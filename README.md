@@ -61,27 +61,25 @@ project/
    npm install
    ```
 
-2. frontend 디렉토리에 `.env` 파일 생성 및 다음 내용 추가:
-   ```
-   SKIP_PREFLIGHT_CHECK=true
-   DISABLE_ESLINT_PLUGIN=true
-   ```
+
 
 ## 애플리케이션 실행
 
-1. Flask 백엔드 서버 시작:
+1. 새 터미널에서 React 개발 서버 시작:
+   ```bash
+   # frontend 디렉토리에서
+   npm start
+   ```
+   프론트엔드는 http://localhost:3000 에서 실행됩니다
+
+2. Flask 백엔드 서버 시작:
    ```bash
    # backend 디렉토리에서
    python run.py
    ```
    백엔드는 http://localhost:5000 에서 실행됩니다
 
-2. 새 터미널에서 React 개발 서버 시작:
-   ```bash
-   # frontend 디렉토리에서
-   npm start
-   ```
-   프론트엔드는 http://localhost:3000 에서 실행됩니다
+
 
 ## 개발
 
