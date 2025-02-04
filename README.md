@@ -99,12 +99,8 @@ project/
 
 ## 기여 방법
 
-1. 저장소를 포크합니다
-2. 기능 브랜치를 생성합니다 (`git checkout -b feature/멋진기능`)
+1. 저장소를 clone 합니다
+2. 기능 브랜치를 생성합니다 (`git checkout -b feature/branch-name`)
 3. 변경사항을 커밋합니다 (`git commit -m '멋진 기능 추가'`)
-4. 브랜치에 푸시합니다 (`git push origin feature/멋진기능`)
+4. 브랜치에 푸시합니다 (`git push origin feature/branch-name`)
 5. Pull Request를 생성합니다
-
-## 라이선스
-
-이 프로젝트는 MIT 라이선스를 따릅니다 - 자세한 내용은 LICENSE 파일을 참조하세요 
