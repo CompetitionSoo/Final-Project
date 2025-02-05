@@ -29,23 +29,23 @@ const Hero: React.FC = () => {
             className="max-w-3xl"
           >
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6">
-              Innovating the Future of Robotics
+              물류 로봇 프로젝트
             </h1>
-            <p className="text-xl text-gray-200 mb-8">
-              Discover our cutting-edge robotic solutions that are transforming industries and shaping tomorrow.
+            <p className="text-xl text-gray-200 mb-8 ml-4">
+              강영수와 아이들
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <a
-                href="#solutions"
+                href="#about" //points to id=about on current page
                 className="btn text-center"
               >
-                Explore Solutions
+                프로젝트 소개
               </a>
               <a
-                href="#contact"
+                href="#view" // points to id=view on current page
                 className="btn btn-secondary text-center"
               >
-                Get in Touch
+                영상 보기
               </a>
             </div>
           </motion.div>

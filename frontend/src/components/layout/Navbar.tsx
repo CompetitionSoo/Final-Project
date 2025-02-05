@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
 const navigation = [
-  { name: 'Solutions', href: '/solutions' },
-  { name: 'Products', href: '/products' },
-  { name: 'Company', href: '/company' },
-  { name: 'Resources', href: '/resources' },
+  { name: '팀소개', href: '/team' },
+  { name: '갤러리', href: '/gallery' },
+  { name: '개발과정', href: '/process' },
+  { name: '제품소개', href: '/about' },
 ];
  
 const Navbar: React.FC = () => {
@@ -39,10 +39,10 @@ const Navbar: React.FC = () => {
               </Link>
             ))}
             <Link
-              to="/contact"
+              to="/login"
               className="btn"
             >
-              Contact Us
+              Login
             </Link>
           </div>
 
@@ -78,11 +78,11 @@ const Navbar: React.FC = () => {
                 </Link>
               ))}
               <Link
-                to="/contact"
+                to="/login"
                 className="block w-full text-center btn mt-4"
                 onClick={() => setIsOpen(false)}
               >
-                Contact Us
+                Login
               </Link>
             </div>
           </div>

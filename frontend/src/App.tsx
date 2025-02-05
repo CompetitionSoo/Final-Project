@@ -4,11 +4,11 @@ import Layout from './components/layout/Layout';
 import Hero from './components/common/Hero';
 
 // Temporary page components until we implement them
-const Solutions = () => <div>Solutions Page</div>;
-const Products = () => <div>Products Page</div>;
-const Company = () => <div>Company Page</div>;
-const Resources = () => <div>Resources Page</div>;
-const Contact = () => <div>Contact Page</div>;
+const Team = () => <div>Team Page</div>;
+const Gallery = () => <div>Gallery Page</div>;
+const Process = () => <div>Process Page</div>;
+const About = () => <div>About Page</div>;
+const Login = () => <div>Login Page</div>;
 
 const HomePage = () => (
   <>
@@ -23,11 +23,11 @@ const App = () => {
       <Layout>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/solutions" element={<Solutions />} />
-          <Route path="/products" element={<Products />} />
-          <Route path="/company" element={<Company />} />
-          <Route path="/resources" element={<Resources />} />
-          <Route path="/contact" element={<Contact />} />
+          <Route path="/team" element={<Team />} />
+          <Route path="/gallery" element={<Gallery />} />
+          <Route path="/process" element={<Process />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </Layout>
     </Router>
