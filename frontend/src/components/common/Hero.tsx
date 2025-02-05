@@ -7,7 +7,7 @@ const Hero: React.FC = () => {
       {/* Video Background */}
       <video
         autoPlay
-        loop
+        loop 
         muted
         playsInline
         className="absolute top-0 left-0 min-h-full min-w-full object-cover"

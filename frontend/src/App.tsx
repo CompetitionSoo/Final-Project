@@ -1,14 +1,14 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Navbar from './components/layout/Navbar';
+import Layout from './components/layout/Layout';
 import Hero from './components/common/Hero';
 
 // Temporary page components until we implement them
-const Solutions = () => <div className="pt-16">Solutions Page</div>;
-const Products = () => <div className="pt-16">Products Page</div>;
-const Company = () => <div className="pt-16">Company Page</div>;
-const Resources = () => <div className="pt-16">Resources Page</div>;
-const Contact = () => <div className="pt-16">Contact Page</div>;
+const Solutions = () => <div>Solutions Page</div>;
+const Products = () => <div>Products Page</div>;
+const Company = () => <div>Company Page</div>;
+const Resources = () => <div>Resources Page</div>;
+const Contact = () => <div>Contact Page</div>;
 
 const HomePage = () => (
   <>
@@ -17,11 +17,10 @@ const HomePage = () => (
   </>
 );
 
-const App: React.FC = () => {
+const App = () => {
   return (
     <Router>
-      <div className="min-h-screen">
-        <Navbar />
+      <Layout>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/solutions" element={<Solutions />} />
@@ -30,7 +29,7 @@ const App: React.FC = () => {
           <Route path="/resources" element={<Resources />} />
           <Route path="/contact" element={<Contact />} />
         </Routes>
-      </div>
+      </Layout>
     </Router>
   );
 };
