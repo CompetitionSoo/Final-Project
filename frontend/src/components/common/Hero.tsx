@@ -3,14 +3,14 @@ import { motion } from 'framer-motion';
 
 const Hero: React.FC = () => {
   return (
-    <div className="relative h-screen w-full overflow-hidden">
+    <div className="relative h-[calc(100vh-4rem)] w-full overflow-hidden">
       {/* Video Background */}
       <video
         autoPlay
         loop 
         muted
         playsInline
-        className="absolute top-0 left-0 min-h-full min-w-full object-cover"
+        className="absolute top-0 left-0 h-full w-full object-cover"
       >
         <source src="/videos/robotvideo.mp4" type="video/mp4" />
         Your browser does not support the video tag.
@@ -36,14 +36,14 @@ const Hero: React.FC = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <a
-                href="#about" //points to id=about on current page
-                className="btn text-center"
+                href="#about"
+                className="inline-block px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200 text-center"
               >
                 프로젝트 소개
               </a>
               <a
-                href="#view" // points to id=view on current page
-                className="btn btn-secondary text-center"
+                href="#view"
+                className="inline-block px-8 py-3 bg-white/20 hover:bg-white/30 text-white rounded-lg backdrop-blur-sm transition-colors duration-200 text-center"
               >
                 영상 보기
               </a>
@@ -57,7 +57,7 @@ const Hero: React.FC = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1, duration: 1 }}
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+        className="absolute bottom-6 left-1/2 transform -translate-x-1/2"
       >
         <div className="flex flex-col items-center text-white">
           <span className="text-sm mb-2">Scroll to explore</span>

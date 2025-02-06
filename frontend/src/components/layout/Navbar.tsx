@@ -19,12 +19,13 @@ const Navbar: React.FC = () => {
       <div className="container">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link to="/" className="flex-shrink-0">
+          <Link to="/" className="flex-shrink-0 flex items-center gap-2">
             <img
-              className="h-8 w-auto"
-              src="/logo.png"
-              alt="강영수와 아이들"
+              className="h-8 w-8 rounded-lg object-cover"
+              src="/logo.avif"
+              alt="logo"
             />
+            <span className="text-gray-900 font-medium">강영수와 아이들</span>
           </Link>
 
           {/* Desktop Navigation */}

@@ -2,19 +2,22 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import Hero from './components/common/Hero';
+import Team from './pages/Team';
+import Gallery from './pages/Gallery';
+import Process from './pages/Process';
+import About from './pages/About';
+import ProjectIntro from './components/sections/ProjectIntro';
+import DemoVideo from './components/sections/DemoVideo';
 
-// Temporary page components until we implement them
-const Team = () => <div>Team Page</div>;
-const Gallery = () => <div>Gallery Page</div>;
-const Process = () => <div>Process Page</div>;
-const About = () => <div>About Page</div>;
+// Temporary page component until we implement it
 const Login = () => <div>Login Page</div>;
 
 const HomePage = () => (
-  <>
+  <div className="snap-y snap-mandatory">
     <Hero />
-    {/* Add other homepage sections here */}
-  </>
+    <ProjectIntro />
+    <DemoVideo />
+  </div>
 );
 
 const App = () => {
