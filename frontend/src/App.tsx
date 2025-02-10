@@ -8,9 +8,11 @@ import Process from './pages/Process';
 import About from './pages/About';
 import ProjectIntro from './components/sections/ProjectIntro';
 import DemoVideo from './components/sections/DemoVideo';
+import Login from "./pages/Login";
+import Register from './pages/Register';
 
 // Temporary page component until we implement it
-const Login = () => <div>Login Page</div>;
+//const Login = () => <div>Login Page</div>;
 
 const HomePage = () => (
   <div className="snap-y snap-mandatory">
@@ -30,7 +32,8 @@ const App = () => {
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/process" element={<Process />} />
           <Route path="/about" element={<About />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login />} /> 
+          <Route path="/register" element={<Register />} />
         </Routes>
       </Layout>
     </Router>
