@@ -1,0 +1,153 @@
+# React Application Structure and File Interaction
+# React 애플리케이션 구조와 파일 상호작용
+
+## 1. Entry Point Files (진입점 파일들)
+
+### index.tsx
+[English]
+This is like the "main door" to your React application. When someone visits your website, this is the first file that runs:
+- It finds the HTML element with id="root" in your index.html
+- Creates a special React container in that element
+- Puts your entire application (App component) inside it
+- StrictMode is like a helper that warns you about potential problems during development
+
+[한국어]
+이것은 React 애플리케이션의 "정문"과 같습니다. 누군가 웹사이트를 방문할 때 가장 먼저 실행되는 파일입니다: (entry point)
+- index.html에서 id="root"인 HTML 요소를 찾습니다
+- 해당 요소 안에 특별한 React 컨테이너를 만듭니다
+- 전체 애플리케이션(App 컴포넌트)을 그 안에 넣습니다
+- StrictMode는 개발 중 잠재적인 문제를 경고해주는 도우미 같은 것입니다
+
+### index.css
+[English]
+This is your website's global style rulebook:
+- It's like the basic dress code for your entire website
+- Sets up fundamental styles that apply everywhere
+- Contains your Tailwind CSS setup
+- Any style you put here affects the whole website
+- Usually contains things like:
+  * Font settings
+  * Basic color schemes
+  * Reset styles (making browsers behave consistently)
+
+[한국어]
+이것은 웹사이트의 전역 스타일 규칙집입니다:
+- 전체 웹사이트의 기본 드레스 코드와 같습니다
+- 모든 곳에 적용되는 기본 스타일을 설정합니다
+- Tailwind CSS 설정을 포함합니다
+- 여기에 넣는 모든 스타일은 전체 웹사이트에 영향을 미칩니다
+- 일반적으로 다음과 같은 것들을 포함합니다:
+  * 폰트 설정
+  * 기본 색상 구성
+  * 리셋 스타일 (브라우저들이 일관되게 동작하도록 함)
+
+## 2. Core Application Files (핵심 애플리케이션 파일들)
+
+### App.tsx
+[English]
+This is your application's control center:
+- It's like a traffic controller that decides what page to show
+- Sets up all the different paths (routes) your website can have
+- Uses Layout component to wrap everything in a consistent design
+- Example: When someone clicks "About Us", App.tsx knows to show the About page
+- Contains the router setup that makes navigation work:
+  ```tsx
+  <Router>        {/* Enables navigation */}
+    <Layout>      {/* Wraps everything in your consistent design */}
+      <Routes>    {/* Lists all possible pages */}
+        <Route path="/" element={<HomePage />} />  {/* Shows HomePage at root URL */}
+        <Route path="/about" element={<About />} /> {/* Shows About page at /about */}
+      </Routes>
+    </Layout>
+  </Router>
+  ```
+
+[한국어]
+이것은 애플리케이션의 관제탑입니다:
+- 어떤 페이지를 보여줄지 결정하는 교통 관제사와 같습니다
+- 웹사이트가 가질 수 있는 모든 다른 경로(라우트)를 설정합니다
+- Layout 컴포넌트를 사용하여 모든 것을 일관된 디자인으로 감쌉니다
+- 예: 누군가 "회사 소개"를 클릭하면 App.tsx는 About 페이지를 보여주어야 한다는 것을 압니다
+- 내비게이션을 작동시키는 라우터 설정을 포함합니다:
+  ```tsx
+  <Router>        {/* 내비게이션 활성화 */}
+    <Layout>      {/* 모든 것을 일관된 디자인으로 감싸기 */}
+      <Routes>    {/* 가능한 모든 페이지 나열 */}
+        <Route path="/" element={<HomePage />} />  {/* 루트 URL에서 HomePage 표시 */}
+        <Route path="/about" element={<About />} /> {/* /about에서 About 페이지 표시 */}
+      </Routes>
+    </Layout>
+  </Router>
+  ```
+
+### components/layout/Layout.tsx
+[English]
+This is your website's template:
+- Think of it like a picture frame that's always there
+- The Navbar stays at the top of every page
+- The main content area adjusts to fit whatever page you're showing
+- Handles spacing and structure consistently
+- Makes sure your website looks unified across all pages
+
+[한국어]
+이것은 웹사이트의 템플릿입니다:
+- 항상 존재하는 액자틀이라고 생각하세요
+- Navbar는 모든 페이지의 상단에 유지됩니다
+- 메인 콘텐츠 영역은 보여주는 페이지에 맞게 조정됩니다
+- 간격과 구조를 일관되게 처리합니다
+- 웹사이트가 모든 페이지에서 통일된 모습을 유지하도록 합니다
+
+### components/layout/Navbar.tsx
+[English]
+Your website's navigation menu:
+- Always visible at the top of the page
+- Contains links to different sections of your website
+- Handles both desktop and mobile views
+- Manages the menu opening/closing on mobile devices
+- Keeps track of which page is currently active
+
+[한국어]
+웹사이트의 내비게이션 메뉴입니다:
+- 페이지 상단에 항상 표시됩니다
+- 웹사이트의 다른 섹션으로 가는 링크를 포함합니다
+- 데스크톱과 모바일 뷰를 모두 처리합니다
+- 모바일 기기에서 메뉴 열기/닫기를 관리합니다
+- 현재 활성화된 페이지를 추적합니다
+
+### components/common/Hero.tsx
+[English]
+Your website's main banner or headline section:
+- Usually the first big section visitors see
+- Contains eye-catching content and important messages
+- Can be reused on different pages
+- Often includes:
+  * Big headlines
+  * Important buttons or calls to action
+  * Featured images or animations
+
+[한국어]
+웹사이트의 메인 배너 또는 헤드라인 섹션입니다: (랜딩 페이지)
+- 보통 방문자가 처음 보는 큰 섹션입니다
+- 눈길을 끄는 콘텐츠와 중요한 메시지를 포함합니다
+- 다른 페이지에서 재사용할 수 있습니다
+- 일반적으로 다음을 포함합니다:
+  * 큰 헤드라인
+  * 중요한 버튼이나 행동 유도 문구
+  * 특징적인 이미지나 애니메이션
+
+## Data Flow (데이터 흐름)
+[English]
+Think of it like a waterfall:
+1. User visits website → index.tsx loads
+2. index.tsx creates App
+3. App sets up navigation and Layout
+4. Layout creates the frame
+5. Inside that frame, the specific page content shows up
+
+[한국어]
+폭포수처럼 생각하세요:
+1. 사용자가 웹사이트 방문 → index.tsx 로드
+2. index.tsx가 App을 생성
+3. App이 내비게이션과 Layout을 설정
+4. Layout이 프레임을 생성
+5. 해당 프레임 안에 특정 페이지 콘텐츠가 표시됨 
