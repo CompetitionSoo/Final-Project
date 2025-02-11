@@ -3,7 +3,7 @@ import React from 'react';
 const Control: React.FC = () => {
     return(
         <div>
-            <h1>라우트 확인중</h1>
+            <h1>테스트</h1>
         </div>
     )
 }

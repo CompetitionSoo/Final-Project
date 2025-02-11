@@ -7,6 +7,9 @@
     scroll-behavior: smooth;
     
   }
+  html {
+    overflow-y: scroll;
+  }
   
   body {
     @apply bg-white text-gray-900;

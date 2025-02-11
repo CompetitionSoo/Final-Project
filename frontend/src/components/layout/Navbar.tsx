@@ -26,7 +26,7 @@ const Navbar: React.FC = () => {
               src="/images/logo.png"
               alt="logo"
             />
-            <span className="text-gray-900 font-medium"></span>
+            <span className="text-gray-900 font-medium">강영수와 아이들</span>
           </Link>
 
           {/* Desktop Navigation */}
