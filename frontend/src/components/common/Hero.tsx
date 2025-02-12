@@ -32,7 +32,11 @@ const Hero: React.FC = () => {
               물류 로봇 프로젝트
             </h1>
             <p className="text-xl text-gray-200 mb-8 ml-4">
+<<<<<<< HEAD
               Coubot은  물류 로봇을 활용한 자동화 시스템입니다.
+=======
+              강영수와 아이들
+>>>>>>> 9e5a6c94a12968ff4f8c023001e56113ded6430e
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <a
