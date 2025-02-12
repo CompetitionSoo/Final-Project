@@ -10,6 +10,7 @@ import ProjectIntro from './components/sections/ProjectIntro';
 import DemoVideo from './components/sections/DemoVideo';
 import Login from "./pages/Login";
 import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
 
 // Temporary page component until we implement it
 //const Login = () => <div>Login Page</div>;
@@ -34,6 +35,7 @@ const App = () => {
           <Route path="/about" element={<About />} />
           <Route path="/login" element={<Login />} /> 
           <Route path="/register" element={<Register />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       </Layout>
     </Router>

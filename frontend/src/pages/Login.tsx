@@ -1,88 +1,101 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { login, isAuthenticated } from "../services/auth";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 상태 관리
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent) => {
+  // Redirect if already logged in
+  React.useEffect(() => {
+    if (isAuthenticated()) {
+      navigate('/dashboard');
+    }
+  }, [navigate]);
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
 
     if (!email || !password) {
       setError("이메일과 비밀번호를 입력하세요.");
       return;
     }
 
-    // 로그인 성공
-    console.log("로그인 시도:", { email, password });
-    setIsLoggedIn(true);  // 로그인 후 상태 변경
-    setError(""); // 에러 초기화
-    navigate("/"); // 홈 페이지로 이동
-  };
-
-  const handleLogout = () => {
-    setIsLoggedIn(false); // 로그아웃 처리
-    navigate("/login"); // 로그인 화면으로 이동
+    setIsLoading(true);
+    try {
+      await login(email, password);
+      setEmail("");
+      setPassword("");
+      navigate("/dashboard");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "로그인에 실패했습니다.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-96">
         <h2 className="text-2xl font-bold mb-4 text-center">로그인</h2>
 
-        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
-
-        {!isLoggedIn ? (
-          <form onSubmit={handleLogin} className="flex flex-col">
-            <label className="mb-2 text-sm font-semibold">이메일</label>
-            <input
-              type="email"
-              className="p-2 mb-4 border rounded"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="이메일을 입력하세요"
-            />
-
-            <label className="mb-2 text-sm font-semibold">비밀번호</label>
-            <input
-              type="password"
-              className="p-2 mb-4 border rounded"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="비밀번호를 입력하세요"
-            />
-
-            <button
-              type="submit"
-              className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-            >
-              로그인
-            </button>
-          </form>
-        ) : (
-          <div className="text-center">
-            {/* 로그아웃 버튼 */}
-            <button
-              onClick={handleLogout}
-              className="mt-4 bg-red-500 text-white p-2 rounded hover:bg-red-700"
-            >
-              로그아웃
-            </button>
+        {error && (
+          <div className="bg-red-50 text-red-500 p-3 rounded mb-4" role="alert">
+            {error}
           </div>
         )}
 
-        {/* 회원가입 버튼 */}
-        {!isLoggedIn && (
+        <form onSubmit={handleLogin} className="flex flex-col">
+          <label htmlFor="email" className="mb-2 text-sm font-semibold">
+            이메일
+          </label>
+          <input
+            id="email"
+            type="email"
+            className="p-2 mb-4 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="이메일을 입력하세요"
+            disabled={isLoading}
+            required
+          />
+
+          <label htmlFor="password" className="mb-2 text-sm font-semibold">
+            비밀번호
+          </label>
+          <input
+            id="password"
+            type="password"
+            className="p-2 mb-4 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="비밀번호를 입력하세요"
+            disabled={isLoading}
+            required
+          />
+
+          <button
+            type="submit"
+            className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+            disabled={isLoading}
+          >
+            {isLoading ? "로그인 중..." : "로그인"}
+          </button>
+        </form>
+
+        <div className="mt-4 text-center">
           <button
             onClick={() => navigate("/register")}
-            className="mt-4 text-blue-600 underline"
+            className="text-blue-500 hover:text-blue-700 focus:outline-none transition-colors duration-200"
+            disabled={isLoading}
           >
-            회원가입
+            계정이 없으신가요? 회원가입하기
           </button>
-        )}
+        </div>
       </div>
     </div>
   );

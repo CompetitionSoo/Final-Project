@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { isAuthenticated, logout } from '../../services/auth';
+import { useNavigate } from 'react-router-dom';
 
 const navigation = [
   { name: '팀소개', href: '/team' },
@@ -11,8 +13,14 @@ const navigation = [
  
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleToggle = () => setIsOpen(!isOpen);
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   return (
     <nav className="bg-white shadow-md fixed w-full z-50">
@@ -39,12 +47,29 @@ const Navbar: React.FC = () => {
                 {item.name}
               </Link>
             ))}
-            <Link
-              to="/login"
-              className="btn"
-            >
-              Login
-            </Link>
+            {isAuthenticated() ? (
+              <div className="flex items-center space-x-4">
+                <Link
+                  to="/dashboard"
+                  className="text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 focus:outline-none"
+                >
+                  Dashboard
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="text-white bg-red-500 hover:bg-red-600 px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 focus:outline-none"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <Link
+                to="/login"
+                className="text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 focus:outline-none"
+              >
+                Login
+              </Link>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -78,13 +103,34 @@ const Navbar: React.FC = () => {
                   {item.name}
                 </Link>
               ))}
-              <Link
-                to="/login"
-                className="block w-full text-center btn mt-4"
-                onClick={() => setIsOpen(false)}
-              >
-                Login
-              </Link>
+              {isAuthenticated() ? (
+                <div className="space-y-2 mt-4">
+                  <Link
+                    to="/dashboard"
+                    className="block w-full text-center text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-md text-base font-medium transition-colors duration-200 focus:outline-none"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Dashboard
+                  </Link>
+                  <button
+                    onClick={() => {
+                      handleLogout();
+                      setIsOpen(false);
+                    }}
+                    className="block w-full text-center text-white bg-red-500 hover:bg-red-600 px-4 py-2 rounded-md text-base font-medium transition-colors duration-200 focus:outline-none"
+                  >
+                    Logout
+                  </button>
+                </div>
+              ) : (
+                <Link
+                  to="/login"
+                  className="block w-full text-center text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-md text-base font-medium transition-colors duration-200 focus:outline-none mt-4"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Login
+                </Link>
+              )}
             </div>
           </div>
         )}
