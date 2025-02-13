@@ -91,6 +91,14 @@ const Gallery: React.FC = () => {
       }
     }
   };
+  // 좋아요 증가 함수 추가
+  const handleLike = (id: number) => {
+    setGalleryItems((prevItems) =>
+      prevItems.map((item) =>
+        item.id === id ? { ...item, likes: item.likes + 1 } : item
+      )
+    );
+  };
 
 
   // 이미지 삭제
@@ -198,7 +206,7 @@ const Gallery: React.FC = () => {
             {/* 좋아요 버튼 */}
             <div>
               <button
-                onClick={() => {}}
+                onClick={() => handleLike(item.id)}
                 className="mt-2 bg-red-500 text-white px-2 py-1 rounded-full w-auto flex items-center justify-center"
               >
                 <span className="mr-1">♥</span>
@@ -247,16 +255,22 @@ const Gallery: React.FC = () => {
           className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
           onClick={() => setSelectedImage(null)}
         >
-          <div className="bg-white p-4 rounded-lg relative" onClick={(e) => e.stopPropagation()}>
-            <img src={selectedImage} alt="Selected" className="w-full h-full object-contain" />
-            <button onClick={() => setSelectedImage(null)} className="mt-4 p-2 text-red-500">
-              닫기
-            </button>
+          <div
+            className="bg-white p-4 rounded-lg relative"
+            onClick={(e) => e.stopPropagation()}
+            style={{ width: '800px', height: '600px' }} // 크기 고정
+          >
+            <img
+              src={selectedImage}
+              alt="Selected"
+              className="w-full h-full object-contain"
+              style={{ maxWidth: '100%', maxHeight: '100%' }} 
+            />
           </div>
         </div>
       )}
 
-      {/* 댓글 모달 */}
+      {/* 댓글 창 */}
       {selectedComments && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"

@@ -6,6 +6,7 @@ const navigation = [
   { name: "갤러리", href: "/gallery" },
   { name: "개발과정", href: "/process" },
   { name: "제품소개", href: "/about" },
+  { name: "사용자", href: "/control" },
 ];
 
 const Footer: React.FC = () => {
@@ -13,8 +14,9 @@ const Footer: React.FC = () => {
     <footer className="bg-gray-900 text-white py-10">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          
           <div>
-          <h2 className="text-lg font-semibold mb-4">메뉴</h2>
+            <h2 className="text-lg font-semibold mb-4">메뉴</h2>
             <ul className="space-y-2">
               {navigation.map((item) => (
                 <li key={item.name}>
@@ -24,7 +26,17 @@ const Footer: React.FC = () => {
                 </li>
               ))}
             </ul>
+          </div>
 
+          <div>
+            <h2 className="text-lg font-semibold mb-4">팀 정보</h2>
+            <p className="text-gray-400 text-sm">
+              강영수와 아이들 ~~~~~하는 팀입니다.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="text-lg font-semibold mb-4">도움말</h2>
             <ul className="mt-4">
               <li>
                 <Link to="/contact" className="text-gray-300 hover:text-white">
@@ -34,21 +46,6 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
-          <div>
-            <h2 className="text-lg font-semibold mb-4">팀 정보</h2>
-            <p className="text-gray-400 text-sm">
-              강영수와 아이들은 ~~~~~하는 팀입니다.<br />
-            </p>
-          </div>
-
-          <div>
-            <h2 className="text-lg font-semibold mb-4">소셜 미디어</h2>
-            <div className="flex space-x-4">
-              {/*<a href="#" className="text-gray-300 hover:text-white">Facebook</a> */}
-              {/*<a href="#" className="text-gray-300 hover:text-white">Twitter</a> */}
-              {/*<a href="#" className="text-gray-300 hover:text-white">Instagram</a>  */}
-            </div>
-          </div>
         </div>
 
         <div className="mt-10 border-t border-gray-700 pt-4 text-center text-gray-400 text-sm">
@@ -60,4 +57,3 @@ const Footer: React.FC = () => {
 };
 
 export default Footer;
-
