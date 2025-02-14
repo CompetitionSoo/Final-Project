@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { HiMenu, HiOutlineLogout, HiOutlineUser } from 'react-icons/hi';
+import { HiMenu, HiOutlineLogout, HiOutlineHome } from 'react-icons/hi';
+import { logout } from '../../services/auth';
 
 interface DashboardNavbarProps {
   onToggleSidebar: () => void;
@@ -10,8 +11,12 @@ const DashboardNavbar: React.FC<DashboardNavbarProps> = ({ onToggleSidebar }) =>
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // Implement logout logic here
+    logout(); // Clear authentication state
     navigate('/login');
+  };
+
+  const handleHomeClick = () => {
+    navigate('/');
   };
 
   return (
@@ -30,10 +35,11 @@ const DashboardNavbar: React.FC<DashboardNavbarProps> = ({ onToggleSidebar }) =>
 
         <div className="flex items-center space-x-4">
           <button
+            onClick={handleHomeClick}
             className="p-2 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
-            aria-label="User Profile"
+            aria-label="Go to Home"
           >
-            <HiOutlineUser className="h-6 w-6 text-gray-600" />
+            <HiOutlineHome className="h-6 w-6 text-gray-600" />
           </button>
           <button
             onClick={handleLogout}
