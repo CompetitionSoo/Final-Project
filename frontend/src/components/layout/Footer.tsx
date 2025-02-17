@@ -31,7 +31,7 @@ const Footer: React.FC = () => {
           <div>
             <h2 className="text-lg font-semibold mb-4">팀 정보</h2>
             <p className="text-gray-400 text-sm">
-              강영수와 아이들 ~~~~~하는 팀입니다.
+              강영수와 아이들
             </p>
           </div>
 

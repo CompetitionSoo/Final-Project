@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { isAuthenticated, logout } from '../../services/auth';
 import { useNavigate } from 'react-router-dom';
@@ -15,6 +15,8 @@ const navigation = [
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const isDashboard = location.pathname.startsWith('/dashboard');
 
   const handleToggle = () => setIsOpen(!isOpen);
 
@@ -22,6 +24,10 @@ const Navbar: React.FC = () => {
     logout();
     navigate('/login');
   };
+
+  if (isDashboard) {
+    return null;
+  }
 
   return (
     <nav className="bg-gray-50 shadow-md fixed w-full z-50">

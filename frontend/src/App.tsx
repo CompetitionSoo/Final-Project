@@ -9,6 +9,7 @@ import About from './pages/About';
 import ProjectIntro from './components/sections/ProjectIntro';
 import DemoVideo from './components/sections/DemoVideo';
 import Login from "./pages/Login";
+import Contact from './pages/Contact'; 
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/dashboard/Profile';
@@ -41,6 +42,7 @@ const App = () => {
           <Route path="/process" element={<Process />} />
           <Route path="/about" element={<About />} />
           <Route path="/login" element={<Login />} /> 
+          <Route path="/contact" element={<Contact />} />
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/overview" element={<Dashboard />} />
