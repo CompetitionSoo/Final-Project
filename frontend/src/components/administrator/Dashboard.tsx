@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { isAuthenticated } from '../services/auth';
-import DashboardLayout from '../components/dashboard/DashboardLayout';
-import Webcam from '../components/dashboard/Webcam';
-import Todolist from '../components/dashboard/Todolist';
+import { isAuthenticated } from '../../services/auth';
+import DashboardLayout from './layout/DashboardLayout';
+import Webcam from './Webcam';
+import Todolist from './Todolist';
 
 
 const Dashboard: React.FC = () => {
@@ -17,7 +17,6 @@ const Dashboard: React.FC = () => {
   }, [navigate]);
 
   return (
-    <DashboardLayout>
       <div className="space-y-6">
         <div className="bg-white rounded-lg shadow-md p-6">
           <h2 className="text-xl font-semibold text-gray-800 mb-4">
@@ -80,7 +79,6 @@ const Dashboard: React.FC = () => {
 
         </div>
       </div>
-    </DashboardLayout>
   );
 };
 

@@ -114,7 +114,7 @@ Your website's navigation menu:
 - 모바일 기기에서 메뉴 열기/닫기를 관리합니다
 - 현재 활성화된 페이지를 추적합니다
 
-### components/common/Hero.tsx
+### components/administrator/Hero.tsx
 [English]
 Your website's main banner or headline section:
 - Usually the first big section visitors see

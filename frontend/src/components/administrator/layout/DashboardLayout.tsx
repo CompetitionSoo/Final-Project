@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
 import DashboardNavbar from './DashboardNavbar';
 import DashboardSidebar from './DashboardSidebar';
+import { Outlet } from "react-router-dom";
 
-interface DashboardLayoutProps {
-  children: React.ReactNode;
-}
-
-const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
+const DashboardLayout: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const handleToggleSidebar = () => {
@@ -24,7 +21,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
           }`}
         >
           <div className="container mx-auto px-6 py-8">
-            {children}
+            <Outlet />
           </div>
         </main>
       </div>
