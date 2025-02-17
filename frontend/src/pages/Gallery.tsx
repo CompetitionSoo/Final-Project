@@ -1,4 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
+
+interface GalleryItem {
+  id: number;
+  src: string;
+  alt: string;
+  likes: number;
+  comments: string[];
+  description: string;
+}
 
 const Gallery: React.FC = () => {
   const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
@@ -103,11 +112,66 @@ const Gallery: React.FC = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-4xl font-bold text-center mb-8">프로젝트 갤러리</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {/* Gallery items will go here */}
-        <div className="aspect-square bg-gray-200 rounded-lg overflow-hidden">
-          <div className="w-full h-full bg-gray-300 hover:opacity-75 transition-opacity duration-300">
-            {/* Image placeholder */}
+
+      {/* 업로드 버튼 */}
+      <div className="flex justify-end">
+        <button
+          onClick={() => setShowUploadModal(true)}
+          className="p-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition duration-300"
+        >
+          사진 업로드
+        </button>
+      </div>
+
+      {/* 업로드 모달 */}
+      {showUploadModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div
+            className="bg-white p-6 rounded-lg w-96"
+            onClick={(e) => e.stopPropagation()} // 모달 클릭 시 닫히지 않도록
+          >
+            <h2 className="text-2xl mb-4">사진 업로드</h2>
+
+            {/* 파일 선택 */}
+            <input
+              type="file"
+              onChange={handleImageUpload}
+              className="mb-4"
+            />
+            {previewImage && (
+              <div className="w-48 h-48 border rounded-lg overflow-hidden mb-4">
+                <img
+                  src={previewImage}
+                  alt="미리보기"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            )}
+
+            {/* 설명 입력 */}
+            <input
+              type="text"
+              placeholder="이미지 설명을 입력하세요"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 mb-4"
+            />
+
+            {/* 업로드 버튼 */}
+            <button
+              onClick={handleAddImage}
+              className="w-full p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition duration-300"
+            >
+              업로드
+            </button>
+
+            {/* 닫기 버튼 */}
+            <button
+              onClick={() => setShowUploadModal(false)}
+              className="mt-4 w-full p-2 text-center text-red-500"
+            >
+              닫기
+            </button>
           </div>
         </div>
       )}
@@ -184,8 +248,59 @@ const Gallery: React.FC = () => {
           </div>
         ))}
       </div>
+
+      {/* 선택한 이미지 창 */}
+      {selectedImage && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+          onClick={() => setSelectedImage(null)}
+        >
+          <div
+            className="bg-white p-4 rounded-lg relative"
+            onClick={(e) => e.stopPropagation()}
+            style={{ width: '800px', height: '600px' }} // 크기 고정
+          >
+            <img
+              src={selectedImage}
+              alt="Selected"
+              className="w-full h-full object-contain"
+              style={{ maxWidth: '100%', maxHeight: '100%' }} 
+            />
+          </div>
+        </div>
+      )}
+
+      {/* 댓글 창 */}
+      {selectedComments && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+          onClick={() => setSelectedComments(null)}
+        >
+          <div
+            className="bg-white p-4 rounded-lg relative w-96 h-90 max-h-full overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <ul className="text-gray-700 text-sm mt-2 space-y-1 max-h-48 overflow-y-auto">
+              {selectedComments.map((comment, index) => (
+                <li key={index} className="bg-gray-100 p-2 rounded flex justify-between items-center">
+                  <span>{comment}</span>
+                  <button
+                    onClick={() => handleDeleteComment(selectedImageId!, index)}
+                    className="ml-2 text-red-500"
+                  >
+                    삭제
+                  </button>
+                </li>
+              ))}
+            </ul>
+            <button onClick={() => setSelectedComments(null)} className="mt-4 p-2 text-red-500">
+              닫기
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default Gallery; 
+export default Gallery;
