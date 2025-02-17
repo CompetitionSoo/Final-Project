@@ -11,5 +11,5 @@ const Settings: React.FC = () => {
     </DashboardLayout>
   );
 };
-
-export default Settings; 
+`
+export default Settings;
