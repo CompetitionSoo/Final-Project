@@ -39,6 +39,7 @@ const Register: React.FC = () => {
         navigate("/login");
       }, 2000);
     } catch (err) {
+      console.log(err)
       setError(err instanceof Error ? err.message : "회원가입에 실패했습니다.");
     } finally {
       setIsLoading(false);

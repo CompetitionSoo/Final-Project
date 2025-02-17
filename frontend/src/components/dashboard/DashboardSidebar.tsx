@@ -1,8 +1,13 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { VscAccount } from "react-icons/vsc";
+import { IoGameController } from "react-icons/io5";
+import { VscVm } from "react-icons/vsc";
+import { MdOutlineContentPasteSearch } from "react-icons/md";
+
+
 import { 
   HiOutlineHome,
-  HiOutlineUserCircle,
   HiOutlineCog,
   HiOutlinePhotograph,
   HiOutlineDocumentText
@@ -24,7 +29,7 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon, label }) => (
     className={({ isActive }) => `
       flex items-center px-4 py-3 text-gray-600 transition-colors duration-200
       hover:bg-gray-100 hover:text-gray-900
-      ${isActive ? 'bg-gray-100 text-gray-900' : ''}
+      ${isActive ? 'bg-emerald-400 text-gray-900' : ''}
     `}
   >
     <span className="h-5 w-5">{icon}</span>
@@ -34,10 +39,13 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon, label }) => (
 
 const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ isOpen }) => {
   const navItems = [
-    { to: '/dashboard', icon: <HiOutlineHome />, label: 'Overview' },
-    { to: '/dashboard/profile', icon: <HiOutlineUserCircle />, label: 'Profile' },
+    { to: '/dashboard/overview', icon: <HiOutlineHome />, label: 'Overview' },
+    { to: '/dashboard/Monitoring', icon: <VscVm />, label: '모니터링' },
+    { to: '/dashboard/control_robot', icon: <IoGameController />, label: '컨트롤러' },
+    { to: '/dashboard/profile', icon: <VscAccount />, label: '프로필' },
+    { to: '/dashboard/check_list', icon: <MdOutlineContentPasteSearch  />, label: '항목조회' },
     { to: '/dashboard/gallery', icon: <HiOutlinePhotograph />, label: 'Gallery' },
-    { to: '/dashboard/documents', icon: <HiOutlineDocumentText />, label: 'Documents' },
+    { to: '/dashboard/documents', icon: <HiOutlineDocumentText />, label: '문의하기' },
     { to: '/dashboard/settings', icon: <HiOutlineCog />, label: 'Settings' },
   ];
 

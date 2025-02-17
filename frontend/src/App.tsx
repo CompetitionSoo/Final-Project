@@ -15,6 +15,9 @@ import Profile from './pages/dashboard/Profile';
 import Documents from './pages/dashboard/Documents';
 import Settings from './pages/dashboard/Settings';
 import Gallery2 from './pages/dashboard/Gallery2';
+import Monitoring from './pages/dashboard/Monitoring';
+import Control_robot from './pages/dashboard/Control_robot';
+import Check_list from './pages/dashboard/Check_list';
 
 // Temporary page component until we implement it
 //const Login = () => <div>Login Page</div>;
@@ -40,6 +43,11 @@ const App = () => {
           <Route path="/login" element={<Login />} /> 
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard/overview" element={<Dashboard />} />
+          <Route path="/dashboard/monitoring" element={<Monitoring />} />
+          <Route path="/dashboard/control_robot" element={<Control_robot/>} />
+          <Route path="/dashboard/check_list" element={<Check_list/>} />
+
           <Route path="/dashboard/profile" element={<Profile />} />
           <Route path="/dashboard/gallery" element={<Gallery2 />} />
           <Route path="/dashboard/documents" element={<Documents />} />
