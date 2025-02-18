@@ -27,7 +27,7 @@ useEffect(() => {
 
 return (
     <div className="bg-white p-6 rounded-lg shadow-md">
-    <h3 className="text-lg font-medium text-gray-800 mb-2">웹캠</h3>
+    <h3 className="text-lg font-medium text-gray-800 mb-2"></h3>
     <video
         ref={videoRef}
         autoPlay

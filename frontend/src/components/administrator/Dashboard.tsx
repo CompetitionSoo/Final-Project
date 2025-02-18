@@ -30,19 +30,25 @@ const Dashboard: React.FC = () => {
             
         <div className="grid md:grid-cols-3 gap-6">
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <h3 className="text-lg font-medium text-gray-800 mb-2">WEBCAME</h3>
+            <h2 className="text-lg font-medium text-gray-800 mb-2">WEBCAME</h2>
+            <p className="text-gray-600">현재 웹캠을 통하여 보이는 화면</p>
             <Webcam />
-            <p className="text-gray-600">View and edit your profile information</p>
+            
           </div>
 
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <h3 className="text-lg font-medium text-gray-800 mb-2">Ros</h3>
-            <p className="text-gray-600">View and edit your profile information</p>
+            <h2 className="text-lg font-medium text-gray-800 mb-2">Ros</h2>
+            <p className="text-gray-600">로스 로봇 웹캠이 나오는 부분입니다.</p>
           </div>
-
+          
+          {/* 로봇이미지를 누르면 컨트롤러로 이동*/}
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <h3 className="text-lg font-medium text-gray-800 mb-2">Map</h3>
-            <p className="text-gray-600">View and edit your profile information</p>
+            <h2 className="text-lg font-medium text-gray-800 mb-2">Cubot Controller</h2>
+            <img
+              src='/images/로봇.png' alt='사진을 못불러왔습니다'
+              className="w-full h-auto cursor-pointer rounded-lg shadow-md"
+              onClick={() => navigate('/dashboard/control_robot')}
+            />
           </div>
 
 

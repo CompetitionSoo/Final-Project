@@ -1,0 +1,28 @@
+
+.grid-container {
+    grid-template-areas: 
+    ". forward ."
+    "left stop right"
+    ". backward .";
+    gap: 20px;
+}
+
+.forward{
+    grid-area: forward;
+}
+.left{
+    grid-area: left;
+}
+
+.stop{
+    grid-area: stop;
+}
+
+.right{
+    grid-area: right;
+}
+
+.backward{
+    grid-area: backward;
+}
+
