@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import DashboardLayout from '../../components/dashboard/DashboardLayout';
+import React from 'react';
+import { useState, useEffect } from 'react';
 
 const Settings: React.FC = () => {
   const [profileImage, setProfileImage] = useState<string | null>(null);
@@ -39,7 +39,6 @@ const Settings: React.FC = () => {
   };
 
   return (
-    <DashboardLayout>
       <div className="bg-white rounded-lg shadow-md p-6">
         <h2 className="text-2xl font-semibold text-gray-800 mb-4">프로필 설정</h2>
         
@@ -94,7 +93,6 @@ const Settings: React.FC = () => {
           </form>
         </div>
       </div>
-    </DashboardLayout>
   );
 };
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { HiMenu, HiOutlineLogout, HiOutlineHome } from 'react-icons/hi';
-import { logout } from '../../services/auth';
+import { logout } from '../../../services/auth';
 
 interface DashboardNavbarProps {
   onToggleSidebar: () => void;

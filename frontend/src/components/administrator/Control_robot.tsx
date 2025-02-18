@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import DashboardLayout from '../../components/dashboard/DashboardLayout';
 
 const ControlRobot: React.FC = () => {
   const [speed, setSpeed] = useState(50);
@@ -7,7 +6,6 @@ const ControlRobot: React.FC = () => {
   const [battery, setBattery] = useState(); // 배터리 상태 (예제 값)
 
   return (
-    <DashboardLayout>
       <div className="bg-white rounded-lg shadow-md p-6">
         <h2 className="text-2xl font-semibold text-gray-800 mb-4">로봇 컨트롤</h2>
         
@@ -63,7 +61,7 @@ const ControlRobot: React.FC = () => {
           <button className="p-2 bg-gray-400 text-white rounded">뒤로 가기</button>
         </div>
       </div>
-    </DashboardLayout>
+    
   );
 };
 

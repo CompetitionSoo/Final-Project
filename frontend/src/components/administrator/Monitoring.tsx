@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import DashboardLayout from "../../components/dashboard/DashboardLayout";
+
 
 const Monitoring: React.FC = () => {
   const [videoSrc, setVideoSrc] = useState<string | null>(null);
@@ -18,7 +18,7 @@ const Monitoring: React.FC = () => {
   }, []);
 
   return (
-    <DashboardLayout>
+    
       <div className="grid grid-cols-2 gap-4 p-6">
         {/* 좌측: 웹캠 및 로봇 카메라 */}
         <div className="bg-white rounded-lg shadow-md p-4">
@@ -49,7 +49,7 @@ const Monitoring: React.FC = () => {
           </div>
         </div>
       </div>
-    </DashboardLayout>
+
   );
 };
 
