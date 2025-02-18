@@ -28,7 +28,6 @@ interface NavItemProps {
 const NavItem: React.FC<NavItemProps> = ({ to, icon, label }) => (
   <NavLink
     to={to}
-    end={to === '/dashboard'}
     className={({ isActive }) => `
       flex items-center px-4 py-3 text-gray-600 transition-colors duration-200
       hover:bg-gray-100 hover:text-gray-900

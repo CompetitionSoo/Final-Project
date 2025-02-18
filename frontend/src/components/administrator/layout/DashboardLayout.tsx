@@ -11,9 +11,9 @@ const DashboardLayout: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-gray-50">
       <DashboardNavbar onToggleSidebar={handleToggleSidebar} />
-      <div className="flex h-[calc(100vh-64px)]">
+      <div className="flex pt-16 h-[calc(100vh-64px)]">
         <DashboardSidebar isOpen={isSidebarOpen} />
         <main 
           className={`flex-1 overflow-auto transition-all duration-300 ${
