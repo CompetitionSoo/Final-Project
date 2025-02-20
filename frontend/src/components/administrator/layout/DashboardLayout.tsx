@@ -16,11 +16,12 @@ const DashboardLayout: React.FC = () => {
       <div className="flex pt-16 h-[calc(100vh-64px)]">
         <DashboardSidebar isOpen={isSidebarOpen} />
         <main 
-          className={`flex-1 overflow-auto transition-all duration-300 ${
+          style={{ backgroundImage: "url('/images/background.avif')" , height: "100vh" }}
+          className={`flex-1 overflow-auto transition-all duration-300 bg-cover bg-center  ${
             isSidebarOpen ? 'ml-64' : 'ml-0'
           }`}
         >
-          <div className="container mx-auto px-6 py-8">
+          <div className="px-6 py-8">
             <Outlet />
           </div>
         </main>

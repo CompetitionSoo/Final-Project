@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import "./Control_robot.css"
+import "./Control_robot.css";
 
 const ControlRobot: React.FC = () => {
   const [battery, setBattery] = useState(85); // 배터리 상태 (%)
@@ -7,24 +7,28 @@ const ControlRobot: React.FC = () => {
   const [isAutoMode, setIsAutoMode] = useState(false); // 자율주행 모드 여부
   const [currentAction, setCurrentAction] = useState('대기 중'); // 현재 동작 상태
 
-  // 키보드 이벤트 리스너를 추가하여 방향키 입력 처리
+  // ✅ 키보드 이벤트 리스너 추가 (W, A, S, D 키 추가)
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      switch (event.key) {
-        case 'ArrowUp':
-          setCurrentAction('위로 이동');
+      switch (event.key.toLowerCase()) { // 소문자로 변환하여 비교 (대소문자 대응)
+        case 'arrowup':
+        case 'w':
+          setCurrentAction('⬆ 앞으로 이동');
           break;
-        case 'ArrowDown':
-          setCurrentAction('아래로 이동');
+        case 'arrowdown':
+        case 's':
+          setCurrentAction('⬇ 뒤로 이동');
           break;
-        case 'ArrowLeft':
-          setCurrentAction('왼쪽으로 이동');
+        case 'arrowleft':
+        case 'a':
+          setCurrentAction('⬅ 왼쪽으로 이동');
           break;
-        case 'ArrowRight':
-          setCurrentAction('오른쪽으로 이동');
+        case 'arrowright':
+        case 'd':
+          setCurrentAction('➡ 오른쪽으로 이동');
           break;
         case ' ':
-          setCurrentAction('정지');
+          setCurrentAction('🛑 정지');
           break;
         default:
           break;
@@ -62,7 +66,6 @@ const ControlRobot: React.FC = () => {
           <div className="bg-black h-72 rounded-lg flex items-center justify-center text-white text-lg font-bold mb-4">
             📷 웹캠 스트리밍
           </div>
-          {/* 실시간 송출 화면 */}
           <div className="bg-black h-72 rounded-lg flex items-center justify-center text-white text-lg font-bold">
             웹캠 화면
           </div>
@@ -73,21 +76,12 @@ const ControlRobot: React.FC = () => {
           <div className="text-center mb-6">
             {/* 방향키 조작 */}
             <div className="grid grid-container">
-            {/* ▲ - 첫 번째 행 첫 번째 열 */}
-            <button className="bg-gray-300 p-6 rounded-md text-xl col-span-1 row-span-1 forward">▲ 앞으로</button>
-            {/* ◀ - 두 번째 행 첫 번째 열 */}
-
-            <button className="bg-gray-300 p-6 rounded-md text-xl col-span-1 row-span-1 left">◀왼쪽</button>
-
-            {/* ■ - 두 번째 행 두 번째 열 */}
-            <button className="bg-red-500 p-6 rounded-md text-xl text-white font-bold col-span-1 row-span-1 stop">■ 정지</button>
-
-            {/* ▶ - 첫 번째 행 세 번째 열 */}
-            <button className="bg-gray-300 p-6 rounded-md text-xl col-span-1 row-span-1 right">오른쪽▶</button>
-          {/* ▼ - 두 번째 행 세 번째 열 */}
-            <button className="bg-gray-300 p-6 rounded-md text-xl col-span-1 row-span-1 backward">▼후진</button>
-          </div>
-
+              <button className="bg-gray-300 p-6 rounded-md text-xl col-span-1 row-span-1 forward">▲ 앞으로</button>
+              <button className="bg-gray-300 p-6 rounded-md text-xl col-span-1 row-span-1 left">◀ 왼쪽</button>
+              <button className="bg-red-500 p-6 rounded-md text-xl text-white font-bold col-span-1 row-span-1 stop">■ 정지</button>
+              <button className="bg-gray-300 p-6 rounded-md text-xl col-span-1 row-span-1 right">오른쪽 ▶</button>
+              <button className="bg-gray-300 p-6 rounded-md text-xl col-span-1 row-span-1 backward">▼ 후진</button>
+            </div>
 
             {/* 버튼들 */}
             <div className="grid grid-cols-2 gap-4 my-6">
