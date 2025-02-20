@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { register } from "../../services/auth";
+import { FaUser, FaIdCard, FaEnvelope, FaPhoneAlt, FaKey, FaLock } from "react-icons/fa";
 
 const Register: React.FC = () => {
+  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
@@ -16,8 +20,8 @@ const Register: React.FC = () => {
     setError("");
     setSuccess("");
 
-    if (!email || !password || !confirmPassword) {
-      setError("이메일, 비밀번호를 입력하세요.");
+    if (!name || !username || !email || !phone || !password || !confirmPassword) {
+      setError("모든 정보를 입력하세요.");
       return;
     }
 
@@ -28,12 +32,15 @@ const Register: React.FC = () => {
 
     setIsLoading(true);
     try {
-      await register(email, password);
+      await register({ name, username, email, phone, password });
       setSuccess("회원가입이 완료되었습니다! 로그인 화면으로 이동합니다.");
+      setName("");
+      setUsername("");
       setEmail("");
+      setPhone("");
       setPassword("");
       setConfirmPassword("");
-      
+
       // 로그인 화면으로 이동
       setTimeout(() => {
         navigate("/login");
@@ -47,68 +54,104 @@ const Register: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-96">
-        <h2 className="text-2xl font-bold mb-4 text-center">회원가입</h2>
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-600 to-blue-600">
+      <div className="bg-white p-20 rounded-2xl shadow-lg w-[600px]">
+        <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">회원가입</h2>
 
         {error && (
-          <div className="bg-red-50 text-red-500 p-3 rounded mb-4" role="alert">
+          <div className="bg-red-100 text-red-600 p-3 rounded-lg mb-4 text-center">
             {error}
           </div>
         )}
-        
+
         {success && (
-          <div className="bg-green-50 text-green-500 p-3 rounded mb-4" role="alert">
+          <div className="bg-green-100 text-green-600 p-3 rounded-lg mb-4 text-center">
             {success}
           </div>
         )}
 
         <form onSubmit={handleRegister} className="flex flex-col">
-          <label htmlFor="email" className="mb-2 text-sm font-semibold">
-            이메일
-          </label>
-          <input
-            id="email"
-            type="email"
-            className="p-2 mb-4 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="이메일을 입력하세요"
-            disabled={isLoading}
-            required
-          />
+          {/* 이름 입력 필드 */}
+          <div className="relative mb-4">
+            <FaUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
+            <input
+              type="text"
+              placeholder="이름을 입력하세요"
+              className="pl-10 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
 
-          <label htmlFor="password" className="mb-2 text-sm font-semibold">
-            비밀번호
-          </label>
-          <input
-            id="password"
-            type="password"
-            className="p-2 mb-4 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="비밀번호를 입력하세요"
-            disabled={isLoading}
-            required
-          />
+          {/* 아이디 입력 필드 */}
+          <div className="relative mb-4">
+            <FaIdCard className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
+            <input
+              type="text"
+              placeholder="아이디를 입력하세요"
+              className="pl-10 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+          </div>
 
-          <label htmlFor="confirmPassword" className="mb-2 text-sm font-semibold">
-            비밀번호 확인
-          </label>
-          <input
-            id="confirmPassword"
-            type="password"
-            className="p-2 mb-4 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            placeholder="비밀번호를 확인하세요"
-            disabled={isLoading}
-            required
-          />
+          {/* 이메일 입력 필드 */}
+          <div className="relative mb-4">
+            <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
+            <input
+              type="email"
+              placeholder="이메일을을 입력하세요"
+              className="pl-10 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+
+          {/* 전화번호 입력 필드 */}
+          <div className="relative mb-4">
+            <FaPhoneAlt className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
+            <input
+              type="text"
+              placeholder="전화번호를 입력하세요"
+              className="pl-10 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              required
+            />
+          </div>
+
+          {/* 비밀번호 입력 필드 */}
+          <div className="relative mb-4">
+            <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
+            <input
+              type="password"
+              placeholder="비밀번호를 입력하세요"
+              className="pl-10 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          {/* 비밀번호 확인 입력 필드 */}
+          <div className="relative mb-4">
+            <FaKey className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
+            <input
+              type="password"
+              placeholder="비밀번호 확인"
+              className="pl-10 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
+          </div>
 
           <button
             type="submit"
-            className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-3 rounded-xl font-semibold hover:opacity-90 transition-all mt-4"
             disabled={isLoading}
           >
             {isLoading ? "처리중..." : "회원가입"}
@@ -118,10 +161,10 @@ const Register: React.FC = () => {
         <div className="mt-4 text-center">
           <button
             onClick={() => navigate("/login")}
-            className="text-blue-500 hover:text-blue-700 focus:outline-none"
+            className="text-blue-600 font-semibold hover:underline"
             disabled={isLoading}
           >
-            이미 계정이 있으신가요? 로그인하기
+            로그인
           </button>
         </div>
       </div>

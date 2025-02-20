@@ -183,7 +183,7 @@ const Gallery: React.FC = () => {
             {/* 삭제 버튼 */}
             <button
               onClick={() => handleDeleteImage(item.id)}
-              className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded"
+              className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded opacity-70 hover:opacity-100 transition-opacity"
             >
               삭제
             </button>
@@ -201,6 +201,20 @@ const Gallery: React.FC = () => {
               <div className="bg-white p-3 rounded-lg max-h-16 overflow-y-auto">
                 <p className="text-gray-700">{item.description}</p>
               </div>
+            </div>
+
+            {/* 댓글 리스트 */}
+            <div className="mt-4">
+              {item.comments.length > 0 && (
+                <div className="bg-gray-100 p-3 rounded-lg">
+                  <h3 className="font-semibold">댓글</h3>
+                  <ul className="space-y-2 mt-2 max-h-[54px] overflow-y-auto">
+                    {item.comments.map((comment, index) => (
+                      <li key={index} className="text-gray-700">{comment}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
 
             {/* 좋아요 버튼 */}
@@ -223,7 +237,7 @@ const Gallery: React.FC = () => {
                 댓글 보기
               </button>
             </div>
-
+            
             {/* 댓글 입력 */}
             <div className="mt-2 flex">
               <input
@@ -258,7 +272,7 @@ const Gallery: React.FC = () => {
           <div
             className="bg-white p-4 rounded-lg relative"
             onClick={(e) => e.stopPropagation()}
-            style={{ width: '800px', height: '600px' }} // 크기 고정
+            style={{ width: '800px', height: '600px' }} 
           >
             <img
               src={selectedImage}
@@ -277,10 +291,10 @@ const Gallery: React.FC = () => {
           onClick={() => setSelectedComments(null)}
         >
           <div
-            className="bg-white p-4 rounded-lg relative w-96 h-90 max-h-full overflow-y-auto"
+            className="bg-white p-4 rounded-lg relative w-[500px] h-[500px] max-h-full overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
-            <ul className="text-gray-700 text-sm mt-2 space-y-1 max-h-48 overflow-y-auto">
+            <ul className="text-gray-700 text-sm mt-2 space-y-1 max-h-[400px] overflow-y-auto">
               {selectedComments.map((comment, index) => (
                 <li key={index} className="bg-gray-100 p-2 rounded flex justify-between items-center">
                   <span>{comment}</span>

@@ -19,6 +19,7 @@ def register():
         return jsonify({'error': 'Email already registered'}), 400
         
     user = User()
+    user.username=data['username'] #비우면안됨
     user.email = data['email']
     user.set_password(data['password'])
     
@@ -36,11 +37,11 @@ def login():
     
     if not data or not data.get('email') or not data.get('password'):
         return jsonify({'error': 'Missing required fields'}), 400
-        
-    user = User.query.filter_by(email=data['email']).first()
+    #email로 쿼리 검색해야해서 id가아닌 email로 로그인해야함
+    user = User.query.filter_by(email=data['email']).first()        
     
     if not user or not user.check_password(data['password']):
-        return jsonify({'error': 'Invalid email or password'}), 401
+        return jsonify({'error': 'Invalid id or password'}), 401
         
     # Generate JWT token
     token = jwt.encode(

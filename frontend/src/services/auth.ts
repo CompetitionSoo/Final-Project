@@ -14,42 +14,55 @@ export interface AuthError {
 }
 
 export const login = async (email: string, password: string): Promise<LoginResponse> => {
-    const response = await fetch(`${API_URL}/api/login`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-    });
+  const response = await fetch(`${API_URL}/api/login`, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+  });
 
-    const data = await response.json();
-    
-    if (!response.ok) {
-        throw new Error(data.error || 'Login failed');
-    }
-    
-    // Store the token in localStorage
-    localStorage.setItem('token', data.token);
-    return data;
+  const data = await response.json();
+  
+  if (!response.ok) {
+      throw new Error(data.error || 'Login failed');
+  }
+  
+  // Store the token in localStorage
+  localStorage.setItem('token', data.token);
+  return data;
 };
 
-export const register = async (email: string, password: string): Promise<{ message: string }> => {
+export const register = async ({
+    name,
+    username,
+    email,
+    phone,
+    password
+  }: {
+    name: string;
+    username: string;
+    email: string;
+    phone: string;
+    password: string;
+  }): Promise<{ message: string }> => {
     const response = await fetch(`${API_URL}/api/register`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, username, email, phone, password }),
     });
-
+  
     const data = await response.json();
-    
+  
     if (!response.ok) {
-        throw new Error(data.error || 'Registration failed');
+      throw new Error(data.error || "Registration failed");
     }
-    
+  
     return data;
-};
+  };
+  
 
 export const logout = (): void => {
     localStorage.removeItem('token');
