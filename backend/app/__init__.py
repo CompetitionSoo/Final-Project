@@ -30,6 +30,7 @@ def create_app():
     
     # Create database tables
     with app.app_context():
+        db.drop_all()       #백엔드 서버 킬때마다 데이터베이스 지우고 다시 만듬
         db.create_all()
     
     return app 
