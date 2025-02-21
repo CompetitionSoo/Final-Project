@@ -2,7 +2,6 @@
 
 React와 Flask로 구축된 현대적인 웹 애플리케이션으로, 비디오 배경의 히어로 섹션과 반응형 디자인을 특징으로 합니다.
 
-괜히 한 줄 더 써봅니다^^
 
 ## 프로젝트 구조
 
@@ -11,7 +10,7 @@ project/
 ├── frontend/          # React 애플리케이션
 │   └── src/
 │       ├── components/
-│       ├── pages/
+│       ├── services/
 │       └── ...
 └── backend/           # Flask 애플리케이션
     └── app/
@@ -50,11 +49,11 @@ project/
 3. backend 디렉토리에 `.env` 파일 생성 및 다음 내용 추가:
    ```
    SECRET_KEY='1234'
-   DATABASE_URL=sqlite:///site.db
+   DATABASE_URL=mysql+pymysql://teamuser:1234@192.168.0.47/mydatabase
    FLASK_ENV=development
    FLASK_APP=run.py
    ```
-
+   안되면 저(이희성)한테 알려주세요
 ### 프론트엔드 설정
 
 1. Node.js 의존성 패키지 설치:
