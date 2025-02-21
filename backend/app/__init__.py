@@ -2,6 +2,7 @@ from flask import Flask
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from decouple import config
+from flask_migrate import Migrate
 
 db = SQLAlchemy()
 
@@ -13,11 +14,13 @@ def create_app():
     
     # Configuration
     app.config['SECRET_KEY'] = config('SECRET_KEY', default='1234')
-    app.config['SQLALCHEMY_DATABASE_URI'] = config('DATABASE_URL', default='sqlite:///site.db')
+    app.config['SQLALCHEMY_DATABASE_URI'] = config('DATABASE_URL')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['SQLALCHEMY_ECHO'] = True
     
     # Initialize extensions
     db.init_app(app)
+    Migrate(app, db)
     
     # Register blueprints
     from .routes.main import main_bp
@@ -27,10 +30,5 @@ def create_app():
     
     # Import models to ensure they're known to Flask-SQLAlchemy
     from .models import user
-    
-    # Create database tables
-    with app.app_context():
-        db.drop_all()       #백엔드 서버 킬때마다 데이터베이스 지우고 다시 만듬
-        db.create_all()
     
     return app 
