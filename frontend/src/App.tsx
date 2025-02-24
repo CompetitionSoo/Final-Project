@@ -13,7 +13,7 @@ import Contact from './components/main/Contact';
 import Register from './components/main/Register';
 
 
-import Dashboard from './components/administrator/Dashboard';
+
 import Monitoring from './components/administrator/Monitoring';
 import Control_robot from './components/administrator/Control_robot';
 import Check_list from './components/administrator/Check_list';
@@ -24,6 +24,7 @@ import Documents from './components/administrator/Documents';
 import Settings from './components/administrator/Settings';
 import Gallery2 from './components/administrator/Gallery2';
 import DashboardLayout from './components/administrator/layout/DashboardLayout';
+import Dashboard from './components/administrator/Dashboard';
 
 // Temporary page component until we implement it
 //const Login = () => <div>Login Page</div>;
@@ -55,7 +56,7 @@ const App = () => {
         {/* Administrator 라우트 */}
         <Route element={<DashboardLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/dashboard/overview" element={<Dashboard />} />
+          <Route path="/dashboard/home" element={<Dashboard />} />
           <Route path="/dashboard/monitoring" element={<Monitoring />} />
           <Route path="/dashboard/control_robot" element={<Control_robot/>} />
           <Route path="/dashboard/check_list" element={<Check_list/>} />

@@ -41,7 +41,7 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon, label }) => (
 
 const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ isOpen }) => {
   const navItems = [
-    { to: '/dashboard/overview', icon: <HiOutlineHome />, label: 'Overview' },
+    { to: '/dashboard/home', icon: <HiOutlineHome />, label: '홈으로' },
     { to: '/dashboard/Monitoring', icon: <VscVm />, label: '모니터링' },
     { to: '/dashboard/control_robot', icon: <IoGameController />, label: '컨트롤러' },
     { to: '/dashboard/profile', icon: <VscAccount />, label: '프로필' },

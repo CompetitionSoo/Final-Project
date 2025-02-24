@@ -25,7 +25,7 @@ const DashboardNavbar: React.FC<DashboardNavbarProps> = ({ onToggleSidebar }) =>
         <div className="flex items-center">
           <button
             onClick={onToggleSidebar}
-            className="p-2 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+            className="p-2 rounded-lg hover:bg-orange-200 focus:outline-none focus:ring-2 focus:ring-gray-200"
             aria-label="Toggle Sidebar"
           >
             <HiMenu className="h-6 w-6 text-gray-600" />

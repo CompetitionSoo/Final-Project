@@ -94,7 +94,7 @@ const ControlRobot: React.FC = () => {
           <div className="flex justify-between items-center mb-6">
             <span className="text-gray-700 font-medium text-lg">🛠 모드: {isAutoMode ? '자율주행' : '수동 조작'}</span>
             <button
-              className={`px-6 py-3 rounded-md text-lg ${isAutoMode ? 'bg-blue-500 text-white' : 'bg-gray-500 text-white'}`}
+              className={`px-6 py-3 rounded-md text-lg ${isAutoMode ? 'bg-blue-500 text-white' : 'bg-orange-500 text-white'}`}
               onClick={() => setIsAutoMode(!isAutoMode)}
             >
               {isAutoMode ? '수동전환' : '자율주행'}
@@ -121,13 +121,22 @@ const ControlRobot: React.FC = () => {
           {/* 뒤로 가기 */}
           <button className="w-full bg-gray-600 text-white py-3 rounded-md mt-6 text-xl">
             ⬅ 뒤로 가기
+            
           </button>
         </div>
       </div>
 
       {/* 현재 동작 상태 출력 */}
-      <div className="w-full bg-gray-200 p-4 rounded-lg mt-4 text-center font-semibold text-lg">
-        현재 동작: {currentAction}
+      <div className="w-full bg-gray-200 p-4 rounded-lg mt-4 text-center font-semibold text-lg flex justify-center items-center">
+        <div className="w-1/2 text-center px-4">
+          현재 동작
+        </div>
+        
+        <div className="w-1/2 bg-orange-300 text-center px-4">
+        
+
+          {currentAction}
+        </div>
       </div>
     </div>
   );
