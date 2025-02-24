@@ -1,5 +1,5 @@
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
-
+//여기가 프론트앤드<<>>백엔드 인증관련 통신하는 typescript파일
 export interface LoginResponse {
     token: string;
     user: {
