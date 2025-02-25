@@ -363,36 +363,14 @@ const Gallery: React.FC = () => {
                 <h3 className="font-semibold mb-2">댓글</h3>
                 <ul className="space-y-2 max-h-28 overflow-y-auto text-sm">
                   {item.comments.map((comment, index) => (
-                    <li key={index} className="text-gray-700 flex justify-between items-center">
+                    <li key={index} className="text-gray-700">
                       <span>{comment.text}</span>
-                      {/* 댓글 삭제 버튼은 댓글 작성자(로그인 상태인 경우)에게만 표시 */}
-                      {isAuthenticated() && comment.author === getCurrentUser().id && (
-                        <div>
-                        <button
-                          onClick={() =>
-                            setEditingComment((prev) => ({
-                              ...prev,
-                              [item.id]: { index, text: comment.text },
-                            }))
-                          }
-                          className="ml-2 text-blue-500 hover:underline"
-                        >
-                          수정
-                        </button>
-                        <button
-                          onClick={() => handleDeleteComment(item.id, index)}
-                          className="ml-2 text-red-500 hover:underline"
-                        >
-                          삭제
-                        </button>
-                      </div>
-                      )}
                     </li>
                   ))}
                 </ul>
               </div>
             )}
-
+            
             {/* 좋아요 버튼 및 댓글 보기 버튼 */}
             <div className="flex justify-between items-center">
               <button
