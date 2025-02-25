@@ -25,15 +25,16 @@ const DashboardNavbar: React.FC<DashboardNavbarProps> = ({ onToggleSidebar }) =>
         <div className="flex items-center">
           <button
             onClick={onToggleSidebar}
-            className="p-2 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+            className="p-2 rounded-lg hover:bg-orange-200 focus:outline-none focus:ring-2 focus:ring-gray-200"
             aria-label="Toggle Sidebar"
           >
             <HiMenu className="h-6 w-6 text-gray-600" />
           </button>
-          <span className="ml-4 text-xl font-semibold text-gray-800">Dashboard</span>
+          <span className="ml-4 text-xl font-semibold text-gray-800">Coubot</span>
         </div>
 
         <div className="flex items-center space-x-4">
+          <span className="text-xl font-semibold text-gray-800 hover:underline">abc 님</span>
           <button
             onClick={handleHomeClick}
             className="p-2 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"

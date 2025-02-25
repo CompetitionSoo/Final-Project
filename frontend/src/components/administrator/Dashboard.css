@@ -1,0 +1,101 @@
+.dashboard-container {
+  padding: 20px;
+}
+
+.dashboard-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.card-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3개의 열을 생성 */
+  grid-template-rows: auto auto; /* 2행으로 설정 */
+  gap: 35px; /* 카드 사이 간격 */
+}
+
+.card {
+  position: relative;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  height: 300px; /* 카드 높이를 설정 */
+}
+
+.card:hover {
+  transform: scale(1.05); /* 카드 확대 효과 */
+}
+
+.card-inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.card-front, .card-front-3 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.card-back, .card-back-3 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #e0e0e0;
+  height: 100%;
+}
+
+/* 이미지 크기 조정 */
+.card img {
+  width: 80%;
+  height: auto;
+  border-radius: 10px;
+}
+
+/* 첫 번째 행에 있는 2개의 카드가 2개의 열을 차지하도록 설정 */
+.card:first-child {
+  grid-column: span 2; /* 첫 번째 카드가 2열을 차지 */
+}
+
+/* 두 번째 행은 3개의 카드로 각각 1개의 열 차지 */
+.card:nth-child(2){
+  grid-column: span 1; /* 기본적으로 1개의 열을 차지 */
+}
+.card:nth-child(3),
+.card:nth-child(4) {
+  grid-column: span 1; /* 기본적으로 1개의 열을 차지 */
+}
+
+
+.robot-card-grid {
+  display: grid;
+  grid-template-rows: auto 50px; /* 이미지가 위, 텍스트가 아래 */
+  justify-items: center;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 300px;
+  height: auto;
+}
+
+.robot-image {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.robot-text {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+}
