@@ -20,12 +20,12 @@ interface GalleryItem {
   uploadedBy: string; // 업로드한 사용자의 ID
 }
 
-// 로그인 여부 확인 함수 (예시)
+// 로그인 여부 확인 함수
 const isAuthenticated = () => {
   return localStorage.getItem('token') !== null;
 };
 
-// 현재 사용자 정보 반환 (예시)
+// 현재 사용자 정보 반환
 const getCurrentUser = () => {
   // 실제 환경에서는 컨텍스트나 전역 상태 관리에서 가져올 수 있음
   return { id: localStorage.getItem('userId') || '', name: 'User' };
@@ -361,7 +361,7 @@ const Gallery: React.FC = () => {
             {item.comments.length > 0 && (
               <div className="bg-gray-100 p-3 rounded-lg shadow-inner mb-4">
                 <h3 className="font-semibold mb-2">댓글</h3>
-                <ul className="space-y-2 max-h-28 overflow-y-auto text-sm">
+                <ul className="space-y-2 h-12 overflow-y-auto text-sm">
                   {item.comments.map((comment, index) => (
                     <li key={index} className="text-gray-700 flex justify-between items-center">
                       <span>{comment.text}</span>
