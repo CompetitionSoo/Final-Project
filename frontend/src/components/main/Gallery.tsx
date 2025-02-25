@@ -322,7 +322,7 @@ const Gallery: React.FC = () => {
         {galleryItems.map((item) => (
           <div
             key={item.id}
-            className="relative bg-white rounded-lg overflow-hidden p-4 flex flex-col justify-between w-full h-full shadow-lg transform hover:scale-105 transition-transform duration-300"
+            className="relative bg-white rounded-lg overflow-hidden p-4 flex flex-col justify-between w-full h-full shadow-lg transform"
           >
             {/* 삭제 버튼 (로그인 상태이며 업로더인 경우에만 표시) */}
             {isAuthenticated() && getCurrentUser().id === item.uploadedBy && (
