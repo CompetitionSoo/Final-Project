@@ -12,15 +12,17 @@ auth_bp = Blueprint('auth', __name__)
 def register():
     data = request.get_json()
     
-    if not data or not data.get('email') or not data.get('password'):
+    if not data or not data.get('username') or not data.get('password'):
         return jsonify({'error': 'Missing required fields'}), 400
         
-    if User.query.filter_by(email=data['email']).first():
-        return jsonify({'error': 'Email already registered'}), 400
-        
+    if User.query.filter_by(username=data['username']).first():
+        return jsonify({'error': 'ID already registered'}), 400
+    #회원가입 데이터 추가
     user = User()
+    user.name=data['name']
     user.username=data['username'] #비우면안됨
     user.email = data['email']
+    user.phone=data['phone']
     user.set_password(data['password'])
     
     try:
@@ -35,10 +37,10 @@ def register():
 def login():
     data = request.get_json()
     
-    if not data or not data.get('email') or not data.get('password'):
+    if not data or not data.get('username') or not data.get('password'):
         return jsonify({'error': 'Missing required fields'}), 400
-    #email로 쿼리 검색해야해서 id가아닌 email로 로그인해야함
-    user = User.query.filter_by(email=data['email']).first()        
+    #ID로 로그인하게 수정
+    user = User.query.filter_by(username=data['username']).first()        
     
     if not user or not user.check_password(data['password']):
         return jsonify({'error': 'Invalid id or password'}), 401
