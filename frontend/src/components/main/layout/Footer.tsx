@@ -6,7 +6,6 @@ const navigation = [
   { name: "갤러리", href: "/gallery" },
   { name: "개발과정", href: "/process" },
   { name: "제품소개", href: "/about" },
-  { name: "사용자", href: "/control" },
 ];
 
 const Footer: React.FC = () => {
@@ -45,7 +44,6 @@ const Footer: React.FC = () => {
               </li>
             </ul>
           </div>
-
         </div>
 
         <div className="mt-10 border-t border-gray-700 pt-4 text-center text-gray-400 text-sm">
