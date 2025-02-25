@@ -14,7 +14,7 @@
   gap: 35px; /* 카드 사이 간격 */
 }
 
-.card {
+.card{
   position: relative;
   background-color: #f9f9f9;
   border-radius: 10px;
@@ -25,7 +25,19 @@
   height: 300px; /* 카드 높이를 설정 */
 }
 
-.card:hover {
+
+.card-1{
+  position: relative;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  height: 300px; /* 카드 높이를 설정 */
+
+}
+.card-1:hover {
   transform: scale(1.05); /* 카드 확대 효과 */
 }
 

@@ -31,14 +31,13 @@ const Dashboard2: React.FC = () => {
     
       <div className="card-container">
         {/* 카드 1: 웹캠 (1행에 2개의 카드 중 첫 번째 카드, 2개의 열을 차지) */}
-        <div className="card" onClick={() => navigate('/dashboard/monitoring')} >
+        <div className="card webcam" onClick={() => navigate('/dashboard/monitoring')} >
           <div className='card-title'/>
-            <h3>실시간 모니터링</h3>
-          <Webcam /> 
+            <Webcam /> 
         </div>
 
         {/* 카드 2: 로봇 제어 (1행에 2개의 카드 중 두 번째 카드, 1열에 위치) */}
-        <div className="card" onClick={() => navigate('/dashboard/control_robot')}>
+        <div className="card-1" onClick={() => navigate('/dashboard/control_robot')}>
 
           <div className="card-inner">
             <div className="card-front-3">
@@ -53,7 +52,7 @@ const Dashboard2: React.FC = () => {
         </div>
 
         {/* 카드 3: 할 일 목록 (2행에 3개의 카드 중 첫 번째 카드, 1열에 위치) */}
-        <div className="card">
+        <div className="card-1">
           <div className="card-inner">
             <div className="card-front-3">
               <Todolist />  {/* 할 일 목록 컴포넌트 추가 */}
@@ -65,7 +64,7 @@ const Dashboard2: React.FC = () => {
         </div>
 
         {/* 카드 4: 할 일 목록 (2행에 3개의 카드 중 두 번째 카드, 2열에 위치) */}
-        <div className="card">
+        <div className="card-1">
           <div className="card-inner">
             <div className="card-front-3">
               <Todolist />  {/* 할 일 목록 컴포넌트 추가 */}
@@ -77,7 +76,7 @@ const Dashboard2: React.FC = () => {
         </div>
 
         {/* 카드 5: 할 일 목록 (2행에 3개의 카드 중 세 번째 카드, 3열에 위치) */}
-        <div className="card">
+        <div className="card-1">
           <div className="card-inner">
             <div className="card-front-3">
               <Todolist />  {/* 할 일 목록 컴포넌트 추가 */}
