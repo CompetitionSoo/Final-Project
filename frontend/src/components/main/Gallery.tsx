@@ -307,12 +307,12 @@ const Gallery: React.FC = () => {
                   {item.comments.map((comment, index) => (
                     <li key={index} className="text-gray-700 flex justify-between items-center">
                       <span>{comment}</span>
-                      <button
+                      {/*<button
                         onClick={() => handleDeleteComment(item.id, index)}
                         className="text-red-500 hover:underline"
                       >
                         삭제
-                      </button>
+                      </button>*/}
                     </li>
                   ))}
                 </ul>
