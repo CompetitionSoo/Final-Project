@@ -56,7 +56,7 @@ const InquiryForm: React.FC = () => {
   return (
     <div className="container mx-auto p-6 flex justify-center items-center">
       {/* Form container with Flexbox */}
-      <div className="border-2 border-gray-300 p-6 rounded-lg shadow-lg flex max-w-4xl w-full">
+      <div className="border-2 border-red-700 bg-white p-6 rounded-lg shadow-lg flex max-w-4xl w-full">
         {/* Form Content Section */}
         <div className="flex-1 pr-6">
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -64,7 +64,7 @@ const InquiryForm: React.FC = () => {
 
             <div>
               <label htmlFor="subject" className="block text-sm font-medium text-gray-700">
-                제목 *
+                제목
               </label>
               <input
                 type="text"
@@ -73,14 +73,14 @@ const InquiryForm: React.FC = () => {
                 value={formData.subject}
                 onChange={handleInputChange}
                 className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-                placeholder="이 문제가 있습니다."
+                placeholder="제목을 입력해주세요."
               />
               {errors.subject && <p className="text-red-500 text-sm">{errors.subject}</p>}
             </div>
 
             <div>
               <label htmlFor="message" className="block text-sm font-medium text-gray-700">
-                내용 *
+                내용
               </label>
               <textarea
                 rows={10}
