@@ -30,6 +30,7 @@ const Navbar: React.FC = () => {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
+          
           <Link to="/" className="flex-shrink-0 flex items-center gap-1">
             <div className="h-12 w-12 flex items-center justify-center">
               <img
@@ -44,6 +45,7 @@ const Navbar: React.FC = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex md:items-center">
             <div className="flex items-center space-x-2">
+              <div className = "main_nav">
               {navigation.map((item) => (
                 <Link
                   key={item.name}
@@ -56,6 +58,7 @@ const Navbar: React.FC = () => {
                                 duration-200 ease-out group-hover:scale-100 -z-0"></span>
                 </Link>
               ))}
+              </div>
             </div>
             {isAuthenticated() ? (
               <div className="flex items-center space-x-3 ml-10">

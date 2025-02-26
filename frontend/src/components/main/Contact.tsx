@@ -66,7 +66,6 @@ const Contact: React.FC = () => {
         title: "문의가 접수되었습니다!",
         text: "빠른 시일 내에 답변드리겠습니다.",
         icon: "success",
-        button: "확인",
       }).then(() => {
         // 실제 폼 제출 (추후 API 요청 or 서버 전송 가능)
         console.log("폼 제출됨:", formData);

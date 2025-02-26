@@ -25,7 +25,7 @@ const Dashboard2: React.FC = () => {
         여기는 여러분의 일정을 관리하고, 로봇을 제어하며, 할 일을 체크하는 공간입니다. 필요한 기능을 선택하여 시작해 보세요.
         </h2>
         <p className="text-gray-600 mb-4">
-      웹캠을 통해 실시간 모니터링을 확인하고, 할 일 목록을 관리하며, 로봇을 제어할 수 있습니다. 오늘의 할 일 목록을 추가하고 완료된 작업에 체크하여 더 효율적으로 하루를 관리하세요!
+            웹캠을 통해 실시간 모니터링을 확인하고, 할 일 목록을 관리하며, 로봇을 제어할 수 있습니다. 오늘의 할 일 목록을 추가하고 완료된 작업에 체크하여 더 효율적으로 하루를 관리하세요!
         </p>
       </div>
     
@@ -43,8 +43,6 @@ const Dashboard2: React.FC = () => {
             <div className="card-front-3">
               <img src="/images/로봇.png" alt="로봇 이미지" />
             </div>
-            <div className='card-title'/>
-            <h3>로봇 컨트롤러</h3>
             <div className="card-back-3">
               {/* 카드 뒷면 내용 */}
             </div>
