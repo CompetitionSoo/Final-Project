@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import 'tailwindcss/tailwind.css';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import "tailwindcss/tailwind.css";
+import { useNavigate } from "react-router-dom";
 
 // 댓글 타입 (작성자 정보 추가)
 interface Comment {
@@ -22,38 +22,42 @@ interface GalleryItem {
 
 // 로그인 여부 확인 함수
 const isAuthenticated = () => {
-  return localStorage.getItem('token') !== null;
+  return localStorage.getItem("token") !== null;
 };
 
 // 현재 사용자 정보 반환
 const getCurrentUser = () => {
   // 실제 환경에서는 컨텍스트나 전역 상태 관리에서 가져올 수 있음
-  return { id: localStorage.getItem('userId') || '', name: 'User' };
+  return { id: localStorage.getItem("userId") || "", name: "User" };
 };
 
 const Gallery: React.FC = () => {
   const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
   const [newImage, setNewImage] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
-  const [description, setDescription] = useState<string>('');
+  const [description, setDescription] = useState<string>("");
   const [newComments, setNewComments] = useState<{ [key: number]: string }>({});
   const [showUploadModal, setShowUploadModal] = useState<boolean>(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [selectedComments, setSelectedComments] = useState<Comment[] | null>(null);
+  const [selectedComments, setSelectedComments] = useState<Comment[] | null>(
+    null
+  );
   const [selectedImageId, setSelectedImageId] = useState<number | null>(null);
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
-  const [editDescription, setEditDescription] = useState<string>('');
+  const [editDescription, setEditDescription] = useState<string>("");
   const [editImage, setEditImage] = useState<File | null>(null);
   const [editPreviewImage, setEditPreviewImage] = useState<string | null>(null);
 
   // 댓글 수정 관련 상태: 갤러리 아이템별로 수정 중인 댓글의 인덱스와 편집 텍스트 저장
-  const [editingComment, setEditingComment] = useState<{ [key: number]: { index: number; text: string } | null }>({});
+  const [editingComment, setEditingComment] = useState<{
+    [key: number]: { index: number; text: string } | null;
+  }>({});
 
   const navigate = useNavigate();
 
   // 로컬 스토리지에서 갤러리 아이템 불러오기
   useEffect(() => {
-    const savedGalleryItems = localStorage.getItem('galleryItems');
+    const savedGalleryItems = localStorage.getItem("galleryItems");
     if (savedGalleryItems) {
       setGalleryItems(JSON.parse(savedGalleryItems));
     }
@@ -61,7 +65,7 @@ const Gallery: React.FC = () => {
 
   // 갤러리 아이템을 로컬 스토리지에 저장
   const saveGalleryItemsToLocalStorage = (items: GalleryItem[]) => {
-    localStorage.setItem('galleryItems', JSON.stringify(items));
+    localStorage.setItem("galleryItems", JSON.stringify(items));
   };
 
   // 이미지 업로드 핸들러
@@ -72,7 +76,7 @@ const Gallery: React.FC = () => {
 
       reader.onloadend = () => {
         setNewImage(file);
-        setPreviewImage(reader.result as string); 
+        setPreviewImage(reader.result as string);
       };
 
       reader.readAsDataURL(file);
@@ -97,7 +101,7 @@ const Gallery: React.FC = () => {
       saveGalleryItemsToLocalStorage(updatedGalleryItems);
       setNewImage(null);
       setPreviewImage(null);
-      setDescription('');
+      setDescription("");
       setShowUploadModal(false);
     }
   };
@@ -109,13 +113,18 @@ const Gallery: React.FC = () => {
       return;
     }
     if (newComments[id]) {
-      const comment: Comment = { text: newComments[id], author: getCurrentUser().id };
+      const comment: Comment = {
+        text: newComments[id],
+        author: getCurrentUser().id,
+      };
       const updatedGalleryItems = galleryItems.map((item) =>
-        item.id === id ? { ...item, comments: [...item.comments, comment] } : item
+        item.id === id
+          ? { ...item, comments: [...item.comments, comment] }
+          : item
       );
       setGalleryItems(updatedGalleryItems);
       saveGalleryItemsToLocalStorage(updatedGalleryItems);
-      setNewComments((prev) => ({ ...prev, [id]: '' }));
+      setNewComments((prev) => ({ ...prev, [id]: "" }));
     }
   };
 
@@ -129,40 +138,58 @@ const Gallery: React.FC = () => {
 
   // 댓글 삭제 (자신의 댓글만 삭제 가능)
   const handleDeleteComment = (imageId: number, commentIndex: number) => {
-    const item = galleryItems.find(item => item.id === imageId);
+    const item = galleryItems.find((item) => item.id === imageId);
     if (!item) return;
     const comment = item.comments[commentIndex];
     if (!isAuthenticated() || comment.author !== getCurrentUser().id) {
       alert("삭제 권한이 없습니다.");
       return;
     }
-    if (window.confirm('댓글을 삭제하시겠습니까?')) {
-      const updatedGalleryItems = galleryItems.map(item =>
+    if (window.confirm("댓글을 삭제하시겠습니까?")) {
+      const updatedGalleryItems = galleryItems.map((item) =>
         item.id === imageId
-          ? { ...item, comments: item.comments.filter((_, index) => index !== commentIndex) }
+          ? {
+              ...item,
+              comments: item.comments.filter(
+                (_, index) => index !== commentIndex
+              ),
+            }
           : item
       );
       setGalleryItems(updatedGalleryItems);
       saveGalleryItemsToLocalStorage(updatedGalleryItems);
       if (selectedComments && selectedImageId === imageId) {
-        const updatedSelectedComments = selectedComments.filter((_, index) => index !== commentIndex);
+        const updatedSelectedComments = selectedComments.filter(
+          (_, index) => index !== commentIndex
+        );
         setSelectedComments(updatedSelectedComments);
       }
     }
   };
 
   // 댓글 수정 (저장) - 자신이 작성한 댓글만 수정 가능
-  const handleSaveCommentEdit = (imageId: number, commentIndex: number, newComment: string) => {
-    const item = galleryItems.find(item => item.id === imageId);
+  const handleSaveCommentEdit = (
+    imageId: number,
+    commentIndex: number,
+    newComment: string
+  ) => {
+    const item = galleryItems.find((item) => item.id === imageId);
     if (!item) return;
     const comment = item.comments[commentIndex];
     if (!isAuthenticated() || comment.author !== getCurrentUser().id) {
       alert("수정 권한이 없습니다.");
       return;
     }
-    const updatedGalleryItems = galleryItems.map(item =>
+    const updatedGalleryItems = galleryItems.map((item) =>
       item.id === imageId
-        ? { ...item, comments: item.comments.map((comment, index) => index === commentIndex ? { ...comment, text: newComment } : comment) }
+        ? {
+            ...item,
+            comments: item.comments.map((comment, index) =>
+              index === commentIndex
+                ? { ...comment, text: newComment }
+                : comment
+            ),
+          }
         : item
     );
     setGalleryItems(updatedGalleryItems);
@@ -185,7 +212,11 @@ const Gallery: React.FC = () => {
     }
     const updatedGalleryItems = galleryItems.map((item) =>
       item.id === id
-        ? { ...item, likes: item.liked ? item.likes - 1 : item.likes + 1, liked: !item.liked }
+        ? {
+            ...item,
+            likes: item.liked ? item.likes - 1 : item.likes + 1,
+            liked: !item.liked,
+          }
         : item
     );
     setGalleryItems(updatedGalleryItems);
@@ -194,13 +225,13 @@ const Gallery: React.FC = () => {
 
   // 이미지 삭제 (자신이 업로드한 이미지만 삭제 가능)
   const handleDeleteImage = (id: number) => {
-    const item = galleryItems.find(item => item.id === id);
+    const item = galleryItems.find((item) => item.id === id);
     if (!item) return;
     if (!isAuthenticated() || item.uploadedBy !== getCurrentUser().id) {
       alert("삭제 권한이 없습니다.");
       return;
     }
-    if (window.confirm('삭제하시겠습니까?')) {
+    if (window.confirm("삭제하시겠습니까?")) {
       const updatedGalleryItems = galleryItems.filter((item) => item.id !== id);
       setGalleryItems(updatedGalleryItems);
       saveGalleryItemsToLocalStorage(updatedGalleryItems);
@@ -208,7 +239,11 @@ const Gallery: React.FC = () => {
   };
 
   // 수정 모달 열기
-  const handleShowEditModal = (id: number, currentDescription: string, currentSrc: string) => {
+  const handleShowEditModal = (
+    id: number,
+    currentDescription: string,
+    currentSrc: string
+  ) => {
     setSelectedImageId(id);
     setEditDescription(currentDescription);
     setEditPreviewImage(currentSrc);
@@ -223,7 +258,7 @@ const Gallery: React.FC = () => {
 
       reader.onloadend = () => {
         setEditImage(file);
-        setEditPreviewImage(reader.result as string); 
+        setEditPreviewImage(reader.result as string);
       };
 
       reader.readAsDataURL(file);
@@ -235,11 +270,11 @@ const Gallery: React.FC = () => {
     if (selectedImageId !== null) {
       const updatedGalleryItems = galleryItems.map((item) =>
         item.id === selectedImageId
-          ? { 
-              ...item, 
+          ? {
+              ...item,
               description: editDescription,
               src: editImage ? URL.createObjectURL(editImage) : item.src,
-              alt: editImage ? editImage.name : item.alt
+              alt: editImage ? editImage.name : item.alt,
             }
           : item
       );
@@ -280,17 +315,13 @@ const Gallery: React.FC = () => {
             onClick={(e) => e.stopPropagation()}
           >
             <h2 className="text-2xl mb-4 text-gray-800">사진 업로드</h2>
-            <input
-              type="file"
-              onChange={handleImageUpload}
-              className="mb-4"
-            />
+            <input type="file" onChange={handleImageUpload} className="mb-4" />
             {previewImage && (
               <div className="w-48 h-48 border rounded-lg overflow-hidden mb-4">
                 <img
                   src={previewImage}
                   alt="미리보기"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                 />
               </div>
             )}
@@ -338,18 +369,20 @@ const Gallery: React.FC = () => {
             <img
               src={item.src}
               alt={item.alt}
-              className="w-full h-48 object-cover cursor-pointer rounded-md mb-4"
+              className="w-full h-48 object-contain cursor-pointer rounded-md mb-4"
               onClick={() => setSelectedImage(item.src)}
             />
 
             {/* 설명 및 수정 버튼 */}
             <div className="mb-4">
-              <div className="bg-gray-50 p-3 rounded-lg shadow-inner">
+              <div className="bg-gray-50 p-3 rounded-lg shadow-inner h-20 overflow-y-auto">
                 <p className="text-gray-700">{item.description}</p>
               </div>
-              {isAuthenticated() && (
+              {isAuthenticated() && getCurrentUser().id === item.uploadedBy && (
                 <button
-                  onClick={() => handleShowEditModal(item.id, item.description, item.src)}
+                  onClick={() =>
+                    handleShowEditModal(item.id, item.description, item.src)
+                  }
                   className="mt-2 bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-400 transition duration-300 shadow"
                 >
                   수정
@@ -361,34 +394,88 @@ const Gallery: React.FC = () => {
             {item.comments.length > 0 && (
               <div className="bg-gray-100 p-3 rounded-lg shadow-inner mb-4">
                 <h3 className="font-semibold mb-2">댓글</h3>
-                <ul className="space-y-2 h-12 overflow-y-auto text-sm">
-                  {item.comments.map((comment, index) => (
-                    <li key={index} className="text-gray-700 flex justify-between items-center">
-                      <span>{comment.text}</span>
-                      {/* 댓글 삭제 버튼은 댓글 작성자(로그인 상태인 경우)에게만 표시 
-                      {isAuthenticated() && comment.author === getCurrentUser().id && (
-                        <div>
-                        <button
-                          onClick={() =>
-                            setEditingComment((prev) => ({
-                              ...prev,
-                              [item.id]: { index, text: comment.text },
-                            }))
-                          }
-                          className="ml-2 text-blue-500 hover:underline"
-                        >
-                          수정
-                        </button>
-                        <button
-                          onClick={() => handleDeleteComment(item.id, index)}
-                          className="ml-2 text-red-500 hover:underline"
-                        >
-                          삭제
-                        </button>
-                      </div>
-                      )}*/}
-                    </li>
-                  ))}
+                <ul className="space-y-2 h-24 overflow-y-auto text-sm">
+                  {item.comments.map((comment, index) => {
+                    const isEditing =
+                      editingComment[item.id] &&
+                      editingComment[item.id]!.index === index;
+                    return (
+                      <li
+                        key={index}
+                        className="text-gray-700 flex justify-between items-center"
+                      >
+                        {isEditing ? (
+                          <>
+                            <input
+                              type="text"
+                              value={editingComment[item.id]!.text}
+                              onChange={(e) =>
+                                setEditingComment((prev) => ({
+                                  ...prev,
+                                  [item.id]: { index, text: e.target.value },
+                                }))
+                              }
+                              className="flex-1 p-2 border rounded"
+                            />
+                            <button
+                              onClick={() =>
+                                handleSaveCommentEdit(
+                                  item.id,
+                                  index,
+                                  editingComment[item.id]!.text
+                                )
+                              }
+                              className="ml-2 text-blue-500 hover:underline"
+                            >
+                              저장
+                            </button>
+                            <button
+                              onClick={() =>
+                                setEditingComment((prev) => ({
+                                  ...prev,
+                                  [item.id]: null,
+                                }))
+                              }
+                              className="ml-2 text-gray-500 hover:underline"
+                            >
+                              취소
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <span>{comment.text}</span>
+                            {isAuthenticated() &&
+                              comment.author === getCurrentUser().id && (
+                                <div className="flex space-x-2">
+                                  <button
+                                    onClick={() =>
+                                      setEditingComment((prev) => ({
+                                        ...prev,
+                                        [item.id]: {
+                                          index,
+                                          text: comment.text,
+                                        },
+                                      }))
+                                    }
+                                    className="text-blue-500 hover:underline"
+                                  >
+                                    수정
+                                  </button>
+                                  <button
+                                    onClick={() =>
+                                      handleDeleteComment(item.id, index)
+                                    }
+                                    className="text-red-500 hover:underline"
+                                  >
+                                    삭제
+                                  </button>
+                                </div>
+                              )}
+                          </>
+                        )}
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
             )}
@@ -396,8 +483,12 @@ const Gallery: React.FC = () => {
             {/* 좋아요 버튼 및 댓글 보기 버튼 */}
             <div className="flex justify-between items-center">
               <button
-                onClick={() => isAuthenticated() ? handleLike(item.id) : navigate("/login")}
-                className={`flex items-center px-3 py-1 rounded-full transition duration-300 shadow ${item.liked ? 'bg-gray-400' : 'bg-red-500'} text-white hover:bg-red-400`}
+                onClick={() =>
+                  isAuthenticated() ? handleLike(item.id) : navigate("/login")
+                }
+                className={`flex items-center px-3 py-1 rounded-full transition duration-300 shadow ${
+                  item.liked ? "bg-gray-400" : "bg-red-500"
+                } text-white hover:bg-red-400`}
               >
                 <span className="mr-1">♥</span>
                 <span>{item.likes}</span>
@@ -415,12 +506,15 @@ const Gallery: React.FC = () => {
               <div className="mt-4 flex">
                 <input
                   type="text"
-                  value={newComments[item.id] || ''}
+                  value={newComments[item.id] || ""}
                   onChange={(e) =>
-                    setNewComments((prev) => ({ ...prev, [item.id]: e.target.value }))
+                    setNewComments((prev) => ({
+                      ...prev,
+                      [item.id]: e.target.value,
+                    }))
                   }
                   onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
+                    if (e.key === "Enter") {
                       handleAddComment(item.id);
                     }
                   }}
@@ -437,7 +531,9 @@ const Gallery: React.FC = () => {
             )}
           </div>
         ))}
-        {galleryItems.length % 2 !== 0 && <div className="w-[calc(50%-16px)] h-0"></div>}
+        {galleryItems.length % 2 !== 0 && (
+          <div className="w-[calc(50%-16px)] h-0"></div>
+        )}
       </div>
 
       {/* 선택한 이미지 모달 */}
@@ -449,13 +545,18 @@ const Gallery: React.FC = () => {
           <div
             className="bg-white p-4 rounded-lg relative shadow-2xl transform"
             onClick={(e) => e.stopPropagation()}
-            style={{ width: '800px', height: '600px' }}
+            style={{
+              width: "90%",
+              height: "90%",
+              maxWidth: "1500px",
+              maxHeight: "800px",
+            }}
           >
             <img
               src={selectedImage}
               alt="Selected"
               className="w-full h-full object-contain"
-              style={{ maxWidth: '100%', maxHeight: '100%' }}
+              style={{ maxWidth: "100%", maxHeight: "100%" }}
             />
           </div>
         </div>
@@ -468,17 +569,26 @@ const Gallery: React.FC = () => {
           onClick={() => setSelectedComments(null)}
         >
           <div
-            className="bg-white p-6 rounded-lg relative w-[500px] max-h-full overflow-y-auto shadow-xl transform"
+            className="bg-white p-6 rounded-lg relative overflow-y-auto shadow-xl transform flex flex-col"
             onClick={(e) => e.stopPropagation()}
+            style={{
+              width: "90%",
+              height: "90%",
+              maxWidth: "800px",
+              maxHeight: "800px",
+            }}
           >
-            <h2 className="text-2xl font-semibold mb-4 text-gray-800">댓글 목록</h2>
-            <ul className="text-gray-700 text-sm space-y-3 max-h-80 overflow-y-auto">
+            <h2 className="text-2xl font-semibold mb-4 text-gray-800">댓글</h2>
+            <ul className="text-gray-700 text-sm space-y-3 flex-grow overflow-y-auto">
               {selectedComments.map((comment, index) => {
                 const isEditing =
                   editingComment[selectedImageId] &&
                   editingComment[selectedImageId]!.index === index;
                 return (
-                  <li key={index} className="bg-gray-100 p-3 rounded flex justify-between items-center">
+                  <li
+                    key={index}
+                    className="bg-gray-100 p-3 rounded flex justify-between items-center"
+                  >
                     {isEditing ? (
                       <>
                         <input
@@ -487,7 +597,10 @@ const Gallery: React.FC = () => {
                           onChange={(e) =>
                             setEditingComment((prev) => ({
                               ...prev,
-                              [selectedImageId]: { index, text: e.target.value },
+                              [selectedImageId]: {
+                                index,
+                                text: e.target.value,
+                              },
                             }))
                           }
                           className="flex-1 p-2 border rounded"
@@ -506,7 +619,10 @@ const Gallery: React.FC = () => {
                         </button>
                         <button
                           onClick={() =>
-                            setEditingComment((prev) => ({ ...prev, [selectedImageId]: null }))
+                            setEditingComment((prev) => ({
+                              ...prev,
+                              [selectedImageId]: null,
+                            }))
                           }
                           className="ml-2 text-gray-500 hover:underline"
                         >
@@ -518,27 +634,33 @@ const Gallery: React.FC = () => {
                         <span>{comment.text}</span>
                         <div>
                           {/* 댓글 수정/삭제 버튼은 댓글 작성자에게만 표시 */}
-                          {isAuthenticated() && comment.author === getCurrentUser().id && (
-                            <>
-                              <button
-                                onClick={() =>
-                                  setEditingComment((prev) => ({
-                                    ...prev,
-                                    [selectedImageId]: { index, text: comment.text },
-                                  }))
-                                }
-                                className="ml-2 text-blue-500 hover:underline"
-                              >
-                                수정
-                              </button>
-                              <button
-                                onClick={() => handleDeleteComment(selectedImageId, index)}
-                                className="ml-2 text-red-500 hover:underline"
-                              >
-                                삭제
-                              </button>
-                            </>
-                          )}
+                          {isAuthenticated() &&
+                            comment.author === getCurrentUser().id && (
+                              <>
+                                <button
+                                  onClick={() =>
+                                    setEditingComment((prev) => ({
+                                      ...prev,
+                                      [selectedImageId]: {
+                                        index,
+                                        text: comment.text,
+                                      },
+                                    }))
+                                  }
+                                  className="ml-2 text-blue-500 hover:underline"
+                                >
+                                  수정
+                                </button>
+                                <button
+                                  onClick={() =>
+                                    handleDeleteComment(selectedImageId, index)
+                                  }
+                                  className="ml-2 text-red-500 hover:underline"
+                                >
+                                  삭제
+                                </button>
+                              </>
+                            )}
                         </div>
                       </>
                     )}
@@ -555,11 +677,18 @@ const Gallery: React.FC = () => {
           </div>
         </div>
       )}
-
       {/* 수정 모달 */}
       {showEditModal && (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-lg w-96 shadow-xl">
+          <div
+            className="bg-white p-6 rounded-lg relative shadow-xl transform flex flex-col"
+            style={{
+              width: "90%",
+              height: "90%",
+              maxWidth: "800px",
+              maxHeight: "800px",
+            }}
+          >
             <h2 className="text-2xl mb-4 text-gray-800">설명 및 사진 수정</h2>
             <input
               type="file"
@@ -571,7 +700,7 @@ const Gallery: React.FC = () => {
                 <img
                   src={editPreviewImage}
                   alt="미리보기"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                 />
               </div>
             )}
