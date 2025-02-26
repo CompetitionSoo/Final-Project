@@ -39,9 +39,10 @@ const Settings: React.FC = () => {
   };
 
   return (
+    <div className="container flex justify-center items-center">
       <div className="bg-white rounded-lg shadow-md p-6">
         <h2 className="text-2xl font-semibold text-gray-800 mb-4">프로필 설정</h2>
-        
+
         <div className="mb-6">
           <h3 className="text-xl font-semibold text-gray-700">프로필 이미지</h3>
           <div className="flex items-center space-x-4">
@@ -93,6 +94,7 @@ const Settings: React.FC = () => {
           </form>
         </div>
       </div>
+    </div>
   );
 };
 
