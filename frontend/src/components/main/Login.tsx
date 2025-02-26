@@ -1,14 +1,13 @@
-import { FaIdCard, FaLock } from "react-icons/fa"; // 아이콘 라이브러리
+import { FaEnvelope, FaLock } from "react-icons/fa";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login, isAuthenticated } from "../../services/auth";
-
 
 const Login: React.FC = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false); //
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   React.useEffect(() => {
@@ -51,22 +50,20 @@ const Login: React.FC = () => {
         )}
 
         <form onSubmit={handleLogin} className="flex flex-col">
-          {/* 아이디 입력 */}
           <div className="relative mb-4">
-            <FaIdCard className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+            <FaEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
             <input
               id="username"
               type="text"
               className="p-2 pl-10 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="아이디를 입력하세요"
+              placeholder="이메일을 입력하세요"
               disabled={isLoading}
               required
             />
           </div>
 
-          {/* 비밀번호 입력 */}
           <div className="relative mb-4">
             <FaLock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
             <input
