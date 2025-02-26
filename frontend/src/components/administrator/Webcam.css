@@ -1,0 +1,14 @@
+
+
+.webcam:hover .text-container{
+    display: flex !important;
+}
+.text-container h1, .text-container p{
+    color: white;
+}
+.text-container h1{
+    font-size: 32px;
+}
+.text-container p{
+    font-size: 16px;
+}
