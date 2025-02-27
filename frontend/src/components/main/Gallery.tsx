@@ -401,11 +401,12 @@ const Gallery: React.FC = () => {
                   !item.src ? "h-48" : ""
                 }`}
               >
-                <p className="text-gray-700 whitespace-pre-line">
+                <p className="text-gray-700 text-left whitespace-pre-wrap" style={{ textAlign: "justify" }}>
                   {item.description}
                 </p>
               </div>
             </div>
+
 
             {/* 댓글 리스트 */}
             {item.comments.length > 0 && (
