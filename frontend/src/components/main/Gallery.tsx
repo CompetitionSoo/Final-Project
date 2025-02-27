@@ -85,11 +85,11 @@ const Gallery: React.FC = () => {
 
   // 갤러리 아이템 추가 (업로드 시 로그인한 사용자 정보 추가)
   const handleAddImage = () => {
-    if (newImage && isAuthenticated()) {
+    if (isAuthenticated()) {
       const newItem: GalleryItem = {
         id: galleryItems.length + 1,
-        src: URL.createObjectURL(newImage),
-        alt: newImage.name,
+        src: newImage ? URL.createObjectURL(newImage) : "",
+        alt: newImage ? newImage.name : "",
         likes: 0,
         comments: [],
         description,
@@ -311,39 +311,48 @@ const Gallery: React.FC = () => {
       {showUploadModal && (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
           <div
-            className="bg-white p-6 rounded-lg w-96 shadow-xl"
+            className="bg-white p-6 rounded-lg relative shadow-xl transform flex flex-col"
             onClick={(e) => e.stopPropagation()}
+            style={{
+              width: "90%",
+              height: "90%",
+              maxWidth: "800px",
+              maxHeight: "800px",
+            }}
           >
-            <h2 className="text-2xl mb-4 text-gray-800">사진 업로드</h2>
+            <h2 className="text-2xl mb-4 text-gray-800">업로드</h2>
             <input type="file" onChange={handleImageUpload} className="mb-4" />
             {previewImage && (
-              <div className="w-48 h-48 border rounded-lg overflow-hidden mb-4">
+              <div className="w-full h-64 object-contain cursor-pointer rounded-md mb-4">
                 <img
                   src={previewImage}
                   alt="미리보기"
                   className="w-full h-full object-contain"
+                  style={{ maxWidth: "100%", maxHeight: "100%" }}
                 />
               </div>
             )}
-            <input
-              type="text"
+            <textarea
               placeholder="이미지 설명을 입력하세요"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 mb-4 w-full"
+              className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 mb-4 w-full h-80 resize-none"
+              style={{ maxWidth: "100%", maxHeight: "100%" }}
             />
-            <button
-              onClick={handleAddImage}
-              className="w-full p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition duration-300 shadow"
-            >
-              업로드
-            </button>
-            <button
-              onClick={() => setShowUploadModal(false)}
-              className="mt-4 w-full p-2 text-center text-red-500"
-            >
-              닫기
-            </button>
+            <div className="mt-auto flex space-x-4">
+              <button
+                onClick={handleAddImage}
+                className="w-full p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300 shadow"
+              >
+                업로드
+              </button>
+              <button
+                onClick={() => setShowUploadModal(false)}
+                className="w-full p-3 text-center text-red-500 border border-red-500 rounded-lg hover:bg-red-50 transition"
+              >
+                닫기
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -376,17 +385,25 @@ const Gallery: React.FC = () => {
             )}
 
             {/* 이미지 */}
-            <img
-              src={item.src}
-              alt={item.alt}
-              className="w-full h-48 object-contain cursor-pointer rounded-md mb-4"
-              onClick={() => setSelectedImage(item.src)}
-            />
+            {item.src && (
+              <img
+                src={item.src}
+                alt={item.alt}
+                className="w-full h-48 object-contain cursor-pointer rounded-md mb-4"
+                onClick={() => setSelectedImage(item.src)}
+              />
+            )}
 
             {/* 설명 */}
             <div className="mb-4">
-              <div className="bg-gray-50 p-3 rounded-lg shadow-inner h-20 overflow-y-auto">
-                <p className="text-gray-700">{item.description}</p>
+              <div
+                className={`bg-gray-50 p-3 rounded-lg shadow-inner overflow-y-auto text-left ${
+                  !item.src ? "h-48" : ""
+                }`}
+              >
+                <p className="text-gray-700 whitespace-pre-line">
+                  {item.description}
+                </p>
               </div>
             </div>
 
