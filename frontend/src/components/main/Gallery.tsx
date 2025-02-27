@@ -357,12 +357,22 @@ const Gallery: React.FC = () => {
           >
             {/* 삭제 버튼 (로그인 상태이며 업로더인 경우에만 표시) */}
             {isAuthenticated() && getCurrentUser().id === item.uploadedBy && (
-              <button
-                onClick={() => handleDeleteImage(item.id)}
-                className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded-full opacity-80 hover:opacity-100 transition-opacity"
-              >
-                삭제
-              </button>
+              <div className="absolute top-2 right-2 flex space-x-2">
+                <button
+                  onClick={() =>
+                    handleShowEditModal(item.id, item.description, item.src)
+                  }
+                  className="bg-blue-500 text-white px-2 py-1 rounded-full opacity-80 hover:opacity-100 transition-opacity"
+                >
+                  수정
+                </button>
+                <button
+                  onClick={() => handleDeleteImage(item.id)}
+                  className="bg-red-600 text-white px-2 py-1 rounded-full opacity-80 hover:opacity-100 transition-opacity"
+                >
+                  삭제
+                </button>
+              </div>
             )}
 
             {/* 이미지 */}
@@ -373,21 +383,11 @@ const Gallery: React.FC = () => {
               onClick={() => setSelectedImage(item.src)}
             />
 
-            {/* 설명 및 수정 버튼 */}
+            {/* 설명 */}
             <div className="mb-4">
               <div className="bg-gray-50 p-3 rounded-lg shadow-inner h-20 overflow-y-auto">
                 <p className="text-gray-700">{item.description}</p>
               </div>
-              {isAuthenticated() && getCurrentUser().id === item.uploadedBy && (
-                <button
-                  onClick={() =>
-                    handleShowEditModal(item.id, item.description, item.src)
-                  }
-                  className="mt-2 bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-400 transition duration-300 shadow"
-                >
-                  수정
-                </button>
-              )}
             </div>
 
             {/* 댓글 리스트 */}
@@ -696,32 +696,35 @@ const Gallery: React.FC = () => {
               className="mb-4"
             />
             {editPreviewImage && (
-              <div className="w-48 h-48 border rounded-lg overflow-hidden mb-4">
+              <div className="w-full h-64 object-contain cursor-pointer rounded-md mb-4">
                 <img
                   src={editPreviewImage}
                   alt="미리보기"
                   className="w-full h-full object-contain"
+                  style={{ maxWidth: "100%", maxHeight: "100%" }}
                 />
               </div>
             )}
-            <input
-              type="text"
+            <textarea
               value={editDescription}
               onChange={(e) => setEditDescription(e.target.value)}
-              className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 mb-4 w-full"
+              className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 mb-4 w-full h-80 resize-none"
+              style={{ maxWidth: "100%", maxHeight: "100%" }}
             />
-            <button
-              onClick={handleSaveEdit}
-              className="w-full p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300 shadow"
-            >
-              저장
-            </button>
-            <button
-              onClick={() => setShowEditModal(false)}
-              className="mt-4 w-full p-2 text-center text-red-500"
-            >
-              닫기
-            </button>
+            <div className="mt-auto flex space-x-4">
+              <button
+                onClick={handleSaveEdit}
+                className="w-full p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300 shadow"
+              >
+                저장
+              </button>
+              <button
+                onClick={() => setShowEditModal(false)}
+                className="w-full p-3 text-center text-red-500 border border-red-500 rounded-lg hover:bg-red-50 transition"
+              >
+                닫기
+              </button>
+            </div>
           </div>
         </div>
       )}
