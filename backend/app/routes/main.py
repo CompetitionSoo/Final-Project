@@ -10,7 +10,7 @@ def test():
 
 @main_bp.route('/')
 def serve():
-    return jsonify({'message': 'Welcome to Yujin Robot API'}), 200
+    return jsonify({'message': 'Welcome to Coubot API'}), 200
     ### return send_from_directory('../frontend/build', 'index.html') once react app is built
 
 @main_bp.route('/api/contact', methods=['POST'])
@@ -44,7 +44,31 @@ def contact():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-    
+
+@main_bp.route('/api/contact2', methods=['POST'])
+def contact2():
+    try:
+        data = request.json
+        subject = data.get('subject')
+        message = data.get('message')
+
+        if not all([subject, message]):
+            return jsonify({"error": "모든 필드를 입력해주세요."}), 400
+
+        # 이메일 전송
+        msg = Message(subject=f"문의사항: {subject}",
+                      recipients=['fpteam1234@gmail.com'])
+        msg.body = f"""
+        내용:
+        {message}
+        """
+        mail.send(msg)
+
+        return jsonify({"message": "문의가 성공적으로 접수되었습니다."}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @main_bp.route('/api/products')
 def get_products():
     # TODO: Implement products API
