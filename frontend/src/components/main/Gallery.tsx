@@ -58,19 +58,20 @@ const Gallery: React.FC = () => {
   // 로컬 스토리지에서 갤러리 아이템 불러오기
   useEffect(() => {
     const savedGalleryItems = localStorage.getItem("galleryItems");
-    if (savedGalleryItems) {
-      setGalleryItems(JSON.parse(savedGalleryItems));
+    const galleryArray = savedGalleryItems ? JSON.parse(savedGalleryItems) : [];
+    if (galleryArray.length > 0) {
+      setGalleryItems(galleryArray);
     } else {
-      // 기본 갤러리 아이템 추가
+      // 기본 게시글 생성
       const defaultItem: GalleryItem = {
         id: 1,
-        src: "https://via.placeholder.com/150",
-        alt: "기본 이미지",
+        src: "https://via.placeholder.com/300", // 원하는 기본 이미지 URL로 변경 가능
+        alt: "default image",
         likes: 0,
         comments: [],
-        description: "기본 설명",
+        description: "게시글입니다.",
         liked: false,
-        uploadedBy: "default",
+        uploadedBy: "defaultUser",
       };
       setGalleryItems([defaultItem]);
       saveGalleryItemsToLocalStorage([defaultItem]);
@@ -379,7 +380,7 @@ const Gallery: React.FC = () => {
             className="relative bg-[#F2F6F8] rounded-lg overflow-hidden p-4 flex flex-col justify-between w-full h-full shadow-lg transform hover:scale-105 transition-transform duration-300"
           >
             {/* 삭제 버튼 (로그인 상태이며 업로더인 경우에만 표시) */}
-            {isAuthenticated() && getCurrentUser().id === item.uploadedBy && (
+            {isAuthenticated() && (getCurrentUser().id === item.uploadedBy || item.id === 1) &&  (
               <div className="absolute top-2 right-2 flex space-x-2">
                 <button
                   onClick={() =>
