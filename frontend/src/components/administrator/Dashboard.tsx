@@ -5,7 +5,7 @@ import Webcam from './Webcam';
 import Todolist from './Todolist';
 import "./Dashboard.css";
 
-const Dashboard2: React.FC = () => {
+const Dashboard: React.FC = () => {
   const navigate = useNavigate();
 
   // Protect this route - redirect to login if not authenticated
@@ -90,4 +90,4 @@ const Dashboard2: React.FC = () => {
   );
 };
 
-export default Dashboard2;
+export default Dashboard;

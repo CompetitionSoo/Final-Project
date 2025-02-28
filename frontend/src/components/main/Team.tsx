@@ -13,7 +13,7 @@ const Team: React.FC = () => {
       <div className='cubot_info'>
         <div className='border border-indigo-800' style={{ height: '200px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <p style={{fontSize: '40px', color: '#333', animation: 'slideIn 2s ease-out'}}>
-            자율주행 로봇 <span style={{ color: '#FF6347', fontWeight: 'bold' }}>쿠봇</span>이 대신 옮겨 드리겠습니다!
+            자율배송 로봇 <span style={{ color: '#FF6347', fontWeight: 'bold' }}>쿠봇</span>이 대신 옮겨 드리겠습니다!
           </p>
         </div>
       </div>

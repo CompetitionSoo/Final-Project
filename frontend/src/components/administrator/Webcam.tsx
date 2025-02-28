@@ -16,7 +16,7 @@ const Webcam: React.FC = () => {
       }
     };
 
-    startWebcam();
+    // startWebcam();
 
     // 컴포넌트가 unmount 될 때 스트림을 멈추기
     return () => {
@@ -28,12 +28,14 @@ const Webcam: React.FC = () => {
 
   return (
     <div className="webcam-container">
-      <video
+      {/*<video
         ref={videoRef}
         autoPlay
         playsInline
         className="absolute top-0 left-0 w-full h-full object-cover"  // 비디오 요소 스타일 추가
-      ></video>
+      ></video>*/}
+
+      <img alt="스트리밍" src="http://127.0.0.1:8001/video_feed" className="absolute top-0 left-0 w-full h-full object-cover" />
 
       <div className="text-container absolute top-0 left-0 w-full h-full object-cover" style={{
         backgroundColor: "#000000AA",
