@@ -1,12 +1,35 @@
 from flask import Blueprint, request, jsonify
 from werkzeug.security import generate_password_hash
 import jwt
+from functools import wraps
 from datetime import datetime, timedelta
 from .. import db
 from ..models.user import User
 from decouple import config
 
 auth_bp = Blueprint('auth', __name__)
+
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = request.headers.get("Authorization")
+        if not token:
+            return jsonify({"message": "토큰이 없습니다."}), 401
+
+        try:
+            token = token.split(" ")[1]  # "Bearer <token>" 형태에서 토큰만 추출
+            decoded = jwt.decode(token, config('SECRET_KEY'), algorithms=["HS256"])
+            current_user = User.query.get(decoded["user_id"])
+            if not current_user:
+                return jsonify({"message": "사용자를 찾을 수 없습니다."}), 404
+        except jwt.ExpiredSignatureError:
+            return jsonify({"message": "토큰이 만료되었습니다."}), 401
+        except jwt.InvalidTokenError:
+            return jsonify({"message": "유효하지 않은 토큰입니다."}), 401
+
+        return f(current_user, *args, **kwargs)
+
+    return decorated
 
 @auth_bp.route('/api/register', methods=['POST'])
 def register():
@@ -60,3 +83,14 @@ def login():
         'token': token,
         'user': user.to_dict()
     }), 200 
+
+@auth_bp.route("/api/profile", methods=["GET"])
+@token_required
+def get_profile(current_user):
+    return jsonify({
+        "id": current_user.id,
+        "name": current_user.name,
+        "email": current_user.email,
+        "phone": current_user.phone,
+        "description": current_user.description
+    })

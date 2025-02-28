@@ -167,7 +167,7 @@ const Contact: React.FC = () => {
                 value={formData.subject}
                 onChange={handleInputChange}
                 className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-                placeholder="이 문제가 있습니다."
+                placeholder="제목을 입력해주세요."
               />
               {errors.subject && <p className="text-red-500 text-sm">{errors.subject}</p>}
             </div>
