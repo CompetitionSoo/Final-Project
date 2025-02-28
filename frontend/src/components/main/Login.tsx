@@ -1,4 +1,4 @@
-import { FaEnvelope, FaLock } from "react-icons/fa";
+import { FaIdCard, FaLock } from "react-icons/fa";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login, isAuthenticated } from "../../services/auth";
@@ -51,14 +51,14 @@ const Login: React.FC = () => {
 
         <form onSubmit={handleLogin} className="flex flex-col">
           <div className="relative mb-4">
-            <FaEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+            <FaIdCard className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
             <input
               id="username"
               type="text"
               className="p-2 pl-10 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="이메일을 입력하세요"
+              placeholder="아이디을 입력하세요"
               disabled={isLoading}
               required
             />
