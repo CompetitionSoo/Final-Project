@@ -1,0 +1,23 @@
+.main_nav a{
+    position: relative;
+    text-decoration: none;
+    font-family: "Poppins", sans-serif;
+    color: #22201e;
+    font-size: 18px;
+    letter-spacing: 0.5px;
+    padding: 0 10px;
+}
+
+.main_nav a::after{
+    content: "";
+    position: absolute;
+    background-color: hsl(303, 67%, 62%);
+    height: 3px;
+    width: 0;
+    left: 0;
+    bottom: -5px;
+    transition: 0.3s;
+}
+.main_nav a:hover:after{
+    width: 100%;
+}

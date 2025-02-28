@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-
 import swal from 'sweetalert';
+
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 //npm install sweetalert --save
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -29,11 +30,11 @@ const Contact: React.FC = () => {
   };
 
   // Form submission handler
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     let formErrors = { name: '', contact: '', email: '', subject: '', message: '' };
     let isValid = true;
-
+  
     // Validation checks
     if (!formData.name) {
       formErrors.name = '성함을 입력해주세요.';
@@ -58,19 +59,39 @@ const Contact: React.FC = () => {
       formErrors.message = '문의 내용을 입력해주세요.';
       isValid = false;
     }
-
+  
     setErrors(formErrors);
-
+  
     if (isValid) {
-      swal({
-        title: "문의가 접수되었습니다!",
-        text: "빠른 시일 내에 답변드리겠습니다.",
-        icon: "success",
-        button: "확인",
-      }).then(() => {
-        // 실제 폼 제출 (추후 API 요청 or 서버 전송 가능)
-        console.log("폼 제출됨:", formData);
-      });
+      try {
+        const response = await fetch(`${API_URL}/api/contact`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+  
+        const result = await response.json();
+  
+        if (response.ok) {
+          swal({
+            title: "문의가 접수되었습니다!",
+            text: "빠른 시일 내에 답변드리겠습니다.",
+            icon: "success",
+          });
+  
+          setFormData({ name: '', contact: '', email: '', subject: '', message: '' });
+        } else {
+          throw new Error(result.error || '문의 접수 중 오류가 발생했습니다.');
+        }
+      } catch (error: any) {
+        swal({
+          title: "오류 발생",
+          text: error.message,
+          icon: "error",
+        });
+      }
     }
   };
 
@@ -146,7 +167,7 @@ const Contact: React.FC = () => {
                 value={formData.subject}
                 onChange={handleInputChange}
                 className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-                placeholder="이 문제가 있습니다."
+                placeholder="제목을 입력해주세요."
               />
               {errors.subject && <p className="text-red-500 text-sm">{errors.subject}</p>}
             </div>

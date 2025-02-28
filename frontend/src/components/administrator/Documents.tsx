@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import swal from 'sweetalert';
+
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 //npm install sweetalert --save
 const InquiryForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -22,9 +24,9 @@ const InquiryForm: React.FC = () => {
   };
 
   // Form submission handler
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    let formErrors = { name: '', contact: '', email: '', subject: '', message: '' };
+    let formErrors = { subject: '', message: '' }; 
     let isValid = true;
 
     // Validation checks
@@ -38,17 +40,37 @@ const InquiryForm: React.FC = () => {
     }
 
     setErrors(formErrors);
-
+    //지금은 제목,내용만 보내지만 login정보에서 이름, 이메일정보를 추출해 같이 보낼수 있도록 구현할것
     if (isValid) {
-      swal({
-        title: "문의가 접수되었습니다!",
-        text: "빠른 시일 내에 답변드리겠습니다.",
-        icon: "success",
-        
-      }).then(() => {
-        // 실제 폼 제출 (추후 API 요청 or 서버 전송 가능)
-        console.log("폼 제출됨:", formData);
-      });
+      try {
+        const response = await fetch(`${API_URL}/api/contact2`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+  
+        const result = await response.json();
+  
+        if (response.ok) {
+          swal({
+            title: "문의가 접수되었습니다!",
+            text: "빠른 시일 내에 답변드리겠습니다.",
+            icon: "success",
+          });
+  
+          setFormData({ subject: '', message: '' });
+        } else {
+          throw new Error(result.error || '문의 접수 중 오류가 발생했습니다.');
+        }
+      } catch (error: any) {
+        swal({
+          title: "오류 발생",
+          text: error.message,
+          icon: "error",
+        });
+      }
     }
   };
 
@@ -56,7 +78,7 @@ const InquiryForm: React.FC = () => {
   return (
     <div className="container mx-auto p-6 flex justify-center items-center">
       {/* Form container with Flexbox */}
-      <div className="border-2 border-gray-300 p-6 rounded-lg shadow-lg flex max-w-4xl w-full">
+      <div className="border-2 border-red-700 bg-white p-6 rounded-lg shadow-lg flex max-w-4xl w-full">
         {/* Form Content Section */}
         <div className="flex-1 pr-6">
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -64,7 +86,7 @@ const InquiryForm: React.FC = () => {
 
             <div>
               <label htmlFor="subject" className="block text-sm font-medium text-gray-700">
-                제목 *
+                제목
               </label>
               <input
                 type="text"
@@ -73,14 +95,14 @@ const InquiryForm: React.FC = () => {
                 value={formData.subject}
                 onChange={handleInputChange}
                 className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-                placeholder="이 문제가 있습니다."
+                placeholder="제목을 입력해주세요."
               />
               {errors.subject && <p className="text-red-500 text-sm">{errors.subject}</p>}
             </div>
 
             <div>
               <label htmlFor="message" className="block text-sm font-medium text-gray-700">
-                내용 *
+                내용
               </label>
               <textarea
                 rows={10}
