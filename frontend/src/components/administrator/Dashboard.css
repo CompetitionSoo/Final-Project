@@ -67,7 +67,7 @@
 
 /* 이미지 크기 조정 */
 .card img {
-  width: 80%;
+  /* width: 80%; */
   height: auto;
   border-radius: 10px;
 }

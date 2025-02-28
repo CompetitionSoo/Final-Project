@@ -60,6 +60,20 @@ const Gallery: React.FC = () => {
     const savedGalleryItems = localStorage.getItem("galleryItems");
     if (savedGalleryItems) {
       setGalleryItems(JSON.parse(savedGalleryItems));
+    } else {
+      // 기본 갤러리 아이템 추가
+      const defaultItem: GalleryItem = {
+        id: 1,
+        src: "https://via.placeholder.com/150",
+        alt: "기본 이미지",
+        likes: 0,
+        comments: [],
+        description: "기본 설명",
+        liked: false,
+        uploadedBy: "default",
+      };
+      setGalleryItems([defaultItem]);
+      saveGalleryItemsToLocalStorage([defaultItem]);
     }
   }, []);
 
@@ -362,7 +376,7 @@ const Gallery: React.FC = () => {
         {galleryItems.map((item) => (
           <div
             key={item.id}
-            className="relative bg-white rounded-lg overflow-hidden p-4 flex flex-col justify-between w-full h-full shadow-lg transform"
+            className="relative bg-[#F2F6F8] rounded-lg overflow-hidden p-4 flex flex-col justify-between w-full h-full shadow-lg transform hover:scale-105 transition-transform duration-300"
           >
             {/* 삭제 버튼 (로그인 상태이며 업로더인 경우에만 표시) */}
             {isAuthenticated() && getCurrentUser().id === item.uploadedBy && (
@@ -397,7 +411,7 @@ const Gallery: React.FC = () => {
             {/* 설명 */}
             <div className="mb-4">
               <div
-                className={`bg-gray-50 p-3 rounded-lg shadow-inner overflow-y-auto text-left ${
+                className={`bg-white p-3 rounded-lg shadow-inner overflow-y-auto text-left ${
                   !item.src ? "h-48" : ""
                 }`}
               >
@@ -410,7 +424,7 @@ const Gallery: React.FC = () => {
 
             {/* 댓글 리스트 */}
             {item.comments.length > 0 && (
-              <div className="bg-gray-100 p-3 rounded-lg shadow-inner mb-4">
+              <div className="bg-gray-50 p-3 rounded-lg shadow-inner mb-4">
                 <h3 className="font-semibold mb-2">댓글</h3>
                 <ul className="space-y-2 h-24 overflow-y-auto text-sm">
                   {item.comments.map((comment, index) => {

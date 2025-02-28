@@ -8,7 +8,10 @@ import Process from './components/main/Process';
 import About from './components/main/About';
 import ProjectIntro from './components/main/ProjectIntro';
 import DemoVideo from './components/main/DemoVideo';
+
 import Login from "./components/main/Login";
+
+
 import Contact from './components/main/Contact'; 
 import Register from './components/main/Register';
 
