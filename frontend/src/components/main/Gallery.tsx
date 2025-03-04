@@ -58,8 +58,23 @@ const Gallery: React.FC = () => {
   // 로컬 스토리지에서 갤러리 아이템 불러오기
   useEffect(() => {
     const savedGalleryItems = localStorage.getItem("galleryItems");
-    if (savedGalleryItems) {
-      setGalleryItems(JSON.parse(savedGalleryItems));
+    const galleryArray = savedGalleryItems ? JSON.parse(savedGalleryItems) : [];
+    if (galleryArray.length > 0) {
+      setGalleryItems(galleryArray);
+    } else {
+      // 기본 게시글 생성
+      const defaultItem: GalleryItem = {
+        id: 1,
+        src: "https://via.placeholder.com/300", // 원하는 기본 이미지 URL로 변경 가능
+        alt: "default image",
+        likes: 0,
+        comments: [],
+        description: "게시글",
+        liked: false,
+        uploadedBy: "defaultUser",
+      };
+      setGalleryItems([defaultItem]);
+      saveGalleryItemsToLocalStorage([defaultItem]);
     }
   }, []);
 
@@ -362,7 +377,7 @@ const Gallery: React.FC = () => {
         {galleryItems.map((item) => (
           <div
             key={item.id}
-            className="relative bg-white rounded-lg overflow-hidden p-4 flex flex-col justify-between w-full h-full shadow-lg transform"
+            className="relative bg-[#F2F6F8] rounded-lg overflow-hidden p-4 flex flex-col justify-between w-full h-full shadow-lg transform hover:scale-105 transition-transform duration-300"
           >
             {/* 삭제 버튼 (로그인 상태이며 업로더인 경우에만 표시) */}
             {isAuthenticated() && getCurrentUser().id === item.uploadedBy && (
@@ -397,20 +412,22 @@ const Gallery: React.FC = () => {
             {/* 설명 */}
             <div className="mb-4">
               <div
-                className={`bg-gray-50 p-3 rounded-lg shadow-inner overflow-y-auto text-left ${
-                  !item.src ? "h-48" : ""
+                className={`bg-white p-3 rounded-lg shadow-inner overflow-y-auto text-left ${
+                  item.src ? "h-28" : "h-80"
                 }`}
               >
-                <p className="text-gray-700 text-left whitespace-pre-wrap" style={{ textAlign: "justify" }}>
+                <p
+                  className="text-gray-700 whitespace-pre-wrap"
+                  style={{ textAlign: "justify" }}
+                >
                   {item.description}
                 </p>
               </div>
             </div>
 
-
             {/* 댓글 리스트 */}
             {item.comments.length > 0 && (
-              <div className="bg-gray-100 p-3 rounded-lg shadow-inner mb-4">
+              <div className="bg-gray-50 p-3 rounded-lg shadow-inner mb-4">
                 <h3 className="font-semibold mb-2">댓글</h3>
                 <ul className="space-y-2 h-24 overflow-y-auto text-sm">
                   {item.comments.map((comment, index) => {
