@@ -69,7 +69,7 @@ const Gallery: React.FC = () => {
         alt: "default image",
         likes: 0,
         comments: [],
-        description: "게시글입니다.",
+        description: "게시글",
         liked: false,
         uploadedBy: "defaultUser",
       };
@@ -380,7 +380,7 @@ const Gallery: React.FC = () => {
             className="relative bg-[#F2F6F8] rounded-lg overflow-hidden p-4 flex flex-col justify-between w-full h-full shadow-lg transform hover:scale-105 transition-transform duration-300"
           >
             {/* 삭제 버튼 (로그인 상태이며 업로더인 경우에만 표시) */}
-            {isAuthenticated() && (getCurrentUser().id === item.uploadedBy || item.id === 1) &&  (
+            {isAuthenticated() && (getCurrentUser().id === item.uploadedBy) &&  (
               <div className="absolute top-2 right-2 flex space-x-2">
                 <button
                   onClick={() =>
