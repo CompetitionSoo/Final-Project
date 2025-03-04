@@ -380,7 +380,7 @@ const Gallery: React.FC = () => {
             className="relative bg-[#F2F6F8] rounded-lg overflow-hidden p-4 flex flex-col justify-between w-full h-full shadow-lg transform hover:scale-105 transition-transform duration-300"
           >
             {/* 삭제 버튼 (로그인 상태이며 업로더인 경우에만 표시) */}
-            {isAuthenticated() && (getCurrentUser().id === item.uploadedBy) &&  (
+            {isAuthenticated() && getCurrentUser().id === item.uploadedBy && (
               <div className="absolute top-2 right-2 flex space-x-2">
                 <button
                   onClick={() =>
@@ -413,15 +413,17 @@ const Gallery: React.FC = () => {
             <div className="mb-4">
               <div
                 className={`bg-white p-3 rounded-lg shadow-inner overflow-y-auto text-left ${
-                  !item.src ? "h-48" : ""
+                  item.src ? "h-32" : "h-72"
                 }`}
               >
-                <p className="text-gray-700 text-left whitespace-pre-wrap" style={{ textAlign: "justify" }}>
+                <p
+                  className="text-gray-700 whitespace-pre-wrap"
+                  style={{ textAlign: "justify" }}
+                >
                   {item.description}
                 </p>
               </div>
             </div>
-
 
             {/* 댓글 리스트 */}
             {item.comments.length > 0 && (
