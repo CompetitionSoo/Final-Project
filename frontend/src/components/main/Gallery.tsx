@@ -413,7 +413,7 @@ const Gallery: React.FC = () => {
             <div className="mb-4">
               <div
                 className={`bg-white p-3 rounded-lg shadow-inner overflow-y-auto text-left ${
-                  item.src ? "h-32" : "h-72"
+                  item.src ? "h-28" : "h-80"
                 }`}
               >
                 <p
