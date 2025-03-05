@@ -33,7 +33,7 @@ const getCurrentUser = () => {
 
 const Gallery: React.FC = () => {
   const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
-  const [newImage, setNewImage] = useState<File | null>(null);
+  const [newImage, setNewImage] = useState<string | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [description, setDescription] = useState<string>("");
   const [newComments, setNewComments] = useState<{ [key: number]: string }>({});
@@ -45,8 +45,11 @@ const Gallery: React.FC = () => {
   const [selectedImageId, setSelectedImageId] = useState<number | null>(null);
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
   const [editDescription, setEditDescription] = useState<string>("");
-  const [editImage, setEditImage] = useState<File | null>(null);
+  const [editImage, setEditImage] = useState<string | null>(null);
   const [editPreviewImage, setEditPreviewImage] = useState<string | null>(null);
+
+  
+
 
   // 댓글 수정 관련 상태: 갤러리 아이템별로 수정 중인 댓글의 인덱스와 편집 텍스트 저장
   const [editingComment, setEditingComment] = useState<{
@@ -88,12 +91,12 @@ const Gallery: React.FC = () => {
     if (e.target.files) {
       const file = e.target.files[0];
       const reader = new FileReader();
-
+  
       reader.onloadend = () => {
-        setNewImage(file);
+        setNewImage(reader.result as string);
         setPreviewImage(reader.result as string);
       };
-
+  
       reader.readAsDataURL(file);
     }
   };
@@ -103,8 +106,8 @@ const Gallery: React.FC = () => {
     if (isAuthenticated()) {
       const newItem: GalleryItem = {
         id: galleryItems.length + 1,
-        src: newImage ? URL.createObjectURL(newImage) : "",
-        alt: newImage ? newImage.name : "",
+        src: newImage || "",
+        alt: newImage ? "Uploaded Image" : "",
         likes: 0,
         comments: [],
         description,
@@ -270,12 +273,12 @@ const Gallery: React.FC = () => {
     if (e.target.files) {
       const file = e.target.files[0];
       const reader = new FileReader();
-
+  
       reader.onloadend = () => {
-        setEditImage(file);
+        setEditImage(reader.result as string);
         setEditPreviewImage(reader.result as string);
       };
-
+  
       reader.readAsDataURL(file);
     }
   };
@@ -288,8 +291,8 @@ const Gallery: React.FC = () => {
           ? {
               ...item,
               description: editDescription,
-              src: editImage ? URL.createObjectURL(editImage) : item.src,
-              alt: editImage ? editImage.name : item.alt,
+              src: editImage || item.src,
+              alt: editImage ? "Edited Image" : item.alt,
             }
           : item
       );
