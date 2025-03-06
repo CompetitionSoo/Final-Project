@@ -28,8 +28,8 @@ def contact():
 
         # 이메일 전송
         msg = Message(subject=f"문의사항: {subject}",
-                      sender=email,
-                      recipients=['fpteam1234@gmail.com'])
+                    sender=email,
+                    recipients=['fpteam1234@gmail.com'])
         msg.body = f"""
         이름: {name}
         연락처: {contact}
@@ -57,7 +57,7 @@ def contact2():
 
         # 이메일 전송
         msg = Message(subject=f"문의사항: {subject}",
-                      recipients=['fpteam1234@gmail.com'])
+                        recipients=['fpteam1234@gmail.com'])
         msg.body = f"""
         내용:
         {message}

@@ -11,12 +11,14 @@ const ControlRobot: React.FC = () => {
   const [currentAction, setCurrentAction] = useState('대기 중'); // 현재 동작 상태
   const navigate = useNavigate();
 
+
   // ✅ 키보드 이벤트 리스너 추가 (W, A, S, D 키 추가)
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       switch (event.key.toLowerCase()) { // 소문자로 변환하여 비교 (대소문자 대응)
         case 'arrowup':
         case 'w':
+          
           setCurrentAction('⬆ 앞으로 이동');
           break;
         case 'arrowdown':
@@ -70,7 +72,7 @@ const ControlRobot: React.FC = () => {
           {/* YOLO 감지 화면 (상단) */}
           <div className="relative h-80 bg-black rounded-lg overflow-hidden mb-4">
             <h3 className="absolute top-2 left-2 text-white font-bold z-10">📷 YOLO 감지 화면</h3>
-            <YoloStream />
+            <YoloStream/>
           </div>
 
           {/* 실시간 웹캠 화면 (하단) */}
@@ -82,7 +84,24 @@ const ControlRobot: React.FC = () => {
 
         {/* 오른쪽: 방향키 및 버튼 */}
         <div className="flex-1">
-          <div className="text-center mb-6">
+        {/* YOLO 모델 선택 */}
+          <div className="bg-white p-1 rounded-lg shadow-md w-full text-center mb-6">
+            <h3 className="font-semibold text-gray-700 mb-2">모델 선택</h3>
+            <div className="grid grid-cols-3 gap-4 my-6">
+              <button className="bg-amber-500 text-white py-3 rounded-md">과일&채소</button>
+              <button className="bg-green-400 text-white py-3 rounded-md">신선도</button>
+              <button className="bg-red-500 text-white py-3 rounded-md">장애물</button>
+            </div>
+          </div>
+  
+
+
+            
+            <div className="bg-white p-4 rounded-lg shadow-md w-full text-center mb-6">
+              <h3 className="font-semibold text-gray-700 mb-2">🔍 검출된 객체</h3>
+              <p id="detection-text" className="text-gray-600">현재 검출된 객체 없음</p>
+            </div>
+            <div className="text-center mb-6">
             {/* 방향키 조작 */}
             <div className="grid grid-container">
               <button className="bg-gray-300 p-6 rounded-md text-xl col-span-1 row-span-1 forward">▲ 앞으로</button>
