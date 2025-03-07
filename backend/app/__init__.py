@@ -37,6 +37,11 @@ def create_app():
     app.register_blueprint(auth_bp)
     app.register_blueprint(upload_bp)
 
+    from .routes.yolo import yolo_bp
+    app.register_blueprint(yolo_bp)
+
+
+
     # Import models to ensure they're known to Flask-SQLAlchemy
     from .models import user
     
