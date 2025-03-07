@@ -111,7 +111,7 @@ const InquiryForm: React.FC = () => {
                 value={formData.message}
                 onChange={handleInputChange}
                 className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500  resize-none"
-                placeholder="문의하실 내용을 자유롭게 입력해주세요."
+                placeholder="하실 내용을 자유롭게 입력해주세요."
                 
               />
               {errors.message && <p className="text-red-500 text-sm">{errors.message}</p>}

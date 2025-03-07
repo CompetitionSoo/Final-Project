@@ -432,7 +432,7 @@ const Gallery: React.FC = () => {
             {item.comments.length > 0 && (
               <div className="bg-gray-50 p-3 rounded-lg shadow-inner mb-4">
                 <h3 className="font-semibold mb-2">댓글</h3>
-                <ul className="space-y-2 h-24 overflow-y-auto text-sm">
+                <ul className="space-y-2 h-20 overflow-y-auto text-sm">
                   {item.comments.map((comment, index) => {
                     const isEditing =
                       editingComment[item.id] &&
