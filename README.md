@@ -50,16 +50,17 @@ project/
 
 3. backend 디렉토리에 `.env` 파일 생성 및 다음 내용 추가:
    ```
-   SECRET_KEY='1234'
-   DATABASE_URL=mysql+pymysql://teamuser:1234@192.168.0.47/mydatabase
-   FLASK_ENV=development
-   FLASK_APP=run.py
-   MAIL_SERVER=smtp.gmail.com
-   MAIL_PORT=587
-   MAIL_USE_TLS=True
-   MAIL_USERNAME=fpteam1234@gmail.com
-   MAIL_PASSWORD=dsff tngk dnsx ahsn
-   MAIL_DEFAULT_SENDER=FP<fpteam1234@gmail.com>
+    SECRET_KEY='1234'
+    DATABASE_URL=mysql+pymysql://teamuser:1234@192.168.0.47/mydatabase
+    FLASK_ENV=development
+    FLASK_APP=run.py
+    MAIL_SERVER=smtp.gmail.com
+    MAIL_PORT=587
+    MAIL_USE_TLS=True
+    MAIL_USERNAME=fpteam1234@gmail.com
+    MAIL_PASSWORD=dsff tngk dnsx ahsn
+    MAIL_DEFAULT_SENDER=FP<fpteam1234@gmail.com>
+    UPLOAD_FOLDER=uploads
    ```
    
 ### 프론트엔드 설정
