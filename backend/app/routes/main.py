@@ -69,12 +69,8 @@ def contact2():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@main_bp.route('/api/products')
-def get_products():
-    # TODO: Implement products API
-    return jsonify({'products': []}), 200
-
 @main_bp.route('/video/<path:filename>')
 def serve_video(filename):
     return send_from_directory('../frontend/public/videos', filename) 
+
 
