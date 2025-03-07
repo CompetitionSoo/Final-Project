@@ -17,6 +17,20 @@ const About: React.FC = () => {
           <div className="mb-8">
             <h2 className="text-2xl font-semibold mb-4">주요 기능</h2>
             <ul className="list-disc list-inside text-gray-600">
+              <li>일정 관리</li>
+              <li>로봇 제어</li>
+              <li>할 일 체크리스트</li>
+              <li>자동차 상태 모니터링</li>
+              <li>자동차 제어</li>
+            </ul>
+          </div>
+
+          <div className="mb-8">
+            <h2 className="text-2xl font-semibold mb-4">대시보드 기능</h2>
+            <p className="text-gray-600 text-left">
+              대시보드를 통해 실시간 모니터링을 확인하고, 할 일 목록을 관리하며, 로봇과 자동차를 제어할 수 있습니다. 오늘의 할 일 목록을 추가하고 완료된 작업에 체크하여 더 효율적으로 하루를 관리하세요!
+            </p>
+            <ul className="list-disc list-inside text-gray-600">
               <li>실시간 웹캠 모니터링</li>
               <li>로봇 제어 기능</li>
               <li>할 일 목록 관리</li>
@@ -24,13 +38,6 @@ const About: React.FC = () => {
               <li>자동차 상태 모니터링</li>
               <li>자동차 제어 기능</li>
             </ul>
-          </div>
-
-          <div className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">대시보드 기능</h2>
-            <p className="text-gray-600 text-left">
-              대시보드를 통해 실시간 모니터링을 확인하고, 할 일 목록을 관리하며, 로봇과 자동차를 제어할 수 있습니다.
-            </p>
           </div>
 
           <div className="mb-8">

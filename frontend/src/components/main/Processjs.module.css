@@ -1,0 +1,138 @@
+
+.container {
+  position: relative;
+}
+
+/* 배경 */
+.background {/* public 폴더 기준 */
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  width: 100vw;
+  height: 100vh;
+  background-position: top;
+  z-index: 1;
+  position: relative;
+  box-shadow:
+    /* 위쪽 그림자: offset-y가 -50px, blur 50px, spread -50px */
+    0 -50px 50px -50px rgba(0,0,0,0.8),
+    /* 왼쪽 그림자: offset-x가 -50px, blur 50px, spread -50px */
+    -50px 0 50px -50px rgba(0,0,0,0.8),
+    /* 오른쪽 그림자: offset-x가 50px, blur 50px, spread -50px */
+    50px 0 50px -50px rgba(0,0,0,0.8);
+}
+
+
+.h1_0 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+  font-family: 'Gruppo', cursive;
+  text-transform: uppercase;
+  letter-spacing: 0.5rem;
+  font-size: 3rem;
+  color: white;
+  text-shadow: 2px 2px 5px;
+}
+.h2_0 {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+  font-family: 'Gruppo', cursive;
+  text-transform: uppercase;
+  letter-spacing: 0.5rem;
+  font-size: 3rem;
+  color: white;
+  text-shadow: 2px 2px 5px;
+}
+
+.layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.layer1 {
+  background-image:
+    linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.70), #020202);
+  z-index: 70;
+}
+
+.layer2 {
+  background-image:
+    linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.80), #020202);
+  z-index: 80;
+}
+
+.layer3 {
+  background-image:
+    linear-gradient(to bottom, transparent 70%, rgba(0,0,0,0.85), #020202);
+  z-index: 90;
+}
+
+.content {
+  font-size: 1.2rem;
+  line-height: 1.7;
+  height: 10%;
+  position: relative;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.text {
+  padding: 4rem 10rem 20rem 40rem;
+}
+
+/* rock 관련 스타일 */
+.rock {
+  background-image: url("https://i.imgur.com/F4xnzjU.png");
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background-position: right bottom;
+  transform: scaleX(-1);
+  background-repeat: repeat-x;       /* 가로 방향으로만 반복 */
+  background-attachment: fixed;
+  background-size: auto;         /* 가로 크기를 110%로 키우고 세로는 자동 */
+}
+
+/*
+.rocks {
+  position: absolute;
+  z-index: 1000;
+}
+
+.rock1 {
+  width: 100px;
+  height: 100px;
+  left: 10%;
+  top: 50%;
+}
+*/
+
+@media only screen and (max-width: 1200px) {
+  h1 {
+    font-size: 2rem;
+    letter-spacing: 0.1rem;
+    text-align: center;
+  }
+  .rocks,
+  .rock {
+    display: none;
+  }
+  .text {
+    padding: 0 3rem 5rem 3rem;
+  }
+  
+}
