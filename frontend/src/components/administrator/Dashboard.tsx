@@ -3,7 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { isAuthenticated } from '../../services/auth';
 import Webcam from './Webcam';
 import Todolist from './Todolist';
+import NoticeList from './NoticeList';
 import "./Dashboard.css";
+import "./todo.css"
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -50,41 +52,40 @@ const Dashboard: React.FC = () => {
         </div>
 
         {/* 카드 3: 할 일 목록 (2행에 3개의 카드 중 첫 번째 카드, 1열에 위치) */}
-        <div className="card-1">
-          <div className="card-inner">
-            <div className="card-front-3">
-              <Todolist />  {/* 할 일 목록 컴포넌트 추가 */}
-            </div>
-            <div className="card-back-3">
-              {/* 카드 뒷면 내용 */}
-            </div>
-          </div>
+        <div className="card-front-3" style={{ width: '100%', height: '100%' }}>
+        <iframe
+          title="미래융합교육원 지도"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3262.7682994796683!2d127.38000071522332!3d36.348468580039534!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x35654be1d22851ad%3A0xf50f267c3c4519dd!2z66-47J207YSw7KeA7YGs6rCA7ZaJ7IOB66eI7Yq4IOy2mOyLnO2YuOyngCDssLTrpr3sgqzsnbTsnZjtj4AgNTnQvCDrj5nri4jsgqzsnbQ!5e0!3m2!1sko!2skr!4v1677928480329!5m2!1sko!2skr"
+          width="100%"
+          height="100%"
+          style={{ border: 0 }}
+          allowFullScreen
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+          />
         </div>
 
         {/* 카드 4: 할 일 목록 (2행에 3개의 카드 중 두 번째 카드, 2열에 위치) */}
+ 
+        
         <div className="card-1">
           <div className="card-inner">
             <div className="card-front-3">
-              <Todolist />  {/* 할 일 목록 컴포넌트 추가 */}
-            </div>
-            <div className="card-back-3">
-              {/* 카드 뒷면 내용 */}
+              <Todolist />  {/* 꾸민 투두리스트 */}
             </div>
           </div>
         </div>
+
 
         {/* 카드 5: 할 일 목록 (2행에 3개의 카드 중 세 번째 카드, 3열에 위치) */}
         <div className="card-1">
-          <div className="card-inner">
-            <div className="card-front-3">
-              <Todolist />  {/* 할 일 목록 컴포넌트 추가 */}
-            </div>
-            <div className="card-back-3">
-              {/* 카드 뒷면 내용 */}
-            </div>
+        <div className="card-inner">
+          <div className="card-front-5">
+            {/* 할 일 목록 대신 공지사항 컴포넌트 삽입 */}
+            <NoticeList />
           </div>
         </div>
-
+      </div>
       </div>
     </div>
   );

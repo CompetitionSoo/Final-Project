@@ -1,37 +1,17 @@
-// Process.tsx
-import React, { useEffect, useRef, useState } from 'react';
-import styles from './Processjs.module.css'; // CSS 모듈 임포트
-import { initParallax } from './Processjs.js';
+import React, { useEffect, useRef, useState } from "react";
+import styles from "./Processjs.module.css";
+import { initParallax } from "./Processjs.js";
 
 const Process: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [showVideo, setShowVideo] = useState(false);
+  const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
 
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
-    // container 내부의 요소에 한정하여 parallax 효과 적용
     const removeParallax = initParallax(container);
     return () => removeParallax();
   }, []);
-
-  // 동영상 토글 시, 동영상만 보이고 클릭 시 다시 원래 화면으로 복귀합니다.
-  if (showVideo) {
-    return (
-      <div
-        ref={containerRef}
-        className={styles.container}
-        onClick={() => setShowVideo(false)}
-        style={{ cursor: 'pointer' }}
-      >
-        <video
-          src={`${process.env.PUBLIC_URL}/videos/myVideo.mp4`} // 실제 동영상 경로로 변경하세요.
-          controls
-          autoPlay
-        />
-      </div>
-    );
-  }
 
   return (
     <div ref={containerRef} className={styles.container}>
@@ -50,52 +30,35 @@ const Process: React.FC = () => {
           `,
         }}
       >
-        {/* a2 스타일: 왼쪽 텍스트를 절대 위치로 배치 */}
         <div
           style={{
-            position: 'absolute',
-            top: '20%',
-            left: '10%',
-            color: '#fff',
-            maxWidth: '400px',
-            alignItems: 'center',
-            justifyContent: 'center',
-            textAlign: 'center',
+            position: "absolute",
+            top: "20%",
+            left: "10%",
+            color: "#fff",
+            maxWidth: "400px",
+            textAlign: "center",
           }}
         >
-          {/* 원하는 텍스트/로고/버튼 등을 자유롭게 배치 */}
-          <div style={{ fontWeight: 'bold', marginBottom: '1rem' }}>쿠봇</div>
-          <h1 style={{ fontSize: '3rem', marginBottom: '1rem' }}>ROBOTICS</h1>
-          <p style={{ marginBottom: '0.1rem' }}>강영수와 아이들이 제작한</p>
+          <div style={{ fontWeight: "bold", marginBottom: "1rem" }}>쿠봇</div>
+          <h1 style={{ fontSize: "3rem", marginBottom: "1rem" }}>ROBOTICS</h1>
+          <p style={{ marginBottom: "0.1rem" }}>강영수와 아이들이 제작한</p>
           <p>ros & yolo 서비스를 만나보세요</p>
           <a
             href="#readmore"
             style={{
-              color: '#fff',
-              textDecoration: 'none',
+              color: "#fff",
+              textDecoration: "none",
+              display: "block",
+              padding: "10px",
             }}
           >
-            <div
-              style={{
-                position: 'absolute',
-                right: 5,
-                width: '100%',
-                height: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                textAlign: 'center',
-              }}
-            >
-              <div>
-                <div style={{ marginBottom: '0.5rem' }}>read more</div>
-                <img
-                  src={`${process.env.PUBLIC_URL}/images/arrow.png`}
-                  alt="화살표"
-                  style={{ width: '34px', height: '24px', marginLeft: '17px' }}
-                />
-              </div>
-            </div>
+            <div style={{ marginBottom: "0.5rem" }}>read more</div>
+            <img
+              src={`${process.env.PUBLIC_URL}/images/arrow.png`}
+              alt="화살표"
+              style={{ width: "34px", height: "24px", marginLeft: "17px" }}
+            />
           </a>
         </div>
       </div>
@@ -104,27 +67,27 @@ const Process: React.FC = () => {
       <div
         className={styles.content}
         style={{
-          backgroundImage: `
-            linear-gradient(to bottom, rgba(255, 255, 255, 0.8) 100%, transparent),
-            url("/images/fac2.png")
-          `,
-          backgroundSize: 'auto 120%',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
+          backgroundImage: `linear-gradient(to bottom, rgba(255, 255, 255, 0.8) 100%, transparent), 
+          url(${process.env.PUBLIC_URL}/images/fac2.png)`,
+          backgroundSize: "auto 120%",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
         }}
       >
         <div className="container mx-auto px-4 py-8" id="readmore"></div>
-        {/* 아래 컨텐츠 영역을 클릭하면 동영상 화면으로 토글됩니다. */}
-        <div
-          className="container mx-auto px-4 py-8"
-          onClick={() => setShowVideo(true)}
-          style={{ cursor: 'pointer' }}
-        >
+
+        {/* 개발 과정 (클릭하면 동영상 모달 띄움) */}
+        <div className="container mx-auto px-4 py-8">
           <h1 className="text-4xl font-bold text-center mb-8">개발과정</h1>
           <div className="space-y-12">
-            <div className="flex flex-col md:flex-row items-center gap-6 bg-gradient-to-r from-sky-50 via-sky-200 to-sky-400 border p-6 rounded-lg shadow-lg transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-[0_50px_80px_-20px_rgba(170,247,247,0.5)]">
+            <div
+              className="flex flex-col md:flex-row items-center gap-6 bg-gradient-to-r from-sky-50 via-sky-200 to-sky-400  
+                border p-6 rounded-lg shadow-lg transition-transform duration-300 ease-in-out hover:scale-105 
+                hover:shadow-[0_50px_80px_-20px_rgba(170,247,247,0.5)] cursor-pointer"
+              onClick={() => setSelectedVideo("/videos/myVideo.mp4")}
+            >
               <div className="w-full md:w-1/2 h-80 border rounded-lg overflow-hidden flex gap-x-3">
-                <img src="" alt="사진1" className="w-1/2 h-full object-cover" />
+              <img src="" alt="사진1" className="w-1/2 h-full object-cover" />
                 <img src="" alt="사진2" className="w-1/2 h-full object-cover" />
               </div>
               <div className="w-full md:w-1/2">
@@ -293,31 +256,23 @@ const Process: React.FC = () => {
               </div>
             </div>
 
-            {showVideo && (
-              <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50">
-                <div className="relative w-11/12 md:w-1/2 max-w-3xl">
-                  {/* 닫기 버튼 */}
-                  <button
-                    className="absolute top-4 right-4 text-white text-3xl"
-                    onClick={() => setShowVideo(false)}
-                  >
-                    &times;
-                  </button>
-                  <video
-                    src={`${process.env.PUBLIC_URL}/videos/myVideo.mp4`} // 실제 동영상 경로로 변경
-                    controls
-                    autoPlay
-                    className="w-full h-auto rounded-lg"
-                  />
+      {/* ✅ 동영상 모달 */}
+      {selectedVideo && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-xl w-11/12 md:w-3/4 max-w-4xl relative">
+            <button
+              className="absolute top-4 right-4 text-gray-600 hover:text-black text-2xl"
+              onClick={() => setSelectedVideo(null)}
+            >
+              &times;
+            </button>
+            <video controls autoPlay className="w-full rounded-lg">
+              <source src={selectedVideo} type="video/mp4" />
+              브라우저가 비디오 태그를 지원하지 않습니다.
+            </video>
           </div>
         </div>
       )}
-
-
-          </div>
-        </div>
-
-      </div>
     </div>
   );
 };

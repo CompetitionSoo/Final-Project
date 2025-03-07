@@ -8,7 +8,6 @@ import { logout } from '../../../services/auth';
 
 import { 
   HiOutlineHome,
-  HiOutlineCog,
   HiOutlinePhotograph,
   HiOutlineDocumentText,
   HiOutlineMail,
@@ -47,7 +46,6 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ isOpen }) => {
     { to: '/dashboard/control_robot', icon: <IoGameController />, label: '컨트롤러' },
     { to: '/dashboard/check_list', icon: <MdOutlineContentPasteSearch  />, label: '항목조회' },
     { to: '/dashboard/gallery', icon: <HiOutlinePhotograph />, label: '갤러리' },
-    { to: '/dashboard/settings', icon: <HiOutlineCog />, label: '설정' },
   ];
 
   return (
