@@ -3,33 +3,12 @@ from werkzeug.security import generate_password_hash
 import jwt
 from functools import wraps
 from datetime import datetime, timedelta
+from app.extensions import token_required
 from .. import db
 from ..models.user import User
 from decouple import config
 
 auth_bp = Blueprint('auth', __name__)
-
-def token_required(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        token = request.headers.get("Authorization")
-        if not token:
-            return jsonify({"message": "토큰이 없습니다."}), 401
-
-        try:
-            token = token.split(" ")[1]  # "Bearer <token>" 형태에서 토큰만 추출
-            decoded = jwt.decode(token, config('SECRET_KEY'), algorithms=["HS256"])
-            current_user = User.query.get(decoded["user_id"])
-            if not current_user:
-                return jsonify({"message": "사용자를 찾을 수 없습니다."}), 404
-        except jwt.ExpiredSignatureError:
-            return jsonify({"message": "토큰이 만료되었습니다."}), 401
-        except jwt.InvalidTokenError:
-            return jsonify({"message": "유효하지 않은 토큰입니다."}), 401
-
-        return f(current_user, *args, **kwargs)
-
-    return decorated
 
 @auth_bp.route('/api/register', methods=['POST'])
 def register():
@@ -92,5 +71,20 @@ def get_profile(current_user):
         "name": current_user.name,
         "email": current_user.email,
         "phone": current_user.phone,
-        "description": current_user.description
+        "description": current_user.description,
+        "profile_picture": current_user.profile_picture
     })
+
+@auth_bp.route("/api/profile", methods=["PUT"])
+@token_required
+def update_profile(current_user):
+    data =  request.json
+    current_user.name = data['name']
+    current_user.email = data['email']
+    current_user.phone= data['phone']
+    current_user.description = data['description']
+    try:
+        db.session.commit()
+        return jsonify({"message":"프로필이 업데이트되었습니다."})
+    except Exception as e:
+        db.session.rollback()
