@@ -12,6 +12,7 @@ class User(db.Model):
     phone = db.Column(db.String(120), nullable=False)
     password_hash = db.Column(db.String(256), nullable=False)
     description = db.Column(db.String(500), nullable=True)
+    profile_picture= db.Column(db.String(256), nullable=True)
         
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -26,4 +27,6 @@ class User(db.Model):
             'username' : self.username,
             'email': self.email,
             'phone' : self.phone,
+            'descrption' : self.description,
+            'profile_picture' : self.profile_picture
         }
