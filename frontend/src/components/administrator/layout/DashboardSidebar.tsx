@@ -17,6 +17,7 @@ import {
 
 interface DashboardSidebarProps {
   isOpen: boolean;
+  user: { name: string; email: string } | null;
 }
 
 interface NavItemProps {
@@ -39,7 +40,7 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon, label }) => (
   </NavLink>
 );
 
-const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ isOpen }) => {
+const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ isOpen, user}) => {
   const navigate = useNavigate();
   const navItems = [
     { to: '/dashboard/home', icon: <HiOutlineHome />, label: '메인' },
@@ -66,7 +67,7 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ isOpen }) => {
             alt="User Profile"
             className="w-16 h-16 rounded-full border-2 border-gray-300"
           />
-          <h3 className="mt-2 text-gray-700 font-semibold">나 다</h3>
+          <h3 className="mt-2 text-gray-700 font-semibold">{user?.name}</h3>
           <div className="flex gap-4 mt-3">
             {/* 프로필 상세 */}
             <Link to="/dashboard/profile" className="relative group">
