@@ -16,7 +16,7 @@ import {
 
 interface DashboardSidebarProps {
   isOpen: boolean;
-  user: { name: string; email: string } | null;
+  user: { name: string; profile_picture: string } | null;
 }
 
 interface NavItemProps {
@@ -61,9 +61,9 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ isOpen, user}) => {
         {/* 유저 프로필 섹션 */}
         <div className="flex flex-col items-center p-4 border-b">
           <img
-            src="/images/avatar.jpg"
+            src={`http://localhost:5000${user?.profile_picture}`}
             alt="User Profile"
-            className="w-16 h-16 rounded-full border-2 border-gray-300"
+            className="w-16 h-16 rounded-full border-2 border-gray-300 object-cover"
           />
           <h3 className="mt-2 text-gray-700 font-semibold">{user?.name}</h3>
           <div className="flex gap-4 mt-3">
