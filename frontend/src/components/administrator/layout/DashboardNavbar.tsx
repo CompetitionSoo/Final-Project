@@ -6,7 +6,7 @@ import userEvent from '@testing-library/user-event';
 
 interface DashboardNavbarProps {
   onToggleSidebar: () => void;
-  user: { name: string; email: string } | null;
+  user: { name: string; profile_picture: string } | null;
 }
 
 const DashboardNavbar: React.FC<DashboardNavbarProps> = ({ onToggleSidebar, user }) => {

@@ -5,7 +5,7 @@ import { Outlet } from "react-router-dom";
 
 const DashboardLayout: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [user, setUser] = useState<{ name: string; email: string } | null>(null);
+  const [user, setUser] = useState<{ name: string; profile_picture: string } | null>(null);
 
   const handleToggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -24,7 +24,7 @@ const DashboardLayout: React.FC = () => {
 
         if (response.ok) {
           const data = await response.json();
-          setUser({ name: data.name, email: data.email });
+          setUser({ name: data.name, profile_picture: data.profile_picture });
         } else {
           console.error("사용자 정보를 불러오는 데 실패했습니다.");
         }
