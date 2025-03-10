@@ -4,37 +4,75 @@ import "./Control_robot.css";
 import YoloStream from './YoloStream';
 import Webcam from './Webcam';
 
-const ControlRobot: React.FC = () => {
+import ROSLIB from "roslib";
+
+interface UserProps {
+  ros: any // 선택적 (optional) props
+}
+
+const ControlRobot: React.FC<UserProps> = ({ ros }) => {
   const [battery, setBattery] = useState(85); // 배터리 상태 (%)
   const [speed, setSpeed] = useState(30); // 속도 조절
   const [isAutoMode, setIsAutoMode] = useState(false); // 자율주행 모드 여부
   const [currentAction, setCurrentAction] = useState('대기 중'); // 현재 동작 상태
   const navigate = useNavigate();
 
+  
+
+  const setSpeedService = (left:number, right:number) => {
+      let leftSpeed = left
+      let rightSpeed = right
+
+      const request = new ROSLIB.ServiceRequest({
+          left_speed: leftSpeed,
+          right_speed: rightSpeed
+      });
+
+      const setSpeedClient = new ROSLIB.Service({
+        ros: ros,
+        name: '/set_speed',
+        serviceType: 'jetbotmini_msgs/SetSpeed'
+      });
+
+      setSpeedClient.callService(request, function(response) {
+          console.log(response.message)
+      });
+  }
+
 
   // ✅ 키보드 이벤트 리스너 추가 (W, A, S, D 키 추가)
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      switch (event.key.toLowerCase()) { // 소문자로 변환하여 비교 (대소문자 대응)
+      let key = event.key.toLowerCase()
+      console.log(key)
+      switch (key) { // 소문자로 변환하여 비교 (대소문자 대응)
         case 'arrowup':
         case 'w':
           
           setCurrentAction('⬆ 앞으로 이동');
+          
+          setSpeedService(80, 80)
           break;
         case 'arrowdown':
         case 's':
           setCurrentAction('⬇ 뒤로 이동');
+          
+          setSpeedService(80, 80)
           break;
         case 'arrowleft':
         case 'a':
           setCurrentAction('⬅ 왼쪽으로 이동');
+          
+          setSpeedService(30, 60)
           break;
         case 'arrowright':
         case 'd':
           setCurrentAction('➡ 오른쪽으로 이동');
+          setSpeedService(60, 30)
           break;
         case ' ':
           setCurrentAction('🛑 정지');
+          setSpeedService(0, 0)
           break;
         default:
           break;
