@@ -1,9 +1,9 @@
-
+/* 
 .grid-container {
     grid-template-areas: 
-    ". forward ."
+    "trun_left forward turn_right"
     "left stop right"
-    ". backward .";
+    "save backward delete";
     gap: 20px;
 }
 
@@ -25,4 +25,4 @@
 .backward{
     grid-area: backward;
 }
-
+ */
