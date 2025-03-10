@@ -77,7 +77,7 @@ const Login: React.FC = () => {
   
         // 로그인 화면으로 이동
         setTimeout(() => {
-          navigate("/login2");
+          navigate("/login");
         }, 2000);
       } catch (err) {
         console.log(err)
@@ -266,7 +266,8 @@ const Login: React.FC = () => {
             <button 
             type="submit" 
             className="w-full h-[50px] bg-black text-white rounded-lg text-lg font-semibold
-            hover:bg-amber-400 hover:scale-105 transition">
+            hover:bg-amber-400 hover:scale-105 transition"
+            onClick={() => {navigate(0); }}>
             회원가입
             </button>
 

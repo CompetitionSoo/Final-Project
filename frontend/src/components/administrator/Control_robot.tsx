@@ -87,10 +87,9 @@ const ControlRobot: React.FC = () => {
         {/* YOLO 모델 선택 */}
           <div className="bg-white p-1 rounded-lg shadow-md w-full text-center mb-6">
             <h3 className="font-semibold text-gray-700 mb-2">모델 선택</h3>
-            <div className="grid grid-cols-3 gap-4 my-6">
-              <button className="bg-amber-500 text-white py-3 rounded-md">과일&채소</button>
+            <div className="grid grid-cols-2 gap-4 my-6">
+              <button className="bg-amber-500 text-white py-3 rounded-md hov" >과일&채소</button>
               <button className="bg-green-400 text-white py-3 rounded-md">신선도</button>
-              <button className="bg-red-500 text-white py-3 rounded-md">장애물</button>
             </div>
           </div>
   
