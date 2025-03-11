@@ -4,40 +4,100 @@ import "./Control_robot.css";
 import YoloStream from './YoloStream';
 import Webcam from './Webcam';
 
-const ControlRobot: React.FC = () => {
+import ROSLIB from "roslib";
+
+interface UserProps {
+  ros: any // 선택적 (optional) props
+}
+
+const ControlRobot: React.FC<UserProps> = ({ ros }) => {
   const [battery, setBattery] = useState(85); // 배터리 상태 (%)
   const [speed, setSpeed] = useState(30); // 속도 조절
   const [isAutoMode, setIsAutoMode] = useState(false); // 자율주행 모드 여부
   const [currentAction, setCurrentAction] = useState('대기 중'); // 현재 동작 상태
   const navigate = useNavigate();
 
+  
+
+  const setSpeedService = (left:number, right:number) => {
+    console.log(left, right)
+      let leftSpeed = left
+      let rightSpeed = right
+
+      const setSpeedClient = new ROSLIB.Service({
+        ros: ros,
+        name: '/set_speed',
+        serviceType: 'jetbotmini_msgs/SetSpeed'
+      });
+
+      setSpeedClient.callService(new ROSLIB.ServiceRequest({
+        left_speed: leftSpeed,
+        right_speed: rightSpeed
+    }), function(response) {
+          console.log(response.message)
+      });
+  }
+
 
   // ✅ 키보드 이벤트 리스너 추가 (W, A, S, D 키 추가)
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      switch (event.key.toLowerCase()) { // 소문자로 변환하여 비교 (대소문자 대응)
+      let key = event.key.toLowerCase()
+      console.log(key)
+      switch (key) { // 소문자로 변환하여 비교 (대소문자 대응)
+        case 'q':
+          setCurrentAction('좌회전');
+          setSpeedService(80, 80)
+          break;
+
         case 'arrowup':
         case 'w':
-          
           setCurrentAction('⬆ 앞으로 이동');
+          setSpeedService(80, 80)
           break;
-        case 'arrowdown':
-        case 's':
-          setCurrentAction('⬇ 뒤로 이동');
+
+        case 'e':
+          setCurrentAction('우회전');
+          setSpeedService(80, 80)
           break;
+
         case 'arrowleft':
         case 'a':
           setCurrentAction('⬅ 왼쪽으로 이동');
+          setSpeedService(30, 60)
           break;
+        
+        case 's':
+          setCurrentAction('🛑 정지');
+          setSpeedService(0, 0)
+          break;
+        
+
+        case 'arrowdown':
+        case 'x':
+          setCurrentAction('⬇ 뒤로 이동');
+          setSpeedService(80, 80)
+          break;
+
         case 'arrowright':
         case 'd':
           setCurrentAction('➡ 오른쪽으로 이동');
+          setSpeedService(60, 30)
           break;
-        case ' ':
-          setCurrentAction('🛑 정지');
+
+        case 'z':
+          setCurrentAction('저장하기');
+          setSpeedService(60, 30)
           break;
-        default:
+        
+        case 'c':
+          setCurrentAction('삭제하기');
+          setSpeedService(60, 30)
           break;
+
+          default:
+        
+          
       }
       console.log(`현재 동작: ${currentAction}`);
     };
@@ -52,7 +112,7 @@ const ControlRobot: React.FC = () => {
   }, [currentAction]); // currentAction이 변경될 때마다 effect 실행
 
   return (
-    <div className="h-auto max-w-5xl mx-auto p-6 bg-gray-100 rounded-lg shadow-lg">
+    <div className="h-auto max-w-7xl mx-auto p-6 bg-gray-100 rounded-lg shadow-lg">
       <h2 className="text-3xl font-semibold text-gray-800 text-center mb-4">🤖 로봇 컨트롤</h2>
 
       {/* 배터리 상태 */}
@@ -70,13 +130,13 @@ const ControlRobot: React.FC = () => {
         {/* 왼쪽: 웹캠 화면 */}
         <div className="flex-1 flex flex-col mr-4">
           {/* YOLO 감지 화면 (상단) */}
-          <div className="relative h-80 bg-black rounded-lg overflow-hidden mb-4">
+          <div className="relative h-1/2 bg-black rounded-lg overflow-hidden mb-4">
             <h3 className="absolute top-2 left-2 text-white font-bold z-10">📷 YOLO 감지 화면</h3>
             <YoloStream/>
           </div>
 
           {/* 실시간 웹캠 화면 (하단) */}
-          <div className="relative h-80 bg-black rounded-lg overflow-hidden">
+          <div className="relative h-1/2 bg-black rounded-lg overflow-hidden">
             <h3 className="absolute top-2 left-2 text-white font-bold z-10">🎥 실시간 웹캠</h3>
             <Webcam />
           </div>
@@ -101,21 +161,25 @@ const ControlRobot: React.FC = () => {
               <p id="detection-text" className="text-gray-600">현재 검출된 객체 없음</p>
             </div>
             <div className="text-center mb-6">
-            {/* 방향키 조작 */}
-            <div className="grid grid-container">
-              <button className="bg-gray-300 p-6 rounded-md text-xl col-span-1 row-span-1 forward">▲ 앞으로</button>
-              <button className="bg-gray-300 p-6 rounded-md text-xl col-span-1 row-span-1 left">◀ 왼쪽</button>
-              <button className="bg-red-500 p-6 rounded-md text-xl text-white font-bold col-span-1 row-span-1 stop">■ 정지</button>
-              <button className="bg-gray-300 p-6 rounded-md text-xl col-span-1 row-span-1 right">오른쪽 ▶</button>
-              <button className="bg-gray-300 p-6 rounded-md text-xl col-span-1 row-span-1 backward">▼ 후진</button>
+              {/* 방향키 조작 */}
+              <div className="grid grid-cols-3 gap-4 gap-x-2">
+                <button className="bg-gray-300 p-6 rounded-md text-xl" >좌회전</button>
+                <button className="bg-gray-300 p-6 rounded-md text-xl">앞으로</button>
+                <button className="bg-gray-300 p-6 rounded-md text-xl">우회전</button>
+                <button className="bg-gray-300 p-6 rounded-md text-xl">왼쪽</button>
+                <button className="bg-red-500 p-6 rounded-md text-xl text-white font-bold">정지</button>
+                <button className="bg-gray-300 p-6 rounded-md text-xl">오른쪽</button>
+                <button className="bg-blue-500 text-white py-3 rounded-md">저장하기</button>
+                <button className="bg-gray-300 p-6 rounded-md text-xl">뒤로</button>
+                <button className="bg-red-500 text-white py-3 rounded-md">삭제하기</button>
+              </div>
             </div>
-
-            {/* 버튼들 */}
+            {/* 버튼들
             <div className="grid grid-cols-2 gap-4 my-6">
               <button className="bg-blue-500 text-white py-3 rounded-md">저장하기</button>
               <button className="bg-red-500 text-white py-3 rounded-md">삭제하기</button>
-            </div>
-          </div>
+            </div> */}
+          
 
           {/* 모드 전환 */}
           <div className="flex justify-between items-center mb-6">

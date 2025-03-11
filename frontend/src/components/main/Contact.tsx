@@ -6,7 +6,7 @@ const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
     name: '',
-    contact: '',
+    phone: '',
     email: '',
     subject: '',
     message: '',
@@ -14,7 +14,7 @@ const Contact: React.FC = () => {
 
   const [errors, setErrors] = useState({
     name: '',
-    contact: '',
+    phone: '',
     email: '',
     subject: '',
     message: '',
@@ -32,7 +32,7 @@ const Contact: React.FC = () => {
   // Form submission handler
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    let formErrors = { name: '', contact: '', email: '', subject: '', message: '' };
+    let formErrors = { name: '', phone: '', email: '', subject: '', message: '' };
     let isValid = true;
   
     // Validation checks
@@ -40,8 +40,8 @@ const Contact: React.FC = () => {
       formErrors.name = '성함을 입력해주세요.';
       isValid = false;
     }
-    if (!formData.contact) {
-      formErrors.contact = '연락처를 입력해주세요.';
+    if (!formData.phone) {
+      formErrors.phone = '연락처를 입력해주세요.';
       isValid = false;
     }
     if (!formData.email) {
@@ -81,7 +81,7 @@ const Contact: React.FC = () => {
             icon: "success",
           });
   
-          setFormData({ name: '', contact: '', email: '', subject: '', message: '' });
+          setFormData({ name: '', phone: '', email: '', subject: '', message: '' });
         } else {
           throw new Error(result.error || '문의 접수 중 오류가 발생했습니다.');
         }
@@ -123,19 +123,19 @@ const Contact: React.FC = () => {
             </div>
 
             <div>
-              <label htmlFor="contact" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
                 연락처 *
               </label>
               <input
                 type="text"
-                id="contact"
-                name="contact"
-                value={formData.contact}
+                id="phone"
+                name="phone"
+                value={formData.phone}
                 onChange={handleInputChange}
                 className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
                 placeholder="연락처를 입력해주세요."
               />
-              {errors.contact && <p className="text-red-500 text-sm">{errors.contact}</p>}
+              {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
             </div>
 
             <div>

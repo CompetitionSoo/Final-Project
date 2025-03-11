@@ -45,7 +45,18 @@ def uploaded_file(filename):
 @upload_bp.route("/api/upload/delete", methods=["POST"])
 @token_required
 def delete_profile(current_user):
-            
+    #프로필 사진을 DB와 파일 시스템에서 삭제      
+    if not current_user.profile_picture:
+        return jsonify({"message": "삭제할 프로필 사진이 없습니다."}), 400
+
+    # 절대 경로로 변환
+    file_path = os.path.join(current_app.config["UPLOAD_FOLDER"], os.path.basename(current_user.profile_picture))
+
+    print(file_path)
+    # 파일이 존재하면 삭제
+    if os.path.exists(file_path):
+        os.remove(file_path)
+
     current_user.profile_picture= None
     db.session.commit()
 
