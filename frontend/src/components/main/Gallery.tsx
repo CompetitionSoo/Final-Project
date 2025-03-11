@@ -65,14 +65,14 @@ const Gallery: React.FC = () => {
       // 기본 게시글 생성
       const defaultItem: GalleryItem = {
         id: 1,
-        src: "https://via.placeholder.com/300", // 원하는 기본 이미지 URL로 변경 가능
+        src: "/images/logo512.png",
         alt: "default image",
         likes: 0,
         comments: [],
         description: "게시글",
         liked: false,
         uploadedBy: "defaultUser",
-      };
+      };      
       setGalleryItems([defaultItem]);
       saveGalleryItemsToLocalStorage([defaultItem]);
     }
