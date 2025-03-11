@@ -8,6 +8,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/roslibjs/1.1.0/roslib.min.js"></script>
 </head>
 <body>
+    <h1>카메라 STREAMING</h1>
+    <img src="http://192.168.137.52:8080/stream?topic=/usb_cam/image_raw">
     <h2>JetBot Mini Controller</h2>
     <label>왼쪽 속도:</label>
     <input type="number" id="leftSpeed" value="100">
@@ -17,7 +19,10 @@
 
     <p id="response"></p>
 
+    <button onclick="sendCommand('on')">자율주행 시작</button>
+    <button onclick="sendCommand('off')">자율주행 정지</button>
     
+    <button id="buzzertoggle">BUZZER</button>
 
     <script>
         // ROSBridge 연결
@@ -74,13 +79,45 @@
                     console.log("응답: " + result.success + ", 메세지: " + result.message)
                 })
             }
-            // else if (key == "q"){
-            //     var stop = new ROSLIB.ServiceRequest({data:false})
-            //     keyControllClient.callService(stop, function(result){
-            //         console.log("응답: " + result.success + ", 메세지: " + result.message)
-            //     })
-            // }
         })
+
+        var lineDrivingTopic = new ROSLIB.Topic({
+            ros: ros,
+            name: "/start_auto",
+            serviceType: "std_msgs/String"
+        })
+        
+        function sendCommand(command) {
+            var message = new ROSLIB.Message({
+                data : command
+            })
+            
+            lineDrivingTopic.publish(message)
+            console.log("Sent command: " + command)
+
+        const buzzerService = new ROSLIB.Service({
+            ros : ros,
+            name : "/Buzzer",
+            serviceType : 'jetbotmini_msgs/Buzzer'
+        })
+
+        let buzzer_state = 0
+        function buzzerserviceFunc() {
+            buzzer_state ^= 1
+            
+            const request = new ROSLIB.ServiceRequest({
+                buzzer : buzzer_state
+            })
+
+            buzzerService.callService(request, (result) => {
+                console.log("Buzzer response:", result);
+            }, (error) => {
+                console.error("Buzzer service error:", error);
+            });
+        }
+
+        document.getElementById("buzzertoggle").addEventListener("click", buzzerserviceFunc)
+        }
     </script>
 </body>
 </html>
