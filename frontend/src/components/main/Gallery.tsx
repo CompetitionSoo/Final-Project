@@ -65,7 +65,7 @@ const Gallery: React.FC = () => {
       // 기본 게시글 생성
       const defaultItem: GalleryItem = {
         id: 1,
-        src: "/images/logo512.png",
+        src: "/images/image1.png",
         alt: "default image",
         likes: 0,
         comments: [],
