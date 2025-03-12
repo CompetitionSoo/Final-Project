@@ -86,6 +86,55 @@ def generate_yolo():
 
         yield (b'--frame\r\n'
             b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+        
+
+
+def generate_yolo_peoplebase():
+    # 현재 사용중인 모델이 yolotraffic.pt 인지 확인
+    is_peoplebase = os.path.basename(MODEL_PATH) == "yolotraffic.pt"
+    
+    while True:
+        ret, frame = capture.read()
+        if not ret:
+            break
+
+        frame = imutils.resize(frame, width=400)
+        
+        # yolotraffic.pt 모델일 경우에만 특정 클래스만 추론
+        if is_peoplebase:
+            results = model.predict(source=frame, classes=[0, 1, 2, 3, 5, 7, 11])
+
+            # 0: person
+            # 1: bicycle
+            # 2: car
+            # 3: motorcycle
+            # 5: bus
+            # 7: truck
+            # 11: stop sign
+
+        else:
+            results = model(frame)
+        
+        for result in results:
+            for box in result.boxes:
+                x1, y1, x2, y2 = map(int, box.xyxy[0])
+                conf = box.conf[0].item()  # 신뢰도
+                cls = int(box.cls[0].item())  # 클래스 인덱스
+                label = model.names[cls]       # 클래스 이름
+                
+                # 신뢰도가 0.5 이상일 경우에만 표시
+                if conf > 0.5:
+                    cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+                    cv2.putText(frame, f"{label} {conf:.2f}", (x1, y1 - 10),
+                                cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+        
+        _, buffer = cv2.imencode('.jpg', frame)
+        frame = buffer.tobytes()
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+
+
+        
             
 @yolo_bp.route('/video_feed')
 def video_feed():
@@ -98,6 +147,11 @@ def video_gray():
 @yolo_bp.route('/video_yolo')
 def video_yolo():
     return Response(generate_yolo(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+@yolo_bp.route('/video_yolo_peoplebase')
+def video_yolo_peoplebase_route():
+    return Response(generate_yolo_peoplebase(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
 
 #if __name__ == "__main__":
 #    app.run(host="0.0.0.0", port="8001", debug=True)
