@@ -33,7 +33,7 @@ const getCurrentUser = () => {
 
 const Gallery: React.FC = () => {
   const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
-  const [newImage, setNewImage] = useState<File | null>(null);
+  const [newImage, setNewImage] = useState<string | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [description, setDescription] = useState<string>("");
   const [newComments, setNewComments] = useState<{ [key: number]: string }>({});
@@ -45,7 +45,7 @@ const Gallery: React.FC = () => {
   const [selectedImageId, setSelectedImageId] = useState<number | null>(null);
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
   const [editDescription, setEditDescription] = useState<string>("");
-  const [editImage, setEditImage] = useState<File | null>(null);
+  const [editImage, setEditImage] = useState<string | null>(null);
   const [editPreviewImage, setEditPreviewImage] = useState<string | null>(null);
 
   // 댓글 수정 관련 상태: 갤러리 아이템별로 수정 중인 댓글의 인덱스와 편집 텍스트 저장
@@ -58,8 +58,23 @@ const Gallery: React.FC = () => {
   // 로컬 스토리지에서 갤러리 아이템 불러오기
   useEffect(() => {
     const savedGalleryItems = localStorage.getItem("galleryItems");
-    if (savedGalleryItems) {
-      setGalleryItems(JSON.parse(savedGalleryItems));
+    const galleryArray = savedGalleryItems ? JSON.parse(savedGalleryItems) : [];
+    if (galleryArray.length > 0) {
+      setGalleryItems(galleryArray);
+    } else {
+      // 기본 게시글 생성
+      const defaultItem: GalleryItem = {
+        id: 1,
+        src: "/images/image1.png",
+        alt: "default image",
+        likes: 0,
+        comments: [],
+        description: "게시글",
+        liked: false,
+        uploadedBy: "defaultUser",
+      };      
+      setGalleryItems([defaultItem]);
+      saveGalleryItemsToLocalStorage([defaultItem]);
     }
   }, []);
 
@@ -75,7 +90,7 @@ const Gallery: React.FC = () => {
       const reader = new FileReader();
 
       reader.onloadend = () => {
-        setNewImage(file);
+        setNewImage(reader.result as string);
         setPreviewImage(reader.result as string);
       };
 
@@ -88,8 +103,8 @@ const Gallery: React.FC = () => {
     if (isAuthenticated()) {
       const newItem: GalleryItem = {
         id: galleryItems.length + 1,
-        src: newImage ? URL.createObjectURL(newImage) : "",
-        alt: newImage ? newImage.name : "",
+        src: newImage || "",
+        alt: newImage ? "Uploaded Image" : "",
         likes: 0,
         comments: [],
         description,
@@ -257,7 +272,7 @@ const Gallery: React.FC = () => {
       const reader = new FileReader();
 
       reader.onloadend = () => {
-        setEditImage(file);
+        setEditImage(reader.result as string);
         setEditPreviewImage(reader.result as string);
       };
 
@@ -273,8 +288,8 @@ const Gallery: React.FC = () => {
           ? {
               ...item,
               description: editDescription,
-              src: editImage ? URL.createObjectURL(editImage) : item.src,
-              alt: editImage ? editImage.name : item.alt,
+              src: editImage || item.src,
+              alt: editImage ? "Edited Image" : item.alt,
             }
           : item
       );
@@ -362,7 +377,7 @@ const Gallery: React.FC = () => {
         {galleryItems.map((item) => (
           <div
             key={item.id}
-            className="relative bg-white rounded-lg overflow-hidden p-4 flex flex-col justify-between w-full h-full shadow-lg transform"
+            className="relative bg-[#F2F6F8] rounded-lg overflow-hidden p-4 flex flex-col justify-between w-full h-full shadow-lg transform hover:scale-105 transition-transform duration-300"
           >
             {/* 삭제 버튼 (로그인 상태이며 업로더인 경우에만 표시) */}
             {isAuthenticated() && getCurrentUser().id === item.uploadedBy && (
@@ -397,106 +412,117 @@ const Gallery: React.FC = () => {
             {/* 설명 */}
             <div className="mb-4">
               <div
-                className={`bg-gray-50 p-3 rounded-lg shadow-inner overflow-y-auto text-left ${
-                  !item.src ? "h-48" : ""
+                className={`bg-white p-3 rounded-lg shadow-inner overflow-y-auto text-left ${
+                  item.src ? "h-28" : "h-80"
                 }`}
               >
-                <p className="text-gray-700 text-left whitespace-pre-wrap" style={{ textAlign: "justify" }}>
+                <p
+                  className="text-gray-700 whitespace-pre-wrap"
+                  style={{ textAlign: "justify" }}
+                >
                   {item.description}
                 </p>
               </div>
             </div>
 
-
-            {/* 댓글 리스트 */}
-            {item.comments.length > 0 && (
-              <div className="bg-gray-100 p-3 rounded-lg shadow-inner mb-4">
-                <h3 className="font-semibold mb-2">댓글</h3>
-                <ul className="space-y-2 h-24 overflow-y-auto text-sm">
-                  {item.comments.map((comment, index) => {
-                    const isEditing =
-                      editingComment[item.id] &&
-                      editingComment[item.id]!.index === index;
-                    return (
-                      <li
-                        key={index}
-                        className="text-gray-700 flex justify-between items-center"
-                      >
-                        {isEditing ? (
-                          <>
-                            <input
-                              type="text"
-                              value={editingComment[item.id]!.text}
-                              onChange={(e) =>
-                                setEditingComment((prev) => ({
-                                  ...prev,
-                                  [item.id]: { index, text: e.target.value },
-                                }))
-                              }
-                              className="flex-1 p-2 border rounded"
-                            />
-                            <button
-                              onClick={() =>
-                                handleSaveCommentEdit(
-                                  item.id,
-                                  index,
-                                  editingComment[item.id]!.text
-                                )
-                              }
-                              className="ml-2 text-blue-500 hover:underline"
-                            >
-                              저장
-                            </button>
-                            <button
-                              onClick={() =>
-                                setEditingComment((prev) => ({
-                                  ...prev,
-                                  [item.id]: null,
-                                }))
-                              }
-                              className="ml-2 text-gray-500 hover:underline"
-                            >
-                              취소
-                            </button>
-                          </>
-                        ) : (
-                          <>
-                            <span>{comment.text}</span>
-                            {isAuthenticated() &&
-                              comment.author === getCurrentUser().id && (
-                                <div className="flex space-x-2">
-                                  <button
-                                    onClick={() =>
-                                      setEditingComment((prev) => ({
-                                        ...prev,
-                                        [item.id]: {
-                                          index,
-                                          text: comment.text,
-                                        },
-                                      }))
-                                    }
-                                    className="text-blue-500 hover:underline"
-                                  >
-                                    수정
-                                  </button>
-                                  <button
-                                    onClick={() =>
-                                      handleDeleteComment(item.id, index)
-                                    }
-                                    className="text-red-500 hover:underline"
-                                  >
-                                    삭제
-                                  </button>
-                                </div>
-                              )}
-                          </>
-                        )}
-                      </li>
-                    );
-                  })}
-                </ul>
+            <div className="bg-gray-50 p-3 rounded-lg shadow-inner mb-4">
+              <h3 className="font-semibold mb-2">댓글</h3>
+              {/* 댓글 리스트 컨테이너에 고정 높이 설정 */}
+              <div className="h-20 overflow-y-auto">
+                {item.comments.length > 0 ? (
+                  <ul className="space-y-2 text-sm">
+                    {item.comments.map((comment, index) => {
+                      const isEditing =
+                        editingComment[item.id] &&
+                        editingComment[item.id]!.index === index;
+                      return (
+                        <li
+                          key={index}
+                          className="text-gray-700 flex justify-between items-center"
+                        >
+                          {isEditing ? (
+                            <>
+                              <input
+                                type="text"
+                                value={editingComment[item.id]!.text}
+                                onChange={(e) =>
+                                  setEditingComment((prev) => ({
+                                    ...prev,
+                                    [item.id]: { index, text: e.target.value },
+                                  }))
+                                }
+                                className="flex-1 p-2 border rounded"
+                              />
+                              <button
+                                onClick={() =>
+                                  handleSaveCommentEdit(
+                                    item.id,
+                                    index,
+                                    editingComment[item.id]!.text
+                                  )
+                                }
+                                className="ml-2 text-blue-500 hover:underline"
+                              >
+                                저장
+                              </button>
+                              <button
+                                onClick={() =>
+                                  setEditingComment((prev) => ({
+                                    ...prev,
+                                    [item.id]: null,
+                                  }))
+                                }
+                                className="ml-2 text-gray-500 hover:underline"
+                              >
+                                취소
+                              </button>
+                            </>
+                          ) : (
+                            <>
+                              <span>{comment.text}</span>
+                              {isAuthenticated() &&
+                                comment.author === getCurrentUser().id && (
+                                  <div className="flex space-x-2">
+                                    <button
+                                      onClick={() =>
+                                        setEditingComment((prev) => ({
+                                          ...prev,
+                                          [item.id]: {
+                                            index,
+                                            text: comment.text,
+                                          },
+                                        }))
+                                      }
+                                      className="text-blue-500 hover:underline"
+                                    >
+                                      수정
+                                    </button>
+                                    <button
+                                      onClick={() =>
+                                        handleDeleteComment(item.id, index)
+                                      }
+                                      className="text-red-500 hover:underline"
+                                    >
+                                      삭제
+                                    </button>
+                                  </div>
+                                )}
+                            </>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                ) : (
+                  // 댓글이 없을 경우에도 고정된 영역 내에 안내 메시지 표시
+                  <div className="flex items-center justify-center h-full">
+                    <p className="text-gray-500 text-sm">
+                      작성된 댓글이 없습니다.
+                    </p>
+                  </div>
+                )}
               </div>
-            )}
+            </div>
 
             {/* 좋아요 버튼 및 댓글 보기 버튼 */}
             <div className="flex justify-between items-center">

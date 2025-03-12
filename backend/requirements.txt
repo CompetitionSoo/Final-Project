@@ -55,7 +55,3 @@ ultralytics==8.3.86
 ultralytics-thop==2.0.14
 urllib3==2.3.0
 Werkzeug==3.0.1
-<<<<<<< HEAD
-=======
-PyMySQL==1.1.0 
->>>>>>> 5be5b6f (html file upload)
