@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import "./Control_robot.css";
-import YoloStream from './YoloStream';
+import YoloStreamProps from './YoloStream';
 import Webcam from './Webcam';
 
 import ROSLIB from "roslib";
@@ -15,7 +15,7 @@ const ControlRobot: React.FC<UserProps> = ({ ros }) => {
   const [speed, setSpeed] = useState(30); // 속도 조절
   const [isAutoMode, setIsAutoMode] = useState(false); // 자율주행 모드 여부
   const [currentAction, setCurrentAction] = useState('대기 중'); // 현재 동작 상태
-  const [checkedModel, setCheckedModel] = useState('fruits'); // 현재 선택한 모델
+  const [checkedModel, setCheckedModel] = useState('default'); // 현재 선택한 모델
 
   const navigate = useNavigate();
 
@@ -85,7 +85,10 @@ const ControlRobot: React.FC<UserProps> = ({ ros }) => {
         case 'c':
           setCurrentAction('화면캡처');
           break;
-
+        
+        case 'g':
+          setCurrentAction('화면캡처');
+          break;
           default:   
       }
     };
@@ -103,6 +106,23 @@ const ControlRobot: React.FC<UserProps> = ({ ros }) => {
     console.log(value)
     setCheckedModel(value)
   }
+
+  useEffect(() => {
+    console.log("자율주행 여부:", isAutoMode)
+
+    if(ros != null){
+      const lineDrivingTopic = new ROSLIB.Topic({
+        ros: ros,
+        name: "/start_auto",
+        messageType: "std_msgs/String"
+      })
+      const message = new ROSLIB.Message({
+        data : isAutoMode ? "on" : "off"
+      })
+    
+      lineDrivingTopic.publish(message)
+    }
+  }, [isAutoMode])
 
   return ros && (
     <div className="h-auto max-w-7xl mx-auto p-6 bg-gray-100 rounded-lg shadow-lg">
@@ -128,30 +148,41 @@ const ControlRobot: React.FC<UserProps> = ({ ros }) => {
             <Webcam />
           </div>
 
-          {/* 실시간 웹캠 화면 (하단) */}
+          {/* 실시간 YOLO 감지 화면 (하단) */}
           <div className="relative h-1/2 bg-black rounded-lg overflow-hidden">
             <h3 className="absolute top-2 left-2 text-white font-bold z-10">📷 YOLO 감지 화면</h3>
-            <YoloStream/>
+            <YoloStreamProps model={checkedModel} />
           </div>
         </div>
 
         {/* 오른쪽: 방향키 및 버튼 */}
         <div className="flex-1">
-        {/* YOLO 모델 선택 */}
+          {/* YOLO 모델 선택 */}
           <div className="bg-white p-1 rounded-lg shadow-md w-full text-center mb-6">
             <h3 className="font-semibold text-gray-700 mb-2">모델 선택</h3>
-            <div className="grid grid-cols-2 gap-4 my-6">
-              <label className="text-white py-3 rounded-md" style={{ backgroundColor: checkedModel === 'fruits' ? '#22C55E' : '#AEAEAE' }}>
-                <input onClick={e => handleChange('fruits')} type="radio" style={{ display: "none" }} /> 과일&채소
+            <div className="grid grid-cols-3 gap-4 my-6">
+            <label 
+                className="text-white py-3 rounded-md cursor-pointer" 
+                style={{ backgroundColor: checkedModel === 'default' ? '#22C55E' : '#AEAEAE' }}
+              >
+                <input onClick={() => handleChange('default')} type="radio" style={{ display: "none" }} /> 주행시
               </label>
-              <label className="text-white py-3 rounded-md" style={{ backgroundColor: checkedModel === 'fresh' ? '#22C55E' : '#AEAEAE' }}>
-                <input onClick={e => handleChange('fresh')} type="radio" style={{ display: "none" }} /> 신선도
+              <label 
+                className="text-white py-3 rounded-md cursor-pointer" 
+                style={{ backgroundColor: checkedModel === 'fruits' ? '#22C55E' : '#AEAEAE' }}
+              >
+                <input onClick={() => handleChange('fruits')} type="radio" style={{ display: "none" }} /> 과일&채소
               </label>
+              <label 
+                className="text-white py-3 rounded-md cursor-pointer" 
+                style={{ backgroundColor: checkedModel === 'fresh' ? '#22C55E' : '#AEAEAE' }}
+              >
+                <input onClick={() => handleChange('fresh')} type="radio" style={{ display: "none" }} /> 신선도
+              </label>
+
             </div>
           </div>
-  
-
-
+          
             
             <div className="bg-white p-4 rounded-lg shadow-md w-full text-center mb-6">
               <h3 className="font-semibold text-gray-700 mb-2">🔍 검출된 객체</h3>
@@ -160,18 +191,57 @@ const ControlRobot: React.FC<UserProps> = ({ ros }) => {
             <div className="text-center mb-6">
               {/* 방향키 조작 */}
               <div className="grid grid-cols-3 gap-4 gap-x-2">
-                <button className="bg-gray-300 p-6 rounded-md text-xl" >좌회전</button>
-                <button className="bg-gray-300 p-6 rounded-md text-xl">앞으로</button>
-                <button className="bg-gray-300 p-6 rounded-md text-xl">우회전</button>
-                <button className="bg-gray-300 p-6 rounded-md text-xl">왼쪽</button>
-                <button className="bg-red-500 p-6 rounded-md text-xl text-white font-bold">정지</button>
-                <button className="bg-gray-300 p-6 rounded-md text-xl">오른쪽</button>
+                <button className="bg-gray-300 p-6 rounded-md text-xl" onClick={() => {
+                  console.log("좌회전 버튼 클릭!");
+                  setCurrentAction('좌회전');
+                  setSpeedService(0, 180);
+                    }}>좌회전</button>
+
+                
+                <button className="bg-gray-300 p-6 rounded-md text-xl" onClick={() => {
+                  console.log("앞으로 버튼 클릭!");
+                  setCurrentAction('앞으로');
+                  setSpeedService(250, 250);
+                    }}>앞으로</button>
+                
+                <button className="bg-gray-300 p-6 rounded-md text-xl" onClick={()=>{
+                  console.log("우회전 버튼 클릭");
+                  setCurrentAction('우회전');
+                  setSpeedService(180, 0);
+                    }}>우회전</button>
+                
+                <button className="bg-gray-300 p-6 rounded-md text-xl" onClick={()=>{
+                  console.log("왼쪽 버튼 클릭");
+                  setCurrentAction('왼쪽');
+                  setSpeedService(100, 255);
+                    }}>왼쪽</button>
+                
+                <button className="bg-red-500 p-6 rounded-md text-xl text-white font-bold" onClick={()=>{
+                  console.log("정지 버튼 클릭");
+                  setCurrentAction('정지');
+                  setSpeedService(0, 0);
+                    }}>정지</button>
+                
+                <button className="bg-gray-300 p-6 rounded-md text-xl" onClick={()=>{
+                  console.log("오른쪽 버튼 클릭");
+                  setCurrentAction('오른쪽');
+                  setSpeedService(255, 100);
+                    }}>오른쪽</button>
               </div>
             </div>
             
             <div className="bg-white p-4 rounded-lg shadow-md w-full text-center mb-6 grid grid-cols-2 gap-4 my-6">
-              <button className="bg-blue-500 text-white py-3 rounded-md">화면캡처</button>
-              <button className="bg-red-500 text-white py-3 rounded-md">저장하기</button>
+              <button className="bg-blue-500 text-white py-3 rounded-md"
+              onClick={()=>{
+                console.log("화면캡처");
+                setCurrentAction('화면캡처');}}>
+                화면캡처</button>
+              
+              <button className="bg-red-500 text-white py-3 rounded-md"
+              onClick={()=>{
+                console.log("저장하기");
+                setCurrentAction('저장하기');
+              }}>저장하기</button>
             </div> 
           
 

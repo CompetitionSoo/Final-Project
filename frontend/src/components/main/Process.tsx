@@ -21,6 +21,7 @@ const Process: React.FC = () => {
     arduino: `${process.env.PUBLIC_URL}/videos/arduino.mp4`,
     ros: `${process.env.PUBLIC_URL}/videos/ros.mp4`,
     robotControl: `${process.env.PUBLIC_URL}/videos/robotControl.mp4`,
+    deployment: `${process.env.PUBLIC_URL}/videos/deployment.mp4`,
   };
   
   function MyButton({ title }: { title: string }) {
@@ -117,8 +118,6 @@ const Process: React.FC = () => {
             {/* 아이디어 기획 및 목표 설정 섹션 */}
             <div
               className="flex flex-col md:flex-row items-center gap-6 bg-gradient-to-r from-sky-50 via-sky-200 to-sky-400 border p-6 rounded-lg shadow-lg transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-[0_50px_80px_-20px_rgba(170,247,247,0.5)]"
-              onClick={() => setSelectedVideo(videoURLs.idea)}
-              style={{ cursor: 'pointer' }}
             >
               <div className="w-full md:w-1/2 h-80 border rounded-lg overflow-hidden flex gap-x-3">
                 <img src="/images/idea.png" alt="사진1" className="w-full h-full object-contain" />
@@ -164,8 +163,6 @@ const Process: React.FC = () => {
             {/* 머신러닝 및 딥러닝 섹션 */}
             <div
               className="flex flex-col md:flex-row items-center gap-6 bg-gradient-to-r from-sky-50 via-sky-200 to-sky-400 border p-6 rounded-lg shadow-lg transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-[0_50px_80px_-20px_rgba(170,247,247,0.5)]"
-              onClick={() => setSelectedVideo(videoURLs.ml)}
-              style={{ cursor: 'pointer' }}
             >
               <div className="w-full md:w-1/2 h-96 border rounded-lg overflow-hidden flex gap-x-3">
                 <img src="/images/머신러닝학습_2.jpg" alt="사진1" className="w-1/2 max-w-full max-h-full object-cover" />

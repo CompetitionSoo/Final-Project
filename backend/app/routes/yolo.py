@@ -1,5 +1,4 @@
-from flask import Blueprint, jsonify, request, send_from_directory
-from flask import Flask, Response
+from flask import Blueprint, jsonify, request, send_from_directory, Response
 from time import sleep
 import cv2
 import imutils
@@ -9,149 +8,77 @@ import os
 
 yolo_bp = Blueprint('yolo', __name__)
 
-# app = Flask(__name__)
-# cors = CORS(app, resources={r"/video_feed/*": {"origins": "*"}})
-
-# YOLO 모델 경로 (절대 경로 사용)
+# 기본 디렉토리 설정
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-MODEL_PATH = os.path.join(BASE_DIR, "..", "models", "best.pt")
 
-if not os.path.exists(MODEL_PATH):
-    raise FileNotFoundError(f"YOLO 모델 파일을 찾을 수 없습니다: {MODEL_PATH}")
+# 모델 파일 경로 설정
+DEFAULT_MODEL_PATH = os.path.join(BASE_DIR, "..", "models", "yolotraffic.pt")
+BEST_MODEL_PATH    = os.path.join(BASE_DIR, "..", "models", "best.pt")
+ROTTEN_MODEL_PATH  = os.path.join(BASE_DIR, "..", "models", "totten.pt")
 
-model = YOLO(MODEL_PATH)
+# 파일 존재 여부 확인
+for path in [DEFAULT_MODEL_PATH, BEST_MODEL_PATH, ROTTEN_MODEL_PATH]:
+    if not os.path.exists(path):
+        raise FileNotFoundError(f"YOLO 모델 파일을 찾을 수 없습니다: {path}")
 
-capture = cv2.VideoCapture(0)  
+# 모델 미리 로드
+default_model = YOLO(DEFAULT_MODEL_PATH)
+best_model    = YOLO(BEST_MODEL_PATH)
+rotten_model  = YOLO(ROTTEN_MODEL_PATH)
+
+# 프론트엔드 선택 값에 따른 모델 매핑
+# "fruits" -> best.pt, "fresh" -> rotten.pt, 그 외엔 기본 모델 사용
+models = {
+    "default": default_model,
+    "fruits": best_model,
+    "fresh": rotten_model
+}
+
+# 카메라 캡처 초기화
+capture = cv2.VideoCapture(0)
 sleep(2.0)
 
 def generate():
     while True:
         ret, frame = capture.read()  
         frame = imutils.resize(frame, width=400)
-        if ret :
-            _, buffer = cv2.imencode('.jpg', frame) 
-
-            # 영상처리 파트 
-
-            frame = buffer.tobytes()  
-            yield (b'--frame\r\n'
-                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-    
-
-def generate_gray():
-    while True:
-        ret, frame = capture.read()  
-        frame = imutils.resize(frame, width=400)
-        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        if ret :
-            _, buffer = cv2.imencode('.jpg', frame) 
-
-            # 영상처리 파트 
-
-            frame = buffer.tobytes()  
-            yield (b'--frame\r\n'
-                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-
-def generate_yolo():
-    while True:
-        ret, frame = capture.read()
-        if not ret:
-            break  
-
-        frame = imutils.resize(frame, width=400)
-
-        # YOLO 모델에 전달할 때 BGR 형식 그대로 사용
-        results = model(frame)
-        color = (0, 255, 0)
-        for result in results:
-            for box in result.boxes:
-                x1, y1, x2, y2 = map(int, box.xyxy[0])
-                conf = box.conf[0].item()  # 신뢰도
-                cls = int(box.cls[0].item())  # 클래스 인덱스
-                label = model.names[cls]  # 클래스 이름 가져오기
-
-                # 신뢰도가 높은 경우에만 표시
-                if conf > 0.5:
-                    if label == "Rotten":
-                        color = (0, 0, 255)
-                    elif label == "Healthy":
-                        color = (0, 255, 0)
-
-                    cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
-                    cv2.putText(frame, f"{label} {conf:.2f}", (x1, y1 - 10),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
-
+        if ret:
             _, buffer = cv2.imencode('.jpg', frame)
             frame = buffer.tobytes()
+            yield (b'--frame\r\n'
+                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
-        yield (b'--frame\r\n'
-            b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-        
-
-
-def generate_yolo_peoplebase():
-    # 현재 사용중인 모델이 yolotraffic.pt 인지 확인
-    is_peoplebase = os.path.basename(MODEL_PATH) == "yolotraffic.pt"
-    
+def generate_yolo_dynamic(selected_model):
+    # 선택된 모델이 없으면 기본 모델 사용
+    chosen_model = models.get(selected_model, default_model)
     while True:
         ret, frame = capture.read()
         if not ret:
             break
-
         frame = imutils.resize(frame, width=400)
-        
-        # yolotraffic.pt 모델일 경우에만 특정 클래스만 추론
-        if is_peoplebase:
-            results = model.predict(source=frame, classes=[0, 1, 2, 3, 5, 7, 11])
-
-            # 0: person
-            # 1: bicycle
-            # 2: car
-            # 3: motorcycle
-            # 5: bus
-            # 7: truck
-            # 11: stop sign
-
+        # default일 경우에만 predict 메서드와 클래스 제한을 사용
+        if selected_model == "default":
+            results = chosen_model.predict(source=frame, classes=[0, 1, 2, 3, 5, 7, 11])
         else:
-            results = model(frame)
-        
+            results = chosen_model(frame)
         for result in results:
             for box in result.boxes:
                 x1, y1, x2, y2 = map(int, box.xyxy[0])
-                conf = box.conf[0].item()  # 신뢰도
-                cls = int(box.cls[0].item())  # 클래스 인덱스
-                label = model.names[cls]       # 클래스 이름
-                
-                # 신뢰도가 0.5 이상일 경우에만 표시
+                conf = box.conf[0].item()
+                cls = int(box.cls[0].item())
+                label = chosen_model.names[cls]
                 if conf > 0.5:
                     cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
                     cv2.putText(frame, f"{label} {conf:.2f}", (x1, y1 - 10),
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-        
         _, buffer = cv2.imencode('.jpg', frame)
         frame = buffer.tobytes()
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
 
-        
-            
-@yolo_bp.route('/video_feed')
-def video_feed():
-    return Response(generate(), mimetype='multipart/x-mixed-replace; boundary=frame')
-
-@yolo_bp.route('/video_gray')
-def video_gray():
-    return Response(generate_gray(), mimetype='multipart/x-mixed-replace; boundary=frame')
-
-@yolo_bp.route('/video_yolo')
-def video_yolo():
-    return Response(generate_yolo(), mimetype='multipart/x-mixed-replace; boundary=frame')
-
-@yolo_bp.route('/video_yolo_peoplebase')
-def video_yolo_peoplebase_route():
-    return Response(generate_yolo_peoplebase(), mimetype='multipart/x-mixed-replace; boundary=frame')
-
-
-#if __name__ == "__main__":
-#    app.run(host="0.0.0.0", port="8001", debug=True)
+# 동적 스트림 엔드포인트: 프론트엔드에서 URL 쿼리 파라미터 'model'로 전달됨.
+@yolo_bp.route('/video_yolo_dynamic')
+def video_yolo_dynamic():
+    selected = request.args.get('model', 'default')  # 기본값은 'default'
+    return Response(generate_yolo_dynamic(selected), mimetype='multipart/x-mixed-replace; boundary=frame')
