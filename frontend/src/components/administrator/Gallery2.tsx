@@ -1,18 +1,44 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { HiOutlineX } from "react-icons/hi";
-import { useState } from "react";
 
-const images = [
+import AWS from 'aws-sdk'
+
+/* const images = [
   "/images/image1.jpg",
   "/images/image2.jpg",
   "/images/image3.jpg",
   "/images/image4.jpg",
   "/images/image5.jpg",
   "/images/image6.jpg",
-];
+]; */
 
 const Gallery2: React.FC = () => {
+
+  const [images, setImages] = useState<string[]>([]);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  useEffect(() => {
+    const s3 = new AWS.S3({
+      accessKeyId: "",
+      secretAccessKey: ""
+    });
+    const params = {
+      Bucket: "coubot-images"
+    }
+    
+    const prefix = "https://coubot-images.s3.us-east-1.amazonaws.com/"
+    
+    const data = async () => await s3.listObjectsV2(params).promise();
+    const result: string[] = []
+    data().then((data) => { 
+        data.Contents?.forEach((item) => { 
+          let url = prefix + item.Key
+          console.log(url)
+          result.push(url) 
+        }) 
+        setImages(result)
+    }).catch((err) => { console.log(err) });
+  }, [])
 
   return (
     <div className="container mx-auto p-6">

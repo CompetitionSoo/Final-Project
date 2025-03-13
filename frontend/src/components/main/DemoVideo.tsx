@@ -58,7 +58,7 @@ const DemoVideo: React.FC = () => {
               onPause={handleVideoPause}
               aria-label="Project demonstration video"
             >
-              <source src="/videos/aespa.mp4" type="video/mp4" />
+              <source src="/videos/login.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
 

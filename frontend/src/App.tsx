@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './components/main/layout/Layout';
 import Hero from './components/main/Hero';
@@ -8,7 +8,10 @@ import Process from './components/main/Process';
 import About from './components/main/About';
 import ProjectIntro from './components/main/ProjectIntro';
 import DemoVideo from './components/main/DemoVideo';
+
 import Login from "./components/main/Login";
+
+
 import Contact from './components/main/Contact'; 
 import Register from './components/main/Register';
 
@@ -28,6 +31,7 @@ import Dashboard from './components/administrator/Dashboard';
 
 // Temporary page component until we implement it
 //const Login = () => <div>Login Page</div>;
+import ROSLIB from "roslib";
 
 const HomePage = () => (
   <div className="snap-y snap-mandatory">
@@ -38,6 +42,31 @@ const HomePage = () => (
 );
 
 const App = () => {
+
+  const [ros, setRos] = useState<ROSLIB.Ros | null>(null);
+
+  useEffect(() => {
+    // ROS 연결 설정
+    console.log("App is mounted!")
+    const rosInstance = new ROSLIB.Ros({
+      url: 'ws://192.168.137.132:9090' // ROSBridge WebSocket 주소
+    });
+
+    rosInstance.on("connection", () => {
+      console.log("Connected to ROSBridge!");
+    });
+
+    rosInstance.on("error", (error: any) => {
+      console.error("Connection error:", error);
+    });
+
+    rosInstance.on("close", () => {
+      console.log("Disconnected from ROSBridge.");
+    });
+
+    setRos(rosInstance);
+  }, []);
+
   return (
     <Router>
       <Routes>
@@ -58,7 +87,7 @@ const App = () => {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/home" element={<Dashboard />} />
           <Route path="/dashboard/monitoring" element={<Monitoring />} />
-          <Route path="/dashboard/control_robot" element={<Control_robot/>} />
+          <Route path="/dashboard/control_robot" element={<Control_robot ros={ros}/>} />
           <Route path="/dashboard/check_list" element={<Check_list/>} />
           <Route path="/dashboard/profile" element={<Profile />} />
           <Route path="/dashboard/gallery" element={<Gallery2 />} />
@@ -67,7 +96,6 @@ const App = () => {
         </Route>
       </Routes>
     </Router>
-
   );
 };
 

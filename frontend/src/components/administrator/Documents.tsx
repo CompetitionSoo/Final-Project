@@ -1,19 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import swal from 'sweetalert';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 //npm install sweetalert --save
 const InquiryForm: React.FC = () => {
   const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    email: '',
     subject: '',
     message: '',
   });
 
   const [errors, setErrors] = useState({
+    name: '',
+    phone: '',
+    email: '',
     subject: '',
     message: '',
   });
 
+  useEffect(() => {
+    //컴포넌트 로딩이 완료되면 현재 로그인한 사용자의 이름,연락처,이메일을 받아옴
+      const fetchUser = async () => {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+  
+        try {
+          const response = await fetch("http://localhost:5000/api/profile", {
+            method: "GET",
+            headers: { Authorization: `Bearer ${token}` },
+          });
+  
+          if (response.ok) {
+            const data = await response.json();
+            setFormData((prev) => ({
+              ...prev, // 기존 subject, message 값 유지
+              name: data.name, // 받아온 데이터로 업데이트
+              phone: data.phone,
+              email: data.email,
+            }));
+          } else {
+            console.error("사용자 정보를 불러오는 데 실패했습니다.");
+          }
+        } catch (error) {
+          console.error("에러 발생:", error);
+        }
+      };
+  
+      fetchUser();
+    }, []);
   // Handle input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -26,7 +62,7 @@ const InquiryForm: React.FC = () => {
   // Form submission handler
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    let formErrors = { subject: '', message: '' }; 
+    let formErrors = { name: '', phone: '', email: '',subject: '', message: '' }; 
     let isValid = true;
 
     // Validation checks
@@ -40,10 +76,9 @@ const InquiryForm: React.FC = () => {
     }
 
     setErrors(formErrors);
-    //지금은 제목,내용만 보내지만 login정보에서 이름, 이메일정보를 추출해 같이 보낼수 있도록 구현할것
     if (isValid) {
       try {
-        const response = await fetch(`${API_URL}/api/contact2`, {
+        const response = await fetch(`${API_URL}/api/contact`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -60,7 +95,7 @@ const InquiryForm: React.FC = () => {
             icon: "success",
           });
   
-          setFormData({ subject: '', message: '' });
+          setFormData({ name: '', phone: '', email: '',subject: '', message: '' });
         } else {
           throw new Error(result.error || '문의 접수 중 오류가 발생했습니다.');
         }
@@ -111,7 +146,7 @@ const InquiryForm: React.FC = () => {
                 value={formData.message}
                 onChange={handleInputChange}
                 className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500  resize-none"
-                placeholder="문의하실 내용을 자유롭게 입력해주세요."
+                placeholder="하실 내용을 자유롭게 입력해주세요."
                 
               />
               {errors.message && <p className="text-red-500 text-sm">{errors.message}</p>}

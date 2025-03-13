@@ -2,12 +2,14 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { HiMenu, HiOutlineLogout, HiOutlineHome } from 'react-icons/hi';
 import { logout } from '../../../services/auth';
+import userEvent from '@testing-library/user-event';
 
 interface DashboardNavbarProps {
   onToggleSidebar: () => void;
+  user: { name: string; profile_picture: string } | null;
 }
 
-const DashboardNavbar: React.FC<DashboardNavbarProps> = ({ onToggleSidebar }) => {
+const DashboardNavbar: React.FC<DashboardNavbarProps> = ({ onToggleSidebar, user }) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -34,7 +36,7 @@ const DashboardNavbar: React.FC<DashboardNavbarProps> = ({ onToggleSidebar }) =>
         </div>
 
         <div className="flex items-center space-x-4">
-          <span className="text-xl font-semibold text-gray-800 hover:underline">abc 님</span>
+          {user && <span className="text-xl font-semibold text-gray-800 hover:underline">{user.name} 님</span>}
           <button
             onClick={handleHomeClick}
             className="p-2 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
