@@ -66,6 +66,7 @@ const About: React.FC = () => {
           </p>
         </div>
 
+
         {/* 왼쪽 이미지, 오른쪽 설명 */}
         <div className="flex flex-col md:flex-row items-start mb-8">
           {/* 왼쪽: 이미지 영역 */}
@@ -90,7 +91,7 @@ const About: React.FC = () => {
             </p>
 
             <div className="flex items-center mb-2">
-              <FaUsers className="w-6 h-6 mr-2 text-green-500" />
+              <FaUsers className="w-6 h-6 mr-2 text-blue-500" />
               <h3 className="text-2xl font-bold">협업 및 데이터 분석</h3>
             </div>
             <p className="mb-4 text-gray-700 text-left">
@@ -99,7 +100,7 @@ const About: React.FC = () => {
             </p>
 
             <div className="flex items-center mb-2">
-              <FaShieldAlt className="w-6 h-6 mr-2 text-red-500" />
+              <FaShieldAlt className="w-6 h-6 mr-2 text-blue-500" />
               <h3 className="text-2xl font-bold">보안 및 안정성</h3>
             </div>
             <p className="text-gray-600 text-left">
