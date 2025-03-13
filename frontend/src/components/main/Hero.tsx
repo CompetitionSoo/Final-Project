@@ -59,16 +59,18 @@ const Hero: React.FC = () => {
         transition={{ delay: 1, duration: 1 }}
         className="absolute bottom-6 left-1/2 transform -translate-x-1/2"
       >
-        <div className="flex flex-col items-center text-white">
-          <span className="text-sm mb-2">Scroll to explore</span>
-          <motion.div
-            animate={{ y: [0, 10, 0] }}
-            transition={{ repeat: Infinity, duration: 1.5 }}
-            className="w-6 h-6 border-2 border-white rounded-full flex items-center justify-center"
-          >
-            <motion.div className="w-1 h-1 bg-white rounded-full" />
-          </motion.div>
-        </div>
+        <a href="#about">
+          <div className="flex flex-col items-center text-white">
+            <span className="text-sm mb-2">Scroll to explore</span>
+            <motion.div
+              animate={{ y: [0, 10, 0] }}
+              transition={{ repeat: Infinity, duration: 1.5 }}
+              className="w-6 h-6 border-2 border-white rounded-full flex items-center justify-center"
+            >
+              <motion.div className="w-1 h-1 bg-white rounded-full" />
+            </motion.div>
+          </div>
+        </a>
       </motion.div>
     </div>
   );
