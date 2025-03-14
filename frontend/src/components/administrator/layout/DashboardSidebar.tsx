@@ -61,7 +61,7 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ isOpen, user}) => {
         {/* 유저 프로필 섹션 */}
         <div className="flex flex-col items-center p-4 border-b">
           <img
-            src={`http://localhost:5000${user?.profile_picture}`}
+            src={user?.profile_picture}
             alt="User Profile"
             className="w-16 h-16 rounded-full border-2 border-gray-300 object-cover"
           />
