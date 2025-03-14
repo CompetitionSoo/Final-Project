@@ -8,20 +8,12 @@ import Process from './components/main/Process';
 import About from './components/main/About';
 import ProjectIntro from './components/main/ProjectIntro';
 import DemoVideo from './components/main/DemoVideo';
-
 import Login from "./components/main/Login";
-
-
 import Contact from './components/main/Contact'; 
 import Register from './components/main/Register';
-
-
-
 import Monitoring from './components/administrator/Monitoring';
 import Control_robot from './components/administrator/Control_robot';
 import Check_list from './components/administrator/Check_list';
-
-
 import Profile from './components/administrator/Profile';
 import Documents from './components/administrator/Documents';
 import Settings from './components/administrator/Settings';
@@ -32,6 +24,7 @@ import Dashboard from './components/administrator/Dashboard';
 // Temporary page component until we implement it
 //const Login = () => <div>Login Page</div>;
 import ROSLIB from "roslib";
+import { UserProvider } from './components/administrator/UserContext';
 
 const HomePage = () => (
   <div className="snap-y snap-mandatory">
@@ -68,6 +61,7 @@ const App = () => {
   }, []);
 
   return (
+    <UserProvider>
     <Router>
       <Routes>
         {/* Main Page 라우트 */}
@@ -96,6 +90,7 @@ const App = () => {
         </Route>
       </Routes>
     </Router>
+    </UserProvider>
   );
 };
 

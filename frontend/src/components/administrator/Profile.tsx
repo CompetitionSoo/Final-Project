@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
+import { useUser } from './UserContext';
 
 interface UserProfile {
   id: number;
@@ -23,6 +24,7 @@ const Profile: React.FC = () => {
     phone: "",
     description: "",
   });
+  const {user, fetchUser} = useUser();
   const navigate = useNavigate();
   
   const fetchProfile = async () => {
@@ -96,6 +98,7 @@ const Profile: React.FC = () => {
       if (response.ok) {
         alert("프로필이 저장되었습니다.");
         fetchProfile();
+        fetchUser();
         setEditMode(false); // 수정 완료 후 보기 모드로 변경
       } else {
         alert("저장 실패");
@@ -126,6 +129,7 @@ const Profile: React.FC = () => {
       const data = await response.json();
       if (response.ok) {
         setProfileImage(data.file_url);
+        fetchUser();
         alert("업로드 성공!");
       } else {
         alert(`업로드 실패: ${data.error}`);
@@ -160,6 +164,7 @@ const Profile: React.FC = () => {
 
       const data = await response.json();
       if (response.ok) {
+        fetchUser();
         alert("삭제 성공!");
       } else {
         alert("에러 발생");
