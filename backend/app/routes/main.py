@@ -1,6 +1,9 @@
 from flask import Blueprint, jsonify, request, send_from_directory
 from app.extensions import mail
 from flask_mail import Message
+from datetime import datetime
+from .. import db
+from ..models.user import Inquiry
 
 main_bp = Blueprint('main', __name__)
 
@@ -22,9 +25,23 @@ def contact():
         email = data.get('email')
         subject = data.get('subject')
         message = data.get('message')
+        created_at= datetime.utcnow()
 
         if not all([name, phone, email, subject, message]):
             return jsonify({"error": "모든 필드를 입력해주세요."}), 400
+
+
+        new_inquiry = Inquiry(
+            subject=subject,
+            message=message,
+            name=name,
+            phone=phone,
+            email=email,
+            created_at=created_at
+        )
+        db.session.add(new_inquiry)
+        db.session.commit()
+
 
         # 이메일 전송
         msg = Message(subject=f"문의사항: {subject}",
