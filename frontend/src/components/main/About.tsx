@@ -43,14 +43,14 @@ const About: React.FC = () => {
             alt="Coubot Logo"
             className="w-20 h-20 mr-4"
           />
-          <h1 className="text-4xl font-bold">Coubot</h1>
+          <h1 className="text-4xl font-bold">쿠봇</h1>
         </div>
 
         {/* 제품 소개 섹션 */}
         <div className="bg-gray-100 p-6 rounded-lg shadow-md mb-8">
           <h2 className="text-2xl font-semibold mb-2">제품 소개</h2>
           <p className="text-gray-600 mb-4 text-left">
-            Coubot은 최첨단 인공지능 기술을 활용하여 물류 및 재고 관리를
+            쿠봇은 최첨단 인공지능 기술을 활용하여 물류 및 재고 관리를
             혁신하는 솔루션입니다. 실시간 데이터 분석과 예측 모델링을 통해 운영
             효율성을 극대화하고 비용을 절감합니다.
           </p>
@@ -65,7 +65,6 @@ const About: React.FC = () => {
             있습니다.
           </p>
         </div>
-
 
         {/* 왼쪽 이미지, 오른쪽 설명 */}
         <div className="flex flex-col md:flex-row items-start mb-8">

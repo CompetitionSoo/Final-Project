@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "tailwindcss/tailwind.css";
 import { useNavigate } from "react-router-dom";
+import { FaEllipsisV, FaEdit, FaTrash, FaComments } from "react-icons/fa";
 
 // 댓글 타입 (작성자 정보 추가)
 interface Comment {
@@ -47,6 +48,8 @@ const Gallery: React.FC = () => {
   const [editDescription, setEditDescription] = useState<string>("");
   const [editImage, setEditImage] = useState<string | null>(null);
   const [editPreviewImage, setEditPreviewImage] = useState<string | null>(null);
+  const [openMenu, setOpenMenu] = useState<number | null>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   // 댓글 수정 관련 상태: 갤러리 아이템별로 수정 중인 댓글의 인덱스와 편집 텍스트 저장
   const [editingComment, setEditingComment] = useState<{
@@ -72,10 +75,21 @@ const Gallery: React.FC = () => {
         description: "게시글",
         liked: false,
         uploadedBy: "defaultUser",
-      };      
+      };
       setGalleryItems([defaultItem]);
       saveGalleryItemsToLocalStorage([defaultItem]);
     }
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        closeMenu();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   // 갤러리 아이템을 로컬 스토리지에 저장
@@ -103,7 +117,7 @@ const Gallery: React.FC = () => {
     if (isAuthenticated()) {
       const newItem: GalleryItem = {
         id: galleryItems.length + 1,
-        src: newImage || "", 
+        src: newImage || "",
         alt: newImage ? "Uploaded Image" : "",
         likes: 0,
         comments: [],
@@ -253,6 +267,14 @@ const Gallery: React.FC = () => {
     }
   };
 
+  const toggleMenu = (id: number) => {
+    setOpenMenu(openMenu === id ? null : id);
+  };
+
+  const closeMenu = () => {
+    setOpenMenu(null);
+  };
+
   // 수정 모달 열기
   const handleShowEditModal = (
     id: number,
@@ -324,7 +346,7 @@ const Gallery: React.FC = () => {
 
       {/* 업로드 모달 */}
       {showUploadModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
+        <div className="fixed inset-0 bg-gray-900 bg-opacity-60 flex justify-center items-center z-50">
           <div
             className="bg-white p-6 rounded-lg relative shadow-xl transform flex flex-col"
             onClick={(e) => e.stopPropagation()}
@@ -335,26 +357,37 @@ const Gallery: React.FC = () => {
               maxHeight: "800px",
             }}
           >
-            <h2 className="text-2xl mb-4 text-gray-800">업로드</h2>
-            <input type="file" onChange={handleImageUpload} className="mb-4" />
-            {previewImage && (
-              <div className="w-full h-64 object-contain cursor-pointer rounded-md mb-4">
-                <img
-                  src={previewImage}
-                  alt="미리보기"
-                  className="w-full h-full object-contain"
-                  style={{ maxWidth: "100%", maxHeight: "100%" }}
-                />
-              </div>
-            )}
-            <textarea
-              placeholder="이미지 설명을 입력하세요"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 mb-4 w-full h-80 resize-none"
-              style={{ maxWidth: "100%", maxHeight: "100%" }}
-            />
-            <div className="mt-auto flex space-x-4">
+            <div className="flex-shrink-0">
+              <input
+                type="file"
+                onChange={handleImageUpload}
+                className="mb-4"
+              />
+            </div>
+
+            {/* 본문: 이미지 미리보기 및 텍스트 영역 (스크롤 가능) */}
+            <div className="flex-grow overflow-y-auto">
+              {previewImage && (
+                <div className="w-full h-64 object-contain cursor-pointer rounded-md mb-4">
+                  <img
+                    src={previewImage}
+                    alt="미리보기"
+                    className="w-full h-full object-contain"
+                    style={{ maxWidth: "100%", maxHeight: "100%" }}
+                  />
+                </div>
+              )}
+              <textarea
+                placeholder="이미지 설명을 입력하세요"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 w-full h-80 resize-none"
+                style={{ minHeight: "120px" }} // 최소 높이 설정
+              />
+            </div>
+
+            {/* 푸터: 업로드, 닫기 버튼 (항상 하단 고정) */}
+            <div className="flex-shrink-0 mt-4 flex space-x-4">
               <button
                 onClick={handleAddImage}
                 className="w-full p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300 shadow"
@@ -379,23 +412,47 @@ const Gallery: React.FC = () => {
             key={item.id}
             className="relative bg-[#F2F6F8] rounded-lg overflow-hidden p-4 flex flex-col justify-between w-full h-full shadow-lg transform hover:scale-105 transition-transform duration-300"
           >
-            {/* 삭제 버튼 (로그인 상태이며 업로더인 경우에만 표시) */}
+            {/* 오른쪽 상단 메뉴 (로그인 상태이며 업로더인 경우에만 표시) */}
             {isAuthenticated() && getCurrentUser().id === item.uploadedBy && (
-              <div className="absolute top-2 right-2 flex space-x-2">
+              <div className="absolute top-2 right-2">
+                {/* 세로 점 아이콘 버튼 */}
                 <button
-                  onClick={() =>
-                    handleShowEditModal(item.id, item.description, item.src)
-                  }
-                  className="bg-blue-500 text-white px-2 py-1 rounded-full opacity-80 hover:opacity-100 transition-opacity"
+                  onClick={() => toggleMenu(item.id)}
+                  className="flex items-center bg-transparent text-gray-700 p-2 rounded-full transition-colors"
                 >
-                  수정
+                  <FaEllipsisV className="w-5 h-5" />
                 </button>
-                <button
-                  onClick={() => handleDeleteImage(item.id)}
-                  className="bg-red-600 text-white px-2 py-1 rounded-full opacity-80 hover:opacity-100 transition-opacity"
-                >
-                  삭제
-                </button>
+
+                {/* 드롭다운 메뉴 */}
+                {openMenu === item.id && (
+                  <div
+                    ref={menuRef}
+                    className="absolute right-0 mt-2 w-32 bg-white rounded-lg shadow-lg border z-10"
+                  >
+                    <button
+                      onClick={() => {
+                        handleShowEditModal(
+                          item.id,
+                          item.description,
+                          item.src
+                        );
+                        closeMenu();
+                      }}
+                      className="flex items-center w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 first:rounded-t-lg"
+                    >
+                      <FaEdit className="w-4 h-4 mr-2" /> 수정하기
+                    </button>
+                    <button
+                      onClick={() => {
+                        handleDeleteImage(item.id);
+                        closeMenu();
+                      }}
+                      className="flex items-center w-full text-left px-4 py-2 text-red-600 hover:bg-red-100 last:rounded-b-lg"
+                    >
+                      <FaTrash className="w-4 h-4 mr-2" /> 삭제하기
+                    </button>
+                  </div>
+                )}
               </div>
             )}
 
@@ -539,9 +596,9 @@ const Gallery: React.FC = () => {
               </button>
               <button
                 onClick={() => handleShowCommentsModal(item.comments, item.id)}
-                className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-400 transition duration-300 shadow"
+                className="bg-gray-900 text-white p-2 rounded-full hover:bg-gray-700 transition duration-300 shadow flex items-center"
               >
-                댓글 보기
+                <FaComments className="w-5 h-5" />
               </button>
             </div>
 
@@ -567,7 +624,7 @@ const Gallery: React.FC = () => {
                 />
                 <button
                   onClick={() => handleAddComment(item.id)}
-                  className="px-3 bg-blue-500 text-white rounded-r-lg hover:bg-blue-400 transition duration-300"
+                  className="px-3 bg-gray-900 text-white rounded-r-lg hover:bg-gray-700 transition duration-300 font-bold"
                 >
                   등록
                 </button>
@@ -733,29 +790,36 @@ const Gallery: React.FC = () => {
               maxHeight: "800px",
             }}
           >
-            <h2 className="text-2xl mb-4 text-gray-800">설명 및 사진 수정</h2>
-            <input
-              type="file"
-              onChange={handleEditImageUpload}
-              className="mb-4"
-            />
-            {editPreviewImage && (
-              <div className="w-full h-64 object-contain cursor-pointer rounded-md mb-4">
-                <img
-                  src={editPreviewImage}
-                  alt="미리보기"
-                  className="w-full h-full object-contain"
-                  style={{ maxWidth: "100%", maxHeight: "100%" }}
-                />
-              </div>
-            )}
-            <textarea
-              value={editDescription}
-              onChange={(e) => setEditDescription(e.target.value)}
-              className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 mb-4 w-full h-80 resize-none"
-              style={{ maxWidth: "100%", maxHeight: "100%" }}
-            />
-            <div className="mt-auto flex space-x-4">
+            <div className="flex-shrink-0">
+              <input
+                type="file"
+                onChange={handleEditImageUpload}
+                className="mb-4"
+              />
+            </div>
+
+            {/* 본문: 이미지 미리보기 및 텍스트 영역 (스크롤 가능) */}
+            <div className="flex-grow overflow-y-auto">
+              {editPreviewImage && (
+                <div className="w-full h-64 object-contain cursor-pointer rounded-md mb-4">
+                  <img
+                    src={editPreviewImage}
+                    alt="미리보기"
+                    className="w-full h-full object-contain"
+                    style={{ maxWidth: "100%", maxHeight: "100%" }}
+                  />
+                </div>
+              )}
+              <textarea
+                value={editDescription}
+                onChange={(e) => setEditDescription(e.target.value)}
+                className="p-3 border border-gray-300 rounded-lg mb-4 w-full h-80 resize-none"
+                style={{ maxWidth: "100%", maxHeight: "100%" }}
+              />
+            </div>
+
+            {/* 푸터: 저장, 닫기 버튼 (항상 하단 고정) */}
+            <div className="flex-shrink-0 mt-4 flex space-x-4">
               <button
                 onClick={handleSaveEdit}
                 className="w-full p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300 shadow"
