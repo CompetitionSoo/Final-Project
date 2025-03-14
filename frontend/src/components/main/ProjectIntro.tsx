@@ -1,9 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import ScrollIndicator from './ScrollIndicator';
 
 const ProjectIntro: React.FC = () => {
   return (
-    <section id="about" className="min-h-screen bg-gray-50 pb-20 pt-16 scroll-mt-16">
+    <section id="about" className="relative min-h-screen bg-gray-50 pb-24 pt-14 scroll-mt-10">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -103,8 +104,16 @@ const ProjectIntro: React.FC = () => {
             </motion.div>
           </div>
         </motion.div>
+
       </div>
+
+      
+
+      <div>
+          <ScrollIndicator target="#view" />
+          </div>
     </section>
+    
   );
 };
 

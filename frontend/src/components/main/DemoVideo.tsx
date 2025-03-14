@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import ScrollIndicator from './ScrollIndicator';
 
 const DemoVideo: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -30,7 +31,7 @@ const DemoVideo: React.FC = () => {
   };
 
   return (
-    <section id="view" className="min-h-screen bg-gray-900 pb-20 pt-16 scroll-mt-16">
+    <section id="view" className="relative min-h-screen bg-gray-900 pb-4 pt-8 scroll-mt-16">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -113,6 +114,11 @@ const DemoVideo: React.FC = () => {
           </motion.p>
         </motion.div>
       </div>
+      
+
+      <div>
+          <ScrollIndicator target="#hero" />
+          </div>
     </section>
   );
 };

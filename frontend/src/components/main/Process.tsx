@@ -97,14 +97,14 @@ const Process: React.FC = () => {
           </a>
         </div>
       </div>
-
+      
       {/* 내용 영역 (개발과정 콘텐츠 전체 유지) */}
       <div
         className={styles.content}
         style={{
           backgroundImage: `
-            linear-gradient(to bottom, rgba(255, 255, 255, 0.8) 100%, transparent),
-            url(${process.env.PUBLIC_URL}/images/fac2.png)
+            linear-gradient(to bottom, rgba(255, 255, 255, 0.5) 100%, transparent),
+            url(${process.env.PUBLIC_URL}/images/main_background.jpg)
           `,
           backgroundSize: 'auto 120%',
           backgroundPosition: 'center',

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { motion } from 'framer-motion';
 import {
   FaChevronLeft,
   FaChevronRight,
@@ -133,6 +134,7 @@ const About: React.FC = () => {
             />
           </div>
         </div>
+     
 
         {/* 하단: 동영상 (자동 전환 + 양쪽 버튼) */}
         <div className="relative w-full flex justify-center items-center mt-8">

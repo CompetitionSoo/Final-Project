@@ -17,27 +17,32 @@ const Gallery2: React.FC = () => {
   const [images, setImages] = useState<string[]>([]);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-  useEffect(() => {
-    const s3 = new AWS.S3({
-      accessKeyId: "",
-      secretAccessKey: ""
-    });
-    const params = {
-      Bucket: "coubot-images"
+
+  const fetchImages = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    try { //fetch로 해당 엔드포인트에 데이터 요청
+      const response = await fetch("http://localhost:5000/api/admingallery", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`, //인증토큰을 보냄
+        },
+      });
+
+      const data = await response.json(); //받아온 JSON data에 저장
+      if (response.ok) {
+        setImages(data.images);
+      } else {
+        console.error("Error fetching images:", data.error);
+      }
+    } catch (error) {
+      console.error("Network error:", error);
     }
-    
-    const prefix = "https://coubot-images.s3.us-east-1.amazonaws.com/"
-    
-    const data = async () => await s3.listObjectsV2(params).promise();
-    const result: string[] = []
-    data().then((data) => { 
-        data.Contents?.forEach((item) => { 
-          let url = prefix + item.Key
-          console.log(url)
-          result.push(url) 
-        }) 
-        setImages(result)
-    }).catch((err) => { console.log(err) });
+  };
+
+  useEffect(() => {
+    fetchImages();
   }, [])
 
   return (
