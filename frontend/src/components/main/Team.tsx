@@ -6,7 +6,7 @@ import { IoIosHome } from "react-icons/io";
 
 const Team: React.FC = () => {
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8"  >
       <h1 className="text-3xl font-bold text-center mb-8">강영수와 아이들</h1>
       <h1 className='text-4xl font-bold text-center mb-8'>로봇과 함께하는 미래형 물류 시스템</h1>
 

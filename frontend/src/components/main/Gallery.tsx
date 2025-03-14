@@ -103,7 +103,7 @@ const Gallery: React.FC = () => {
     if (isAuthenticated()) {
       const newItem: GalleryItem = {
         id: galleryItems.length + 1,
-        src: newImage || "",
+        src: newImage || "", 
         alt: newImage ? "Uploaded Image" : "",
         likes: 0,
         comments: [],

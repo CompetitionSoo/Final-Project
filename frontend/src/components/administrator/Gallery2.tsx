@@ -17,6 +17,7 @@ const Gallery2: React.FC = () => {
   const [images, setImages] = useState<string[]>([]);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
+
   const fetchImages = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
