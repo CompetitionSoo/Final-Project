@@ -89,7 +89,7 @@ def uploaded_file(filename):
 @token_required
 def get_gallery_images(current_user):
     try:
-        response = s3.list_objects_v2(Bucket=AWS_BUCKET_NAME, Prefix="admingallery/")
+        response = s3.list_objects_v2(Bucket=AWS_BUCKET_NAME, Prefix="yolochecklist/")
         if "Contents" not in response:
             return jsonify({"images": []})  # 버킷이 비어 있는 경우
 

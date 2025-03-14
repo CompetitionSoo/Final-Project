@@ -26,9 +26,6 @@ const ControlRobot: React.FC<UserProps> = ({ ros }) => {
   const imgRef = useRef()
   const canvasRef = useRef()
 
-  console.log(JSON.stringify(process.env.REACT_APP_AWS_ACCESS_KEY_ID))
-  console.log(JSON.stringify(process.env.REACT_APP_AWS_SECRET_ACCESS_KEY))
-
   const navigate = useNavigate();
   const alertIfAutoMode = () => {
     if(isAutoMode) {
@@ -210,13 +207,42 @@ const ControlRobot: React.FC<UserProps> = ({ ros }) => {
           {/* 방향키 조작 버튼 */}
           <div className="text-center mb-6">
             <div className="grid grid-cols-3 gap-4 gap-x-2">
-              <button className="bg-gray-300 p-6 rounded-md text-xl" >좌회전</button>
-              <button className="bg-gray-300 p-6 rounded-md text-xl">앞으로</button>
-              <button className="bg-gray-300 p-6 rounded-md text-xl">우회전</button>
-              <button className="bg-gray-300 p-6 rounded-md text-xl">왼쪽</button>
-              <button className="bg-red-500 p-6 rounded-md text-xl text-white font-bold">정지</button>
-              <button className="bg-gray-300 p-6 rounded-md text-xl">오른쪽</button>
-            </div>
+              <button className="bg-gray-300 p-6 rounded-md text-xl" onClick={() => {
+                  console.log("좌회전 버튼 클릭!");
+                  setCurrentAction('좌회전');
+                  setSpeedService(0, 180);
+                    }}>좌회전</button>
+
+              <button className="bg-gray-300 p-6 rounded-md text-xl" onClick={() => {
+                  console.log("앞으로 버튼 클릭!");
+                  setCurrentAction('앞으로');
+                  setSpeedService(250, 250);
+                    }}>앞으로</button>
+                    
+              <button className="bg-gray-300 p-6 rounded-md text-xl" onClick={()=>{
+                console.log("우회전 버튼 클릭");
+                setCurrentAction('우회전');
+                setSpeedService(180, 0);
+                  }}>우회전</button>
+              
+              <button className="bg-gray-300 p-6 rounded-md text-xl" onClick={()=>{
+                console.log("왼쪽 버튼 클릭");
+                setCurrentAction('왼쪽');
+                setSpeedService(100, 255);
+                  }}>왼쪽</button>
+              
+              <button className="bg-red-500 p-6 rounded-md text-xl text-white font-bold" onClick={()=>{
+                console.log("정지 버튼 클릭");
+                setCurrentAction('정지');
+                setSpeedService(0, 0);
+                  }}>정지</button>
+              
+              <button className="bg-gray-300 p-6 rounded-md text-xl" onClick={()=>{
+                console.log("오른쪽 버튼 클릭");
+                setCurrentAction('오른쪽');
+                setSpeedService(255, 100);
+                  }}>오른쪽</button>
+              </div>
           </div>
 
           <div className="bg-white p-4 rounded-lg shadow-md w-full text-center mb-6 grid grid-cols-2 gap-4 my-6">
