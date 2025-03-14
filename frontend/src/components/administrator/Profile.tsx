@@ -40,7 +40,7 @@ const Profile: React.FC = () => {
       const data = await response.json(); //받아온 JSON data에 저장
       if (response.ok) {
         setProfile(data);
-        setProfileImage(`http://localhost:5000${data.profile_picture}`)
+        setProfileImage(data.profile_picture)
       } else {
         console.error("Error fetching profile:", data.message);
       }
@@ -125,7 +125,7 @@ const Profile: React.FC = () => {
 
       const data = await response.json();
       if (response.ok) {
-        setProfileImage(`http://localhost:5000${data.file_url}`);
+        setProfileImage(data.file_url);
         alert("업로드 성공!");
       } else {
         alert(`업로드 실패: ${data.error}`);
@@ -151,7 +151,7 @@ const Profile: React.FC = () => {
   
     setProfileImage(null);
     try {
-      const response = await fetch("http://localhost:5000/api/upload/delete", {
+      const response = await fetch("http://localhost:5000/api/delete", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`, //인증토큰을 보냄
