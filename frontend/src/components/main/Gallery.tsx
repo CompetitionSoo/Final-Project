@@ -483,7 +483,10 @@ const Gallery: React.FC = () => {
             </div>
 
             <div className="bg-gray-50 p-3 rounded-lg shadow-inner mb-4">
-              <h3 className="font-semibold mb-2">댓글</h3>
+              <h3 className="font-semibold mb-2">
+                댓글 ({item.comments.length}) {/* 댓글 개수 표시 */}
+              </h3>
+
               {/* 댓글 리스트 컨테이너에 고정 높이 설정 */}
               <div className="h-20 overflow-y-auto">
                 {item.comments.length > 0 ? (
@@ -571,12 +574,7 @@ const Gallery: React.FC = () => {
                     })}
                   </ul>
                 ) : (
-                  // 댓글이 없을 경우에도 고정된 영역 내에 안내 메시지 표시
-                  <div className="flex items-center justify-center h-full">
-                    <p className="text-gray-500 text-sm">
-                      작성된 댓글이 없습니다.
-                    </p>
-                  </div>
+                  <p className="text-gray-500 text-sm">작성된 댓글이 없습니다.</p>
                 )}
               </div>
             </div>
@@ -620,7 +618,7 @@ const Gallery: React.FC = () => {
                     }
                   }}
                   placeholder="댓글을 입력하세요"
-                  className="flex-1 p-2 border rounded-l-lg focus:ring-2 focus:ring-indigo-500"
+                  className="flex-1 p-2 border rounded-l-lg"
                 />
                 <button
                   onClick={() => handleAddComment(item.id)}
