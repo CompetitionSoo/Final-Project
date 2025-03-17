@@ -45,7 +45,7 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ isOpen, user}) => {
     { to: '/dashboard/home', icon: <HiOutlineHome />, label: '메인' },
     { to: '/dashboard/Monitoring', icon: <VscVm />, label: '모니터링' },
     { to: '/dashboard/control_robot', icon: <IoGameController />, label: '컨트롤러' },
-    { to: '/dashboard/check_list', icon: <MdOutlineContentPasteSearch  />, label: '항목조회' },
+    { to: '/dashboard/check_list', icon: <MdOutlineContentPasteSearch  />, label: '재고조회' },
     { to: '/dashboard/gallery', icon: <HiOutlinePhotograph />, label: '갤러리' },
   ];
 
