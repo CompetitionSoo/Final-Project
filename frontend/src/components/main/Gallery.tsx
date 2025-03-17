@@ -574,7 +574,9 @@ const Gallery: React.FC = () => {
                     })}
                   </ul>
                 ) : (
-                  <p className="text-gray-500 text-sm">작성된 댓글이 없습니다.</p>
+                  <p className="text-gray-500 text-sm">
+                    작성된 댓글이 없습니다.
+                  </p>
                 )}
               </div>
             </div>
@@ -651,6 +653,15 @@ const Gallery: React.FC = () => {
               maxHeight: "800px",
             }}
           >
+            {/* 닫기 버튼 (오른쪽 상단) */}
+            <button
+              className="absolute top-1 right-3 text-gray-600 hover:text-gray-900 text-2xl"
+              onClick={() => setSelectedImage(null)}
+            >
+              &times;
+            </button>
+
+            {/* 이미지 */}
             <img
               src={selectedImage}
               alt="Selected"
