@@ -96,7 +96,7 @@ def generate_yolo_dynamic(selected_model):
             pass
 
 def generate():
-    url = "http://192.168.137.238:8000/video_feed"
+    url = "http://192.168.137.132:8080/stream?topic=/usb_cam/image_raw"
     stream = urlopen(url)
     buffer = b""
     while True:

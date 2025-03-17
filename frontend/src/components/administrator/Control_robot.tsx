@@ -40,6 +40,7 @@ const ControlRobot: React.FC<UserProps> = ({ ros }) => {
   }, [ros]);
   const setSpeedService = (left: number, right: number) => {
     if (ros != null) {
+      console.log("ROS 연결됨")
       const setSpeedClient = new ROSLIB.Service({
         ros: ros,
         name: '/set_speed',
@@ -51,6 +52,8 @@ const ControlRobot: React.FC<UserProps> = ({ ros }) => {
       }), function (response: any) {
         console.log(response.message)
       });
+    }else{
+      console.log("ROS 연결 안됨")
     }
   };
 
@@ -307,7 +310,10 @@ const ControlRobot: React.FC<UserProps> = ({ ros }) => {
                 <button
                   key={value}
                   className={`py-2 px-4 rounded-md text-white font-bold ${speed === value ? 'bg-amber-500' : 'bg-blue-500'}`}
-                  onClick={() => setSpeed(value)}
+                  onClick={() => {
+                    setSpeed(value)
+                    setSpeedService(value, value)
+                  }}
                 >
                   {value}
                 </button>

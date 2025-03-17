@@ -3,6 +3,55 @@ import "./Team.css";
 import { MdEmail } from "react-icons/md";
 import { MdOutlinePhoneIphone } from "react-icons/md";
 import { IoIosHome } from "react-icons/io";
+import { FaChessKing } from "react-icons/fa6";
+import { IoIosStar } from "react-icons/io";
+
+const teamMembers = [
+  {
+    name: "강 영 수",
+    role: "프론트엔드, 백엔드",
+    phone: "010-6679-5780",
+    email: "geem1282@gmail.com",
+    home: "대전 서구 둔산동",
+    image: "./images/강영수.jpg",
+    icon: <FaChessKing />
+  },
+  {
+    name: "이 희 성",
+    role: "프론트엔드, 백엔드",
+    phone: "010-6638-5438",
+    email: "lstar216@naver.com",
+    home: "대전 서구 월평동",
+    image: "./images/이희성.jpg"
+  },
+  {
+    name: "김 희 선",
+    role: "프론트엔드, 백엔드",
+    phone: "010-2960-7801",
+    email: "1209khs51@gmail.com",
+    home: "대전 동구 삼성동 ",
+    image: "./images/김희선.png"
+  },
+  {
+    name: "이 정 희",
+    role: "머신러닝, 딥러닝, 프론트엔드",
+    phone: "010-2742-2352",
+    email: "ggp05158@naver.com",
+    home: "대전 유성구 노은동",
+    image: "./images/이정희.jpg",
+    icon: <IoIosStar />
+  },
+  {
+    name: "정 성 민",
+    role: "ROS",
+    phone: "010-5090-3039",
+    email: "smjeong5090@naver.com",
+    home: "대전 서구 만년동",
+    image: "./images/정성민.png"
+  }
+];
+
+
 
 const Team: React.FC = () => {
   return (
@@ -13,101 +62,37 @@ const Team: React.FC = () => {
       <div className='cubot_info'>
         <div className='border border-indigo-800' style={{ height: '200px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <p style={{fontSize: '40px', color: '#333', animation: 'slideIn 2s ease-out'}}>
-            자율배송 로봇 <span style={{ color: '#FF6347', fontWeight: 'bold' }}>쿠봇</span>이 대신 옮겨 드리겠습니다!
+            물류분류 로봇 <span style={{ color: '#FF6347', fontWeight: 'bold' }}>쿠봇</span>이 대신 옮겨 드리겠습니다!
           </p>
         </div>
       </div>
-
-      <div className="team_container">
-        <div className="team_card">
-          <div className="team_card-inner">
-            <div className="text-center">
-              <div className="w-32 h-32 mx-auto mb-4 rounded-full">
-                <img src="./images/강영수.jpg" alt="강 영 수" className="team_img" />
-              </div>
-              <div className="text-2xl font-semibold mt-5">강 영 수</div>
-              <hr/>
-              <div className= "text-xl font-semibold mb-5">프론트엔드, 백엔드</div>
-              <hr/>
-              <p><MdOutlinePhoneIphone/>010-6679-5780</p>
-              <p><MdEmail/>geem1282@gmail.com</p>
-              <p><IoIosHome/>미래기술융합학원</p>
+      
+      {teamMembers.map((member, index) => (
+        <div key={index} className="team_member_card flex flex-col md:flex-row items-center mt-9 mb-8 p-6 border border-gray-300 rounded-lg shadow-lg">
+          {/* 왼쪽 - 이미지 */}
+          <div className="w-full md:w-1/3 flex justify-center">
+            <img src={member.image} alt={member.name} className="w-60 object-top rounded-lg" />
+          </div>
+          
+          {/* 중간 구분선 */}
+          <div className="hidden md:block w-px bg-gray-400 h-40 mx-6"></div>
+          
+          {/* 오른쪽 - 정보 */}
+          <div className="w-full md:w-2/3 p-6">
+            <h2 className="text-2xl font-bold mb-2 flex items-center">
+            {member.name === "이 정 희" && <IoIosStar className="mr-2 text-yellow-500" />}
+            {member.name === "강 영 수" && <FaChessKing className="mr-2 text-black" />}
+            {member.name}
+            </h2>
               
-            </div>
+            <p className="text-xl text-gray-700 mb-4">{member.role}</p>
+            <hr className="mb-4" />
+            <p className="flex items-center mb-2"><MdOutlinePhoneIphone className="mr-2" />{member.phone}</p>
+            <p className="flex items-center mb-2"><MdEmail className="mr-2" />{member.email}</p>
+            <p className="flex items-center"><IoIosHome className="mr-2" />{member.home}</p>
           </div>
         </div>
-
-        <div className="team_card">
-          <div className="team_card-inner">
-            <div className="text-center">
-            <div className="w-32 h-32 mx-auto mb-4 rounded-full">
-              <img src="./images/이희성.png" alt="이 희 성" className="team_img" />
-              </div>
-              <div className="text-2xl font-semibold mt-5">이 희 성</div>
-              <hr/>
-              <div className= "text-xl font-semibold mb-5">프론트엔드, 백엔드</div>
-              <hr/>
-              <p><MdOutlinePhoneIphone/>010-6638-5438</p>
-              <p><MdEmail/>lstar216@naver.com</p>
-              <p><IoIosHome/>미래기술융합학원</p>
-              
-            </div>
-          </div>
-        </div>
-
-        <div className="team_card">
-          <div className="team_card-inner">
-            <div className="text-center">
-            <div className="w-32 h-32 mx-auto mb-4 rounded-full">
-                <img src="./images/김희선.png" alt="김 희 선"  className="team_img" />
-              </div>
-              <div className="text-2xl font-semibold mt-5">김 희 선</div>
-              <hr/>
-              <div className="text-xl font-semibold mb-5">프론트엔드, 백엔드</div>
-              <hr/>
-              <p><MdOutlinePhoneIphone/>010-2960-7801</p>
-              <p><MdEmail/>1209khs51@gmail.com</p>
-              <p><IoIosHome/>미래기술융합학원</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="team_card">
-          <div className="team_card-inner">
-            <div className="text-center">
-            <div className="w-32 h-32 mx-auto mb-4 rounded-full">
-                <img src="./images/이정희.jpg" alt="이 정 희" className="team_img" />
-              </div>
-              <div className="text-2xl font-semibold mt-5">이 정 희</div>
-              <hr/>
-              <div className="text-xl font-semibold mb-5">머신러닝, 딥러닝</div>
-              <hr/>
-              <p><MdOutlinePhoneIphone/>010-2742-2352</p>
-              <p><MdEmail/>ggp05158@naver.com</p>
-              <p><IoIosHome/>미래기술융합학원</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="team_card">
-          <div className="team_card-inner">
-            <div className="text-center">
-            <div className="w-32 h-32 mx-auto mb-4 rounded-full">
-                <img src="./images/정성민.png" alt="정 성 민" className="team_img" />
-              </div>
-              
-              <div className="text-2xl font-semibold mt-5">정 성 민</div>
-              <hr/>
-              <div className="text-xl font-semibold mb-5">ROS</div>
-              <hr/>
-              <p><MdOutlinePhoneIphone/>010-5090-3039</p>
-              <p><MdEmail/>smjeong5090@naver.com</p>
-              <p><IoIosHome/>미래기술융합학원</p>
-            </div>
-          </div>
-        </div>
-
-      </div>
+      ))}
     </div>
   );
 };
