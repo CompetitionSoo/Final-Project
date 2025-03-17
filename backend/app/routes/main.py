@@ -3,7 +3,7 @@ from app.extensions import mail
 from flask_mail import Message
 from datetime import datetime
 from .. import db
-from ..models.user import Inquiry
+from ..models.user import Inquiry, Inventory
 
 main_bp = Blueprint('main', __name__)
 
@@ -67,4 +67,24 @@ def contact():
 def serve_video(filename):
     return send_from_directory('../frontend/public/videos', filename) 
 
-
+@main_bp.route('/api/inventory', methods=['GET'])
+def get_inventory():
+    try:
+        inventory_data = Inventory.query.order_by(Inventory.created_at).all()
+        
+        # 변환된 데이터 리스트
+        formatted_data = []
+        for item in inventory_data:
+            formatted_data.append({
+                "No.": item.id,
+                "로봇ID": f"BOT-{item.bot_id}",
+                "탐지항목": item.item,
+                "위치": f"{item.location}구역",
+                "재고현황": item.list,  
+                "시간": item.created_at.strftime("%Y/%m/%d %H시%M분%S초")  # 시간 포맷 변환
+            })
+        
+        return jsonify(formatted_data)
+    
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
