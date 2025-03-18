@@ -80,7 +80,7 @@ const Team: React.FC = () => {
           {/* 오른쪽 - 정보 */}
           <div className="w-full md:w-2/3 p-6">
             <h2 className="text-2xl font-bold mb-2 flex items-center">
-            {member.name === "이 정 희" && <IoIosStar className="mr-2 text-yellow-500" />}
+            {member.name === "이 정 희" && <IoIosStar className="mr-2 text-black" />}
             {member.name === "강 영 수" && <FaChessKing className="mr-2 text-black" />}
             {member.name}
             </h2>
