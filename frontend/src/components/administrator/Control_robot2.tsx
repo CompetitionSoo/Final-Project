@@ -23,8 +23,8 @@ const ControlRobot: React.FC<UserProps> = ({ ros }) => {
   const [checkedModel, setCheckedModel] = useState('default');
   const [detectedObjects, setDetectedObjects] = useState("현재 검출된 객체 없음");
 
-  const imgRef = useRef();
-  const canvasRef = useRef(null);
+  const imgRef = useRef()
+  const canvasRef = useRef()
 
   const navigate = useNavigate();
   const alertIfAutoMode = () => {
@@ -34,45 +34,6 @@ const ControlRobot: React.FC<UserProps> = ({ ros }) => {
     }
     return false
   }
-
-  const handleCaptureAndUpload = async () => {
-    let img = new Image();
-    img.src = `http://127.0.0.1:5000/video_yolo_dynamic?model=${checkedModel}`;
-    img.crossOrigin = "Anonymous";
-
-    img.onload = function () {
-      canvasRef.current.width = img.width;
-      canvasRef.current.height = img.height;
-      canvasRef.current.getContext("2d").drawImage(img, 0, 0);
-    };
-
-    setTimeout(async () => {
-      // 캔버스에서 이미지 데이터 추출
-      canvasRef.current.toBlob(async (blob) => {
-        if (!blob) return;
-
-        const formData = new FormData();
-        formData.append("image", blob, "capture.jpg");
-        formData.append("tag", detectedObjects);
-
-        try {
-          const token = localStorage.getItem("token");
-          const response = await axios.post("http://localhost:5000/api/admingalleryupload", formData, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "multipart/form-data",
-            },
-          });
-
-          if (response.status === 201) {
-            console.log("업로드 성공:", response.data.image_url);
-          }
-        } catch (error) {
-          console.error("업로드 실패:", error);
-        }
-      }, "image/jpeg");
-    }, 1000);
-  };
 
   useEffect(() => {
     console.log("ROS 연결된 듯 :", ros)
@@ -167,8 +128,7 @@ const ControlRobot: React.FC<UserProps> = ({ ros }) => {
         .then((res) => res.json())
         .then((data) => {
           if (data.detected && data.detected.length > 0) {
-            // setDetectedObjects(data.detected.join(', ') + ' 가 검출되었습니다');
-            setDetectedObjects(data.detected.join(', '));
+            setDetectedObjects(data.detected.join(', ') + ' 가 검출되었습니다');
           } else {
             setDetectedObjects("현재 검출된 객체 없음");
           }
@@ -289,7 +249,45 @@ const ControlRobot: React.FC<UserProps> = ({ ros }) => {
           </div>
 
           <div className="bg-white p-4 rounded-lg shadow-md w-full text-center mb-6 grid grid-cols-2 gap-4 my-6">
-            <button className="bg-blue-500 text-white py-3 rounded-md" onClick={handleCaptureAndUpload}>화면캡처</button>
+            <button className="bg-blue-500 text-white py-3 rounded-md" onClick={() => {
+
+              let img = new Image();
+              img.src = `http://127.0.0.1:5000/video_yolo_dynamic?model=${checkedModel}`;
+              img.crossOrigin = 'Anonymous';
+              img.onload = function() {
+                // console.log(img)
+                canvasRef.current.width = img.width;
+                canvasRef.current.height = img.height;
+                canvasRef.current.getContext("2d").drawImage(img, 0, 0);
+              }
+
+              const s3 = new AWS.S3({
+                accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
+                secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY
+              });
+
+              setTimeout(() => {
+                // console.log(canvasRef.current.toDataURL('image/jpg'))
+
+                const get = async () => await axios({
+                    url: canvasRef.current.toDataURL('image/jpg'),
+                    responseType: 'arraybuffer',
+                });             
+                const now = new Date();   
+                get().then((response) => {
+                    let params = {
+                        Bucket:"coubot-images",
+                        Key: `yolochecklist/${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}_${now.getHours()}-${now.getMinutes()}-${now.getSeconds()}_${checkedModel}.jpg`,
+                        Body: response.data,
+                        ContentType: response.headers['content-type']
+                      }
+                      const call = async () => await s3.upload(params).promise();
+                        call().then((data) => { 
+                            console.log(data)
+                        }).catch((err) => { console.log(err) });
+                }).catch((err) => { console.log(err) });
+              }, 1000)
+            }}>화면캡처</button>
             <button className="bg-red-500 text-white py-3 rounded-md">저장하기</button>
           </div> 
 

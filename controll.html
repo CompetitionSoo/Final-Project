@@ -9,7 +9,7 @@
 </head>
 <body>
     <h1>카메라 STREAMING</h1>
-    <img src="http://192.168.137.52:8080/stream?topic=/usb_cam/image_raw">
+    <img src="http://192.168.137.220:8080/stream?topic=/usb_cam/image_raw">
     <h2>JetBot Mini Controller</h2>
     <label>왼쪽 속도:</label>
     <input type="number" id="leftSpeed" value="100">
@@ -27,7 +27,7 @@
     <script>
         // ROSBridge 연결
         var ros = new ROSLIB.Ros({
-            url: 'ws://192.168.137.52:9090'  // ROSBridge WebSocket 주소
+            url: 'ws://192.168.137.220:9090'  // ROSBridge WebSocket 주소
         });
 
         ros.on('connection', function() {
