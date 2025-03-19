@@ -41,10 +41,10 @@ def generate_yolo_dynamic(selected_model):
     global detected_labels_global
     frame_count = 0
     chosen_model = models.get(selected_model, default_model)
-    url = "http://192.168.137.132:8080/stream?topic=/usb_cam/image_raw"
+    url = "http://192.168.137.220:8080/stream?topic=/usb_cam/image_raw"
     
     
-    # url = "http://192.168.137.238:8000/video_feed"
+    # url = "http://192.168.220.238:8000/video_feed"
     stream = urlopen(url)
     buffer = b""
     while True:
@@ -96,7 +96,7 @@ def generate_yolo_dynamic(selected_model):
             pass
 
 def generate():
-    url = "http://192.168.137.132:8080/stream?topic=/usb_cam/image_raw"
+    url = "http://192.168.137.220:8080/stream?topic=/usb_cam/image_raw"
     stream = urlopen(url)
     buffer = b""
     while True:

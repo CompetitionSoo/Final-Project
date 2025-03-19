@@ -129,7 +129,7 @@ const Profile: React.FC = () => {
     formData.append("file", file);
 
     try {
-      const response = await fetch("http://localhost:5000/api/upload", {
+      const response = await fetch("http://localhost:5000/api/uploadprofile", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`, //인증토큰을 보냄
@@ -157,7 +157,7 @@ const Profile: React.FC = () => {
   
     setProfileImage(null);
     try {
-      const response = await fetch("http://localhost:5000/api/delete", {
+      const response = await fetch("http://localhost:5000/api/deleteprofile", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`, //인증토큰을 보냄
