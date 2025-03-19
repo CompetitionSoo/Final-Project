@@ -70,7 +70,26 @@ project/
    npm install
    ```
 
+## ROS에서 터미널 실행 방법
+```bash
+# 1. 노드간 연결하는 기초 명령어
+roscore
 
+# 2. 다른 웹 서버와 9090포트로 연결
+roslaunch rosbridge_server rosbridge_websocket.launch
+
+# 3. 카메라 활성화
+roslaunch jetbot_ros opencv_apps.launch
+
+# 4. usb 카메라 활성화 (usb 카메라 사용시에만)
+roslaunch usb_cam usb_cam-test.launch
+
+# 5. 실시간 영상 서버
+rosrun web_video_server web_video_server
+
+# 6. 코드 실행
+rosrun coubot.py
+```
 
 ## 애플리케이션 실행
 
