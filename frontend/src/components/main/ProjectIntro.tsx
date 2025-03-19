@@ -93,11 +93,13 @@ const ProjectIntro: React.FC = () => {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="w-full h-auto  flex justify-center"
             >
+              
               <img
                 src="/images/coubot_3.jpg"
                 alt="로봇 이미지"
-                className="w-full h-full max-h-[500px] object-cover"
-            />
+                className="w-full h-auto object-cover"
+              />  
+              
           
             </motion.div>
             <motion.div

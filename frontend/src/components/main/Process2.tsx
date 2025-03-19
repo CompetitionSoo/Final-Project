@@ -46,7 +46,7 @@ const Process2: React.FC = () => {
               rgba(155, 149, 204, 0.95) 100%,
               #020202
             ),
-            url(${process.env.PUBLIC_URL}/images/10.png)
+            url(${process.env.PUBLIC_URL}/images/119.png)
           `,
         }}
       >
@@ -123,7 +123,7 @@ const Process2: React.FC = () => {
                 <img src="/images/idea.png" alt="사진1" className="w-full h-full object-contain" />
               </div>
               <div className="w-full md:w-1/2">
-                <h2 className="text-2xl text-center font-semibold mb-5">아이디어 기획 및 목표 설정</h2>
+                <h2 className="text-2xl text-center font-semibold mb-8">아이디어 기획 및 목표 설정</h2>
                   <div className="bg-gray-100 p-6 rounded-lg shadow-lg">
                     <ol className="list-decimal list-inside text-gray-600 space-y-6">
                       <li>MySQL 서버와 연동하여 사용자 접근성을 높이고, Yolo객체 <br/>&nbsp; 검출을 활용한 실시간 데이터 확인 및 장애물 탐지 시스템 구축</li>
@@ -229,15 +229,15 @@ const Process2: React.FC = () => {
               </div>
               <div className="w-full md:w-1/2">
                 <h2 className="text-2xl text-center font-semibold mb-5">Arduino AI 자율주행자동차</h2>
-                  <div className="bg-gray-100 p-6 rounded-lg shadow-lg">
-                    <ol className="list-decimal list-inside text-gray-600 space-y-4">
-                      <li> PyQt5를 활용하여 버튼을 화면 하단에 배치하도록 구현.</li>
-                      <li> 초기에는 그리드 레이아웃을 사용하여 화면을 배치하였으나,<br/>&nbsp;&nbsp; 여백의 너비가 일정하게 유지되었음에도 불구하고 어색한<br/>&nbsp;&nbsp; 배치가 발생하여 BOX 형식으로 수정.</li>
-                      <li> 자율주행 기능을 적용하여 아두이노 자동차 로봇이 검은색<br/>&nbsp;&nbsp; 선을 따라 최종 목적지까지 도달하도록 설계하였습니다.</li>
-                      <li> Haar Cascade 기능을 활용하여 얼굴 인식 기능을 구현.</li>
-                      <li >화면 저장 기능을 추가하여, 사용자가 원하는 폴더를 <br/>&nbsp;&nbsp;생성하고 해당 위치에 이미지를 저장할 수 있도록 개발.</li>
-                    </ol>
-                  </div>
+                <div className="bg-gray-100 p-6 rounded-lg shadow-lg">
+                  <ol className="list-decimal list-inside text-gray-600 space-y-2">
+                    <li> PyQt5를 활용하여 버튼을 화면 하단에 배치하도록 구현.</li>
+                    <li> 초기에는 그리드 레이아웃을 사용하여 화면을 배치하였으나,<br/>&nbsp;&nbsp; 여백의 너비가 일정하게 유지되었음에도 불구하고 어색한<br/>&nbsp;&nbsp; 배치가 발생하여 BOX 형식으로 수정.</li>
+                    <li> 자율주행 기능을 적용하여 아두이노 자동차 로봇이 검은색<br/>&nbsp;&nbsp; 선을 따라 최종 목적지까지 도달하도록 설계하였습니다.</li>
+                    <li> Haar Cascade 기능을 활용하여 얼굴 인식 기능을 구현.</li>
+                    <li >화면 저장 기능을 추가하여, 사용자가 원하는 폴더를 <br/>&nbsp;&nbsp;생성하고 해당 위치에 이미지를 저장할 수 있도록 개발.</li>
+                  </ol>
+                </div>
               </div>
             </div>
 
