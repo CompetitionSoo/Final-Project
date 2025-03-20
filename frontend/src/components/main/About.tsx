@@ -54,6 +54,8 @@ const About: React.FC = () => {
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-6xl mx-auto">
         {/* 상단: 로고와 타이틀 */}
+
+ 
       
         {/* 제품 소개 섹션 */}
           <motion.div 
@@ -83,7 +85,6 @@ const About: React.FC = () => {
               </p>
             </div>
           </motion.div>
-
 
         {/* 왼쪽 이미지, 오른쪽 설명 */}
         <motion.div 
