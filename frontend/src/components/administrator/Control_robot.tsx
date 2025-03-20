@@ -250,14 +250,16 @@ const ControlRobot: React.FC<UserProps> = ({ ros }) => {
           {/* 모드 전환 */}
           <div className="flex justify-between items-center mb-6">
           <span className="text-gray-700 font-medium text-lg">🛠 모드: {isAutoMode ? '자율주행' : '수동 조작'}</span>
-          <div>ddddd </div>
-
           <button
             className={`px-6 py-3 rounded-md text-lg ${isAutoMode ? 'bg-blue-500 text-white' : 'bg-orange-500 text-white'}`}
             onClick={() => setIsAutoMode(!isAutoMode)}
           >
             {isAutoMode ? '수동전환' : '자율주행'}
           </button>
+          <select className="px-16 py-4 border rounded-md text-lg">
+              <option>과일</option>
+              <option>채소</option>
+            </select>
         </div>
 
           {/* 방향키 조작 버튼 */}
