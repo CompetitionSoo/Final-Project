@@ -42,7 +42,7 @@ const App = () => {
     // ROS 연결 설정
     console.log("App is mounted!")
     const rosInstance = new ROSLIB.Ros({
-      url: 'ws://192.168.137.220:9090' // ROSBridge WebSocket 주소
+      url: 'ws://192.168.137.132:9090' // ROSBridge WebSocket 주소
     });
 
     rosInstance.on("connection", () => {

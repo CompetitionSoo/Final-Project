@@ -41,10 +41,10 @@ def generate_yolo_dynamic(selected_model):
     global detected_labels_global
     frame_count = 0
     chosen_model = models.get(selected_model, default_model)
-    url = "http://192.168.137.220:8080/stream?topic=/usb_cam/image_raw"
+    url = "http://192.168.137.132:8080/stream?topic=/usb_cam/image_raw"
     
     
-    # url = "http://192.168.220.238:8000/video_feed"
+    # url = "http://192.168.137.238:8000/video_feed"
     stream = urlopen(url)
     buffer = b""
     while True:
@@ -64,6 +64,8 @@ def generate_yolo_dynamic(selected_model):
                     detected_labels = set()  # 이번 프레임의 검출 객체 초기화
                     if selected_model == "default":
                         results = chosen_model.predict(source=frame, classes=[0, 1, 2, 3, 5, 7, 11])
+                    elif selected_model == "totten":
+                        results = chosen_model(frame)
                     else:
                         results = chosen_model(frame)
                     for result in results:
@@ -75,9 +77,20 @@ def generate_yolo_dynamic(selected_model):
                             if conf > 0.5:
                                 percentage = str(int(100 * conf)) + '%'
                                 detected_labels.add(label)
-                                cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 3)
+                                
+                                # 기본 색상 설정 (초록색)
+                                box_color = (0, 255, 0)
+                                
+                                # totten 모델을 사용하고 있을 때 cls에 따라 색상 변경
+                                if selected_model == "fresh":
+                                    if cls == 0:  # fresh 클래스
+                                        box_color = (0, 255, 0)  # 초록색
+                                    elif cls == 1:  # rotten 클래스
+                                        box_color = (0, 0, 255)  # 빨간색 (BGR 형식에서 빨간색)
+                                
+                                cv2.rectangle(frame, (x1, y1), (x2, y2), box_color, 3)
                                 cv2.putText(frame, f"{label} {percentage}", (x1, y1 - 10),
-                                            cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 3)
+                                            cv2.FONT_HERSHEY_SIMPLEX, 1, box_color, 3)
                     # 검출된 객체를 전역 변수에 업데이트
                     detected_labels_global = detected_labels
                 # 매 프레임마다 카운터 증가
@@ -96,7 +109,8 @@ def generate_yolo_dynamic(selected_model):
             pass
 
 def generate():
-    url = "http://192.168.137.220:8080/stream?topic=/usb_cam/image_raw"
+    url = "http://192.168.137.132:8080/stream?topic=/usb_cam/image_raw"
+    # url = "http://192.168.137.238:8000/video_feed"
     stream = urlopen(url)
     buffer = b""
     while True:
@@ -138,3 +152,4 @@ def detected_objects():
     global detected_labels_global
     detected_list = list(detected_labels_global)
     return jsonify({"detected": detected_list})
+

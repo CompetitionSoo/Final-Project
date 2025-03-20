@@ -14,6 +14,8 @@ module.exports = {
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
+        korea: ['KCC-Ganpan'],
+        korea2: ['Gyeonggi_Batang_Regular']
       },
     },
   },

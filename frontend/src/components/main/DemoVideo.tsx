@@ -3,9 +3,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import ScrollIndicator from "./ScrollIndicator";
 
 const videoList = [
-  "/videos/aespa.mp4",
   "/videos/login.mp4",
-  "/videos/robotvideo.mp4",
+  "/videos/과일,채소.mp4",
+  "/videos/라인트레이싱영상.mp4",
 ];
 
 const DemoVideo: React.FC = () => {
@@ -64,7 +64,7 @@ const DemoVideo: React.FC = () => {
           className="max-w-5xl mx-auto"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-12 text-center">
-            데모 영상
+            프로젝트 영상
           </h2>
 
           <div

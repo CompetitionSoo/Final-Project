@@ -247,6 +247,19 @@ const ControlRobot: React.FC<UserProps> = ({ ros }) => {
             <p id="detection-text" className="text-gray-600">{detectedObjects}</p>
           </div>
 
+          {/* 모드 전환 */}
+          <div className="flex justify-between items-center mb-6">
+          <span className="text-gray-700 font-medium text-lg">🛠 모드: {isAutoMode ? '자율주행' : '수동 조작'}</span>
+          <div>ddddd </div>
+
+          <button
+            className={`px-6 py-3 rounded-md text-lg ${isAutoMode ? 'bg-blue-500 text-white' : 'bg-orange-500 text-white'}`}
+            onClick={() => setIsAutoMode(!isAutoMode)}
+          >
+            {isAutoMode ? '수동전환' : '자율주행'}
+          </button>
+        </div>
+
           {/* 방향키 조작 버튼 */}
           <div className="text-center mb-6">
             <div className="grid grid-cols-3 gap-4 gap-x-2">
@@ -293,16 +306,7 @@ const ControlRobot: React.FC<UserProps> = ({ ros }) => {
             <button className="bg-red-500 text-white py-3 rounded-md">저장하기</button>
           </div> 
 
-          {/* 모드 전환 */}
-          <div className="flex justify-between items-center mb-6">
-            <span className="text-gray-700 font-medium text-lg">🛠 모드: {isAutoMode ? '자율주행' : '수동 조작'}</span>
-            <button
-              className={`px-6 py-3 rounded-md text-lg ${isAutoMode ? 'bg-blue-500 text-white' : 'bg-orange-500 text-white'}`}
-              onClick={() => setIsAutoMode(!isAutoMode)}
-            >
-              {isAutoMode ? '수동전환' : '자율주행'}
-            </button>
-          </div>
+         
 
           {/* 속도 조절 */}
           <div className="mb-6">
