@@ -9,10 +9,13 @@ module.exports = {
         primary: "#1a56db",
         secondary: "#7c3aed",
         dark: "#111827",
-        deepskyblue: "#00bfff"
+        deepskyblue: "#00bfff",
+        bg1:"#FFDCDCDC"
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
+        korea: ['KCC-Ganpan'],
+        korea2: ['Gyeonggi_Batang_Regular']
       },
     },
   },

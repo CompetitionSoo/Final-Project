@@ -14,8 +14,6 @@ interface UserProfile {
 
 const Profile: React.FC = () => {
   const [profileImage, setProfileImage] = useState<string | null>(null);
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({
@@ -42,7 +40,7 @@ const Profile: React.FC = () => {
       const data = await response.json(); //받아온 JSON data에 저장
       if (response.ok) {
         setProfile(data);
-        setProfileImage(data.profile_picture)
+        setProfileImage(data.profile_picture);
       } else {
         console.error("Error fetching profile:", data.message);
       }
@@ -60,31 +58,42 @@ const Profile: React.FC = () => {
   };
 
   const handleEditClick = () => {
+    if (profile) {
+      setFormData({
+        name: profile.name || "",
+        email: profile.email || "",
+        phone: profile.phone || "",
+        description: profile.description || "",
+      });
+    }
     setEditMode(true);
   };
 
   const handleSaveClick = async () => {
     const token = localStorage.getItem("token");
-    if (!token) return alert("토큰없음!");
-    
-    const updateProfile={
-      name: formData.name.trim() || profile?.name,
-      email: formData.email.trim() || profile?.email, 
-      phone: formData.phone.trim() || profile?.phone,
-      description: formData.description.trim() || profile?.description,
-    }
+    if (!token) return alert("토큰이 없습니다!");
 
-    if(
-      updateProfile.name===profile?.name &&
-      updateProfile.email===profile?.email &&
-      updateProfile.phone===profile?.phone &&
-      updateProfile.description===profile?.description
+    if (!profile) return;
+
+    const updateProfile = {
+      name: formData.name.trim() || profile.name,
+      email: formData.email.trim() || profile.email,
+      phone: formData.phone.trim() || profile.phone,
+      description: formData.description.trim() || profile.description,
+    };
+
+    // 변경 사항이 없으면 저장 X
+    if (
+      updateProfile.name === profile.name &&
+      updateProfile.email === profile.email &&
+      updateProfile.phone === profile.phone &&
+      updateProfile.description === profile.description
     ) {
-      alert("변경된 내용이 없습니다.")
+      alert("변경된 내용이 없습니다.");
       setEditMode(false);
       return;
     }
-    
+
     try {
       const response = await fetch("http://localhost:5000/api/profile", {
         method: "PUT",
@@ -97,9 +106,10 @@ const Profile: React.FC = () => {
 
       if (response.ok) {
         alert("프로필이 저장되었습니다.");
+        // 저장 후 프로필 재조회
         fetchProfile();
         fetchUser();
-        setEditMode(false); // 수정 완료 후 보기 모드로 변경
+        setEditMode(false);
       } else {
         alert("저장 실패");
       }
@@ -109,16 +119,17 @@ const Profile: React.FC = () => {
   };
 
   //프로필 이미지 변경
-  const handleProfileImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleProfileImageChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const file = event.target.files?.[0];
     const token = localStorage.getItem("token");
-    if (!token) return;
-    if (!file) return;
+    if (!token || !file) return;
     const formData = new FormData();
-    formData.append("file", file)
+    formData.append("file", file);
 
     try {
-      const response = await fetch("http://localhost:5000/api/upload", {
+      const response = await fetch("http://localhost:5000/api/uploadprofile", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`, //인증토큰을 보냄
@@ -139,23 +150,14 @@ const Profile: React.FC = () => {
     }
   };
 
-  const handlePasswordChange = (event: React.FormEvent) => {
-    event.preventDefault();
-    if (newPassword !== confirmPassword) {
-      alert('Passwords do not match!');
-      return;
-    }
-    // 비밀번호 변경 로직 추가
-    console.log('Password changed');
-  };
-  //프로필이미지 제거, DB에서 경로만 비움 서버에서 사진 실제 삭제기능 미구현
+  // 프로필 이미지 제거
   const handleRemoveImage = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
   
     setProfileImage(null);
     try {
-      const response = await fetch("http://localhost:5000/api/delete", {
+      const response = await fetch("http://localhost:5000/api/deleteprofile", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`, //인증토큰을 보냄
@@ -175,124 +177,179 @@ const Profile: React.FC = () => {
   };
 
   if(!profile){
-    return <p>loading..</p>
+    return <p>loading..</p>;
   }
 
   return (
-    <div className="container flex justify-center items-center">
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4">프로필 상세</h2>
-        <div className='flex justify-center'>
-          <div className="mb-6 border-r-1">
-            <h3 className="text-xl font-semibold text-gray-700">프로필 이미지</h3>
-              {profileImage ? (
-                <img src={profileImage} alt="Profile" className="w-48 h-48 border-4 border-solid rounded-full object-cover" />
-              ) : (
-                <div className="w-16 h-16 bg-gray-300 rounded-full border-1 border-solid" />
-              )}
-            <div className="flex justify-center space-x-2">
-              <label className="cursor-pointer bg-blue-500 text-white px-3 py-2 rounded-md text-sm w-26">
-                프로필 변경
-                <input type="file" className="hidden" onChange={handleProfileImageChange} />
-              </label>
-              {profileImage && (
-                <button
-                  onClick={handleRemoveImage}
-                  className="bg-red-500 text-white px-3 py-2 rounded-md text-sm w-1/3" 
-                >
-                  삭제
-                </button>
-              )}
-            </div>
+    <div className="flex justify-center items-center h-screen bg-gradient-to-b from-gray-100 to-gray-300">
+      {/* 카드 컨테이너 */}
+      <div className="w-80 bg-white rounded-xl shadow-lg overflow-hidden">
+        {/* 상단 영역 (프로필 이미지, 이름, 연락처) */}
+        <div className="flex flex-col items-center p-4 bg-white">
+          {/* 프로필 이미지 */}
+          <div className="relative w-24 h-24 mb-2">
+            {profileImage ? (
+              <img
+                src={profileImage}
+                alt="Profile"
+                className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-md"
+              />
+            ) : (
+              <div className="w-24 h-24 bg-gray-300 rounded-full border-4 border-white shadow-md flex items-center justify-center">
+                <span className="text-gray-500">No Image</span>
+              </div>
+            )}
+            {/* 이미지 업로드 버튼 */}
+            <label className="absolute bottom-0 right-0 bg-blue-600 text-white rounded-full p-1 cursor-pointer">
+              <input
+                type="file"
+                className="hidden"
+                onChange={handleProfileImageChange}
+              />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            </label>
           </div>
 
-          <div className="mb-6 pl-4">
-            <form onSubmit={(e) => e.preventDefault()}>
-              <div className="mb-4">
-                <label className="block text-gray-600 mb-2">이름</label>
-                {editMode ? (
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                  />
-                ) : (
-                  <p>{profile.name}</p>
-                )}
-              </div>
+          {/* 이미지 삭제 버튼 */}
+          {profileImage && (
+            <button
+              onClick={handleRemoveImage}
+              className="text-xs text-red-500 hover:text-red-700 mb-2"
+            >
+              프로필 제거
+            </button>
+          )}
 
-              <div className="mb-4">
-                <label className="block text-gray-600 mb-2">이메일</label>
-                {editMode ? (
-                  <input
-                    type="text"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                  />
-                ) : (
-                  <p>{profile.email}</p>
-                )}
-              </div>
+          {/* 이름 */}
+          {editMode ? (
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              placeholder="이름"
+              className="w-full text-center border-b border-gray-200 focus:outline-none"
+            />
+          ) : (
+            <h2 className="text-xl font-bold">{profile.name}</h2>
+          )}
 
-              <div className="mb-4">
-                <label className="block text-gray-600 mb-2">연락처</label>
-                {editMode ? (
-                  <input
-                    type="text"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                  />
-                ) : (
-                  <p>{profile.phone}</p>
-                )}
-              </div>
+          {/* 연락처 */}
+          <div className="mt-2 text-gray-600 flex items-center">
+          <span className="mr-1">📱</span>
+            {editMode ? (
+              <input
+                type="text"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                placeholder="연락처"
+                className="w-full text-center border-b border-gray-200 focus:outline-none"
+              />
+            ) : (
+              <p>{profile.phone || "연락처가 없습니다."}</p>
+            )}
+          </div>
 
-              <div className="mb-4">
-                <label className="block text-gray-600 mb-2">소개글</label>
-                {editMode ? (
-                  <textarea
-                    name="description"
-                    value={formData.description}
-                    onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                  />
-                ) : (
-                  <p>{profile.description || "새로운 소개글을 입력해주세요."}</p>
-                )}
-              </div>
+          <div className="mt-2 text-gray-600 flex items-center">
+          <span className="mr-1">✉️</span>
+            {editMode ? (
+              <input
+                type="text"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="이메일"
+                className="w-full text-center border-b border-gray-200 focus:outline-none"
+              />
+            ) : (
+              <p>{profile.email || "이메일이 없습니다."}</p>
+            )}
+          </div>
+        </div>
 
-              {/* 버튼 영역 */}
-              {editMode ? (
-                <button
-                  onClick={handleSaveClick}
-                  className="w-1/2 bg-green-500 text-white p-2 rounded-md mt-4"
-                >
-                  저장
-                </button>
-              ) : (
-                <button
-                  onClick={handleEditClick}
-                  className="w-1/2 bg-blue-500 text-white p-2 rounded-md mt-4"
-                >
-                  수정
-                </button>
-              )}
+        {/* 중단 영역 (소개글을 Send your message 위치에서 편집) */}
+        <div className="bg-yellow-200 p-4">
+          {editMode ? (
+            <textarea
+              name="description"
+              className="w-full p-2 rounded-md outline-none"
+              placeholder="Send your message"
+              value={formData.description}
+              onChange={handleChange}
+            />
+          ) : (
+            <p className="text-gray-700">
+              {profile.description || "새로운 소개글을 입력해주세요."}
+            </p>
+          )}
+        </div>
 
-              {!editMode && (
-                <button
-                  onClick={() => navigate("/Dashboard")}
-                  className="w-1/2 bg-red-500 text-white p-2 rounded-md mt-4"
-                >
-                  뒤로
-                </button>
-              )}
-            </form>
+        {/* 하단 영역 (SNS 아이콘 + 수정/저장/뒤로 버튼) */}
+        <div className="flex items-center justify-between bg-gray-800 text-white px-4 py-2">
+          {/* SNS 아이콘 (예시) */}
+          <div className="flex space-x-3">
+            <a href="#" className="hover:text-gray-300">
+              <i className="fab fa-facebook-f"></i>
+            </a>
+            <a href="#" className="hover:text-gray-300">
+              <i className="fab fa-twitter"></i>
+            </a>
+            <a href="#" className="hover:text-gray-300">
+              <i className="fab fa-youtube"></i>
+            </a>
+            <a href="#" className="hover:text-gray-300">
+              <i className="fab fa-instagram"></i>
+            </a>
+          </div>
+
+          {/* 수정/저장/뒤로 버튼 */}
+          <div className='flex items-center gap-2'>
+            {editMode ? (
+              <button 
+                onClick={handleSaveClick}
+                className="inline-flex items-center bg-green-500 text-white px-3 py-1 rounded-md mr-2"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 3.75V16.5L12 14.25 7.5 16.5V3.75m9 0H18A2.25 2.25 0 0 1 20.25 6v12A2.25 2.25 0 0 1 18 20.25H6A2.25 2.25 0 0 1 3.75 18V6A2.25 2.25 0 0 1 6 3.75h1.5m9 0h-9" />
+                </svg>
+                저장
+              </button>
+            ) : (
+              <button
+                onClick={handleEditClick}
+                className="inline-flex items-center px-6 py-2.5 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-colors"
+              >
+                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                </svg>
+                수정
+              </button>
+            )}
+            {!editMode && (
+              <button
+                onClick={() => navigate("/Dashboard")}
+                className="inline-flex items-center px-6 py-2.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+              >
+                뒤로
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                </svg>
+              </button>
+            )}
           </div>
         </div>
       </div>

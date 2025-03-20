@@ -7,7 +7,7 @@ import numpy as np
 app = Flask(__name__)
 CORS(app)  # React와 CORS 문제 해결
 
-IP = "192.168.137.167"  # 아두이노 자동차의 IP
+IP = "192.168.137.132"  # 아두이노 자동차의 IP
 STREAM_URL = f"http://{IP}:81/stream"  # ESP32 CAM의 영상 스트리밍 URL
 
 # 자동차 이동 컨트롤 API

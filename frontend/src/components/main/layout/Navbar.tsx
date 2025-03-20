@@ -30,7 +30,7 @@ const Navbar: React.FC = () => {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          
+         
           <Link to="/" className="flex-shrink-0 flex items-center gap-1">
             <div className="h-12 w-12 flex items-center justify-center">
               <img
@@ -50,11 +50,11 @@ const Navbar: React.FC = () => {
                 <Link
                   key={item.name}
                   to={item.href}
-                  className="relative px-4 py-2 text-sm font-medium text-gray-800 rounded-full
+                  className="relative px-4 py-2 text-sm font-medium font-korea text-gray-800 rounded-full
                             transition-all duration-200 group hover:text-gray-900"
                 >
                   <span className="relative z-10">{item.name}</span>
-                  <span className="absolute inset-0 bg-gray-100 rounded-2xl scale-0 transition-transform 
+                  <span className="absolute inset-0 bg-gray-100 rounded-2xl scale-0 transition-transform
                                 duration-200 ease-out group-hover:scale-100 -z-0"></span>
                 </Link>
               ))}
@@ -64,15 +64,13 @@ const Navbar: React.FC = () => {
               <div className="flex items-center space-x-3 ml-10">
                 <Link
                   to="/dashboard"
-                  className="text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-xl text-sm 
-                          font-medium transition-all duration-200 hover:shadow-md"
+                  className="btn-2"
                 >
                   Dashboard
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="text-white bg-red-500 hover:bg-red-600 px-4 py-2 rounded-xl text-sm 
-                          font-medium transition-all duration-200 hover:shadow-md"
+                  className="btn-3"
                 >
                   Logout
                 </button>
@@ -80,8 +78,7 @@ const Navbar: React.FC = () => {
             ) : (
               <Link
                 to="/login"
-                className="text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-xl text-sm 
-                        font-medium transition-all duration-200 hover:shadow-md ml-10"
+                className="btn-2"
               >
                 Login
               </Link>
@@ -92,7 +89,7 @@ const Navbar: React.FC = () => {
           <div className="md:hidden">
             <button
               type="button"
-              className="inline-flex items-center justify-center p-2 rounded-full text-gray-700 
+              className="inline-flex items-center justify-center p-2 rounded-full text-gray-700
                       hover:bg-white hover:text-gray-900 transition-all duration-200"
               onClick={handleToggle}
             >
@@ -125,8 +122,8 @@ const Navbar: React.FC = () => {
                 <div className="space-y-2 mt-4">
                   <Link
                     to="/dashboard"
-                    className="block w-full text-center text-white bg-blue-600 hover:bg-blue-700 
-                            px-4 py-2 rounded-xl text-base font-medium transition-all duration-200 
+                    className="block w-full text-center text-white bg-blue-600 hover:bg-blue-700
+                            px-4 py-2 rounded-xl text-base font-medium transition-all duration-200
                             hover:shadow-md"
                     onClick={() => setIsOpen(false)}
                   >
@@ -137,8 +134,8 @@ const Navbar: React.FC = () => {
                       handleLogout();
                       setIsOpen(false);
                     }}
-                    className="block w-full text-center text-white bg-red-500 hover:bg-red-600 
-                            px-4 py-2 rounded-xl text-base font-medium transition-all duration-200 
+                    className="block w-full text-center text-white bg-red-500 hover:bg-red-600
+                            px-4 py-2 rounded-xl text-base font-medium transition-all duration-200
                             hover:shadow-md"
                   >
                     Logout
@@ -147,8 +144,8 @@ const Navbar: React.FC = () => {
               ) : (
                 <Link
                   to="/login"
-                  className="block w-full text-center text-white bg-blue-600 hover:bg-blue-700 
-                          px-4 py-2 rounded-xl text-base font-medium transition-all duration-200 
+                  className="block w-full text-center text-white bg-blue-600 hover:bg-blue-700
+                          px-4 py-2 rounded-xl text-base font-medium transition-all duration-200
                           hover:shadow-md mt-4"
                   onClick={() => setIsOpen(false)}
                 >
@@ -163,4 +160,4 @@ const Navbar: React.FC = () => {
   );
 };
 
-export default Navbar; 
+export default Navbar;

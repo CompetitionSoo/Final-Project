@@ -30,7 +30,7 @@ const Hero: React.FC = () => {
             className="max-w-3xl"
           >
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6">
-              물류 로봇 프로젝트
+              물류분류 로봇 프로젝트
             </h1>
             <p className="text-xl text-gray-200 mb-8 ml-4">
               Coubot은  물류 로봇을 활용한 자동화 시스템입니다.

@@ -1,11 +1,30 @@
-import React, { useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import ScrollIndicator from './ScrollIndicator';
+import React, { useRef, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import ScrollIndicator from "./ScrollIndicator";
+
+const videoList = [
+  "/videos/login.mp4",
+  "/videos/과일,채소.mp4",
+  "/videos/라인트레이싱영상.mp4",
+];
 
 const DemoVideo: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
+
+  // 다음 동영상으로 변경하는 함수
+  const goToNextVideo = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % videoList.length);
+  };
+
+  // 이전 동영상으로 변경하는 함수
+  const goToPreviousVideo = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? videoList.length - 1 : prevIndex - 1
+    );
+  };
 
   const handlePlayPause = () => {
     if (videoRef.current) {
@@ -20,6 +39,7 @@ const DemoVideo: React.FC = () => {
 
   const handleVideoEnded = () => {
     setIsPlaying(false);
+    goToNextVideo(); // 동영상이 끝나면 다음 동영상으로 변경
   };
 
   const handleVideoPlay = () => {
@@ -31,7 +51,10 @@ const DemoVideo: React.FC = () => {
   };
 
   return (
-    <section id="view" className="relative min-h-screen bg-gray-900 pb-4 pt-8 scroll-mt-16">
+    <section
+      id="view"
+      className="relative min-h-screen bg-gray-900 pb-4 pt-8 scroll-mt-16"
+    >
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -41,28 +64,31 @@ const DemoVideo: React.FC = () => {
           className="max-w-5xl mx-auto"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-12 text-center">
-            데모 영상
+            프로젝트 영상
           </h2>
 
-          <div 
+          <div
             className="relative aspect-video rounded-xl overflow-hidden shadow-2xl"
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => setIsHovering(false)}
           >
             <video
+              key={videoList[currentIndex]} // 동영상이 변경될 때 새로 로드되도록 설정
               ref={videoRef}
               className="w-full h-full object-cover"
               controls
               playsInline
+              autoPlay
               onEnded={handleVideoEnded}
               onPlay={handleVideoPlay}
               onPause={handleVideoPause}
               aria-label="Project demonstration video"
             >
-              <source src="/videos/login.mp4" type="video/mp4" />
+              <source src={videoList[currentIndex]} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
 
+            {/* 재생/일시정지 버튼 */}
             <AnimatePresence>
               {(isHovering || !isPlaying) && (
                 <motion.button
@@ -74,7 +100,7 @@ const DemoVideo: React.FC = () => {
                   className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
                            bg-white/20 hover:bg-white/30 rounded-full p-4 backdrop-blur-sm
                            transition-all duration-300 ease-in-out"
-                  aria-label={isPlaying ? 'Pause video' : 'Play video'}
+                  aria-label={isPlaying ? "Pause video" : "Play video"}
                   tabIndex={0}
                 >
                   <svg
@@ -102,6 +128,22 @@ const DemoVideo: React.FC = () => {
             </AnimatePresence>
           </div>
 
+          {/* 이전/다음 버튼 추가 */}
+          <div className="flex justify-center gap-4 mt-6">
+            <button
+              onClick={goToPreviousVideo}
+              className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600"
+            >
+              이전 영상
+            </button>
+            <button
+              onClick={goToNextVideo}
+              className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600"
+            >
+              다음 영상
+            </button>
+          </div>
+
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -114,13 +156,12 @@ const DemoVideo: React.FC = () => {
           </motion.p>
         </motion.div>
       </div>
-      
 
       <div>
-          <ScrollIndicator target="#hero" />
-          </div>
+        <ScrollIndicator target="#hero" />
+      </div>
     </section>
   );
 };
 
-export default DemoVideo; 
+export default DemoVideo;
