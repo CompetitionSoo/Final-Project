@@ -256,9 +256,13 @@ const ControlRobot: React.FC<UserProps> = ({ ros }) => {
           >
             {isAutoMode ? '수동전환' : '자율주행'}
           </button>
-          <select className="px-16 py-4 border rounded-md text-lg">
-              <option>과일</option>
-              <option>채소</option>
+          <select className="px-16 py-5 border rounded-md text-lg">
+              <option>딸기</option>
+              <option>사과</option>
+              <option>바나나</option>
+              <option>오렌지</option>
+              <option>포도</option>
+              <option>당근</option>
             </select>
         </div>
 
