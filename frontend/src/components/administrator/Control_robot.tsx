@@ -22,6 +22,8 @@ const ControlRobot: React.FC<UserProps> = ({ ros }) => {
   const [currentAction, setCurrentAction] = useState('대기 중');
   const [checkedModel, setCheckedModel] = useState('default');
   const [detectedObjects, setDetectedObjects] = useState("현재 검출된 객체 없음");
+  const [isPersonDetected, setIsPersonDetected] = useState(false);
+  const [buzzer, setBuzzer] = useState(0)
 
   const imgRef = useRef();
   const canvasRef = useRef(null);
@@ -148,20 +150,67 @@ const ControlRobot: React.FC<UserProps> = ({ ros }) => {
     }
   };
 
-  
+  useEffect(() => {
+    console.log("Connected to ROS : ", ros)
+    if (!ros) return
+
+    const volTopic = new ROSLIB.Topic({
+      ros : ros,
+      name : "/voltage",
+      messageType : "jetbotmini_msgs/Battery"
+    })
+    volTopic.subscribe((message) => {
+      console.log("배터리 잔량 : ", message.Voltage, "%")
+      setBattery(message.Voltage)
+    })
+    return () => {
+      volTopic.unsubscribe(); // cleanup (구독 해제)
+    };
+  }, [ros]);
 
   useEffect(() => {
     console.log("isAutoMode 변경됨 :", isAutoMode)
     window.addEventListener('keydown', handleKeyDown);
 
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    }
+    if (!ros) return
+    const autoModeTopic = new ROSLIB.Topic({
+      ros : ros,
+      name : "/start_auto",
+      messageType : "std_msgs/String"
+    })
+    const newMode = isAutoMode ? "on" : "off"; // 상태 변경 후 값 결정
+
+    if (ros) {
+      const msg = new ROSLIB.Message({ data: newMode });
+      autoModeTopic.publish(msg);
+      console.log(`자율주행 모드: ${newMode} (토픽 발행됨)`);
+    } else {
+        console.log("ROS 연결 안됨");
+      }
+      return () => {
+        window.removeEventListener('keydown', handleKeyDown);
+      }
   }, [isAutoMode]);
 
+  useEffect(() => {
+    if (!ros) return
+    const buzzerService = new ROSLIB.Service({
+      ros: ros,
+      name: "/Buzzer",
+      serviceType: "jetbotmini_msgs/Buzzer",
+    })
+    const callBuzzerService = (buzzerState: number) => {
+      const request = new ROSLIB.ServiceRequest({ buzzer: buzzerState });
+      buzzerService.callService(request, (response: any) => {
+        console.log(`Buzzer Service Response: ${response.result}`);
+      });
+    }
+    callBuzzerService(buzzer);
+  }, [buzzer])
 
   // 백엔드에서 검출된 객체를 주기적으로 가져오기 (1초마다)
   useEffect(() => {
+    if (!ros) return
     const interval = setInterval(() => {
       fetch('http://127.0.0.1:5000/detected_objects')
         .then((res) => res.json())
@@ -169,9 +218,18 @@ const ControlRobot: React.FC<UserProps> = ({ ros }) => {
           if (data.detected && data.detected.length > 0) {
             // setDetectedObjects(data.detected.join(', ') + ' 가 검출되었습니다');
             setDetectedObjects(data.detected.join(', '));
+            console.log(data.detected)
+            // "person"이 검출되면 멈추고 buzzer 울리는 메시지를 전달하는 코드
+            if (isAutoMode && data.detected.includes("person")) {
+              console.log('"person"이 검출되면 멈추고 buzzer 울리는 메시지를 전달하는 코드!!!')
+              setIsAutoMode(false)
+              setBuzzer(1)
+            }
           } else {
             setDetectedObjects("현재 검출된 객체 없음");
-          }
+            setIsAutoMode(true)
+            setBuzzer(0)
+            }
         })
         .catch(err => {
           console.error(err);
@@ -181,6 +239,8 @@ const ControlRobot: React.FC<UserProps> = ({ ros }) => {
 
     return () => clearInterval(interval);
   }, []);
+
+  // 수동모드일때 YOLO끄는 코드 추가 
 
   return ros && (
     <div className="h-auto max-w-7xl mx-auto p-6 bg-gray-100 rounded-lg shadow-lg">
@@ -247,21 +307,6 @@ const ControlRobot: React.FC<UserProps> = ({ ros }) => {
             <p id="detection-text" className="text-gray-600">{detectedObjects}</p>
           </div>
 
-          {/* 모드 전환 */}
-          <div className="flex justify-between items-center mb-6">
-          <span className="text-gray-700 font-medium text-lg">🛠 모드: {isAutoMode ? '자율주행' : '수동 조작'}</span>
-          <button
-            className={`px-6 py-3 rounded-md text-lg ${isAutoMode ? 'bg-blue-500 text-white' : 'bg-orange-500 text-white'}`}
-            onClick={() => setIsAutoMode(!isAutoMode)}
-          >
-            {isAutoMode ? '수동전환' : '자율주행'}
-          </button>
-          <select className="px-16 py-4 border rounded-md text-lg">
-              <option>과일</option>
-              <option>채소</option>
-            </select>
-        </div>
-
           {/* 방향키 조작 버튼 */}
           <div className="text-center mb-6">
             <div className="grid grid-cols-3 gap-4 gap-x-2">
@@ -308,7 +353,16 @@ const ControlRobot: React.FC<UserProps> = ({ ros }) => {
             <button className="bg-red-500 text-white py-3 rounded-md">저장하기</button>
           </div> 
 
-         
+          {/* 모드 전환 */}
+          <div className="flex justify-between items-center mb-6">
+            <span className="text-gray-700 font-medium text-lg">🛠 모드: {isAutoMode ? '자율주행' : '수동 조작'}</span>
+            <button
+              className={`px-6 py-3 rounded-md text-lg ${isAutoMode ? 'bg-blue-500 text-white' : 'bg-orange-500 text-white'}`}
+              onClick={() => setIsAutoMode(!isAutoMode)}
+            >
+              {isAutoMode ? '수동전환' : '자율주행'}
+            </button>
+          </div>
 
           {/* 속도 조절 */}
           <div className="mb-6">
