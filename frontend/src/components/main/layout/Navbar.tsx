@@ -8,7 +8,7 @@ const navigation = [
   { name: '팀소개', href: '/team' },
   { name: '제품소개', href: '/about' },
   { name: '개발과정', href: '/process' },
-  { name: '갤러리', href: '/gallery' },
+  { name: '제품현황', href: '/chart' },
 ];
 
 const Navbar: React.FC = () => {
@@ -50,10 +50,10 @@ const Navbar: React.FC = () => {
                 <Link
                   key={item.name}
                   to={item.href}
-                  className="relative px-4 py-2 text-sm font-medium font-korea text-gray-800 rounded-full
+                  className="relative px-4 py-2 text-sm font-medium text-gray-800 rounded-full
                             transition-all duration-200 group hover:text-gray-900"
                 >
-                  <span className="relative z-10">{item.name}</span>
+                  <span className="relative z-10 font-korea3">{item.name}</span>
                   <span className="absolute inset-0 bg-gray-100 rounded-2xl scale-0 transition-transform
                                 duration-200 ease-out group-hover:scale-100 -z-0"></span>
                 </Link>

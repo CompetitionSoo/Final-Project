@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "./components/main/layout/Layout";
 import Hero from "./components/main/Hero";
 import Team from "./components/main/Team";
-import Gallery from "./components/main/Gallery";
+import Chart from "./components/main/Chart";
 import Process from "./components/main/Process";
 import About from "./components/main/About";
 import ProjectIntro from "./components/main/ProjectIntro";
@@ -42,7 +42,7 @@ const App = () => {
     // ROS 연결 설정
     console.log("App is mounted!");
     const rosInstance = new ROSLIB.Ros({
-      url: 'ws://192.168.137.50:9090' // ROSBridge WebSocket 주소
+      url: 'ws://192.168.137.52:9090' // ROSBridge WebSocket 주소
     });
 
     rosInstance.on("connection", () => {
@@ -68,7 +68,7 @@ const App = () => {
           <Route element={<Layout />}>
             <Route path="/" element={<HomePage />} />
             <Route path="/team" element={<Team />} />
-            <Route path="/gallery" element={<Gallery />} />
+            <Route path="/chart" element={<Chart/>} />
             <Route path="/post/:id" element={<PostDetail />} />
             <Route path="/process" element={<Process />} />
             <Route path="/about" element={<About />} />
