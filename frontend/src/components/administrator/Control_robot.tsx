@@ -5,8 +5,6 @@ import YoloStream from './YoloStream';
 import Webcam from './Webcam';
 import ROSLIB from "roslib";
 import { bool } from 'aws-sdk/clients/signer';
-
-
 import AWS from 'aws-sdk'
 import axios from 'axios'
 
@@ -24,7 +22,7 @@ const ControlRobot: React.FC<UserProps> = ({ ros }) => {
   const [detectedObjects, setDetectedObjects] = useState("현재 검출된 객체 없음");
   const [isPersonDetected, setIsPersonDetected] = useState(false);
   const [buzzer, setBuzzer] = useState(0)
-
+  const [selectedFruit, setSelectedFruit] = useState('');
   const imgRef = useRef();
   const canvasRef = useRef(null);
 
@@ -227,14 +225,25 @@ const ControlRobot: React.FC<UserProps> = ({ ros }) => {
               setIsAutoMode(false);  // 자율주행 모드 종료
               setBuzzer(1); // 부저 울림
             
-              // 5초 후에 자율주행 모드 다시 시작하고 부저 멈추기
+              // 3초 후에 자율주행 모드 다시 시작하고 부저 멈추기
               setTimeout(() => {
                 setIsAutoMode(true);  // 자율주행 모드 다시 시작
                 setBuzzer(0);  // 부저 멈추기
                 console.log('자율주행 모드 재시작, 부저 멈춤');
               }, 3000);  //3초 후 실행
             }
+            // 과일 검출 시 로봇 멈추기
+            if (isAutoMode && data.detected.includes(selectedFruit)) {
+              console.log(`"${selectedFruit}"이 검출되면 멈추고 부저 울리는 메시지를 전달하는 코드!!!`);
+              setIsAutoMode(false);  // 자율주행 모드 종료
+              setBuzzer(1); // 부저 울림
 
+              setTimeout(() => {
+                setIsAutoMode(true);  // 자율주행 모드 다시 시작
+                setBuzzer(0);  // 부저 멈추기
+                console.log('자율주행 모드 재시작, 부저 멈춤');
+              }, 3000);
+            }
           } else {
             setDetectedObjects("현재 검출된 객체 없음");
           }
@@ -246,7 +255,7 @@ const ControlRobot: React.FC<UserProps> = ({ ros }) => {
     }, 1000);
   
     return () => clearInterval(interval);
-  }, [isAutoMode]);
+  }, [isAutoMode, selectedFruit]);
 
   // 수동모드일때 YOLO끄는 코드 추가 
 
@@ -323,14 +332,20 @@ const ControlRobot: React.FC<UserProps> = ({ ros }) => {
             >
               {isAutoMode ? '수동전환' : '자율주행'}
             </button>
-            <select className="px-16 py-4 border rounded-md text-lg">
-                <option>딸기</option>
-                <option>사과</option>
-                <option>바나나</option>
-                <option>키위</option>
-                <option>포도</option>
-                <option>당근</option>
-              </select>
+            <select 
+              className="px-16 py-4 border rounded-md text-lg"
+              value={selectedFruit}
+              onChange={(e) => setSelectedFruit(e.target.value)}
+            >
+              <option value="">선택하세요</option>
+              <option value="apple">사과</option>
+              <option value="orange">오렌지</option>
+              <option value="banana">바나나</option>
+              <option value="kiwi">키위</option>
+              <option value="carrot">당근</option>
+              <option value="cucumber">오이</option>
+              <option value="broccoli">브로콜리</option>
+            </select>
           </div>
 
           {/* 방향키 조작 버튼 */}
