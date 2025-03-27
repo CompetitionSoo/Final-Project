@@ -63,7 +63,7 @@ const Gallery2: React.FC = () => {
 
 return (
     <div className="container mx-auto p-6">
-      <h1 className="text-2xl font-semibold mb-6">Gallery</h1>
+      <h1 className="text-2xl font-semibold mb-6">📷갤러리</h1>
 
       {/* 이미지 그리드 */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">

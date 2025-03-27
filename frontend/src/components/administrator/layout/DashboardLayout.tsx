@@ -6,12 +6,16 @@ import { useUser } from '../UserContext';
 
 const DashboardLayout: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const {user} = useUser();
+  const {user,fetchUser} = useUser();
 
   const handleToggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
   
+  useEffect(() => {
+      fetchUser(); // 로그인 후 즉시 사용자 정보 갱신
+  }, []);
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <DashboardNavbar onToggleSidebar={handleToggleSidebar} user={user} />

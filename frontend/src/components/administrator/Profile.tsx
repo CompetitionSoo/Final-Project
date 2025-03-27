@@ -200,7 +200,7 @@ const Profile: React.FC = () => {
               </div>
             )}
             {/* 이미지 업로드 버튼 */}
-            <label className="absolute bottom-0 right-0 bg-blue-600 text-white rounded-full p-1 cursor-pointer">
+            <label className="absolute bottom-0 right-0 text-white rounded-full p-1 cursor-pointer">
               <input
                 type="file"
                 className="hidden"
@@ -248,8 +248,8 @@ const Profile: React.FC = () => {
           )}
 
           {/* 연락처 */}
-          <div className="mt-2 text-gray-600 flex items-center">
-          <span className="mr-1">📱</span>
+          <div className="mt-2 text-gray-600 flex items-center gap-x-2 w-1/2">
+          <span className="w-6 text-center">📱</span>
             {editMode ? (
               <input
                 type="text"
@@ -257,15 +257,15 @@ const Profile: React.FC = () => {
                 value={formData.phone}
                 onChange={handleChange}
                 placeholder="연락처"
-                className="w-full text-center border-b border-gray-200 focus:outline-none"
+                className="flex-1 border-b border-gray-200 focus:outline-none text-left"
               />
             ) : (
               <p>{profile.phone || "연락처가 없습니다."}</p>
             )}
           </div>
 
-          <div className="mt-2 text-gray-600 flex items-center">
-          <span className="mr-1">✉️</span>
+          <div className="mt-2 text-gray-600 flex items-center gap-x-2 w-1/2">
+          <span className="w-6 text-center">✉️</span>
             {editMode ? (
               <input
                 type="text"
@@ -273,7 +273,7 @@ const Profile: React.FC = () => {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="이메일"
-                className="w-full text-center border-b border-gray-200 focus:outline-none"
+                className="flex-1 border-b border-gray-200 focus:outline-none text-left"
               />
             ) : (
               <p>{profile.email || "이메일이 없습니다."}</p>
